@@ -3,114 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro y Edición - Credenciales CETis 116</title>
+    <title>Registro de Estudiante - CETis No. 116</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .bg-pattern {
-            background-color: #020617;
-            background-image: radial-gradient(rgba(56, 189, 248, 0.08) 1px, transparent 1px);
-            background-size: 20px 20px;
+        body {
+            background-color: #070b14;
+            color: #f1f5f9;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        /* Encabezado Institucional Guinda DGETI / SEP */
+        .header-guinda {
+            background: linear-gradient(145deg, #4a0e1e 0%, #631328 50%, #380915 100%);
+            border-bottom: 2px solid #8a6d3b;
+        }
+        /* Botón y acentos Dorados */
+        .btn-gold {
+            background: linear-gradient(135deg, #d4b26f 0%, #c59b4d 100%);
+            color: #1a1205;
+        }
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #e0c283 0%, #d1a95b 100%);
+        }
+        .badge-gold {
+            border: 1px solid rgba(212, 178, 111, 0.5);
+            color: #e2c68d;
+            background: rgba(0, 0, 0, 0.25);
+        }
+        /* Inputs estilo oscuro elegante */
+        .input-dgeti {
+            background-color: #0b111e;
+            border: 1px solid #1e293b;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .input-dgeti:focus {
+            border-color: #c59b4d;
+            box-shadow: 0 0 0 2px rgba(197, 155, 77, 0.2);
+            outline: none;
         }
     </style>
 </head>
-<body class="bg-pattern text-slate-100 min-h-screen p-4 md:p-6 flex items-center justify-center">
-    <div class="max-w-2xl w-full bg-slate-900/95 backdrop-blur-sm border border-slate-800 p-6 md:p-8 rounded-2xl shadow-2xl my-auto">
-        
-        <!-- Encabezado -->
-        <div class="border-b border-slate-800 pb-4 mb-6 flex justify-between items-center gap-2">
-            <div>
-                <h1 id="tituloPagina" class="text-xl font-bold text-sky-400 tracking-wide">CETis No. 116</h1>
-                <p id="subtituloPagina" class="text-xs text-slate-400">Registro de Alumno para Credencial PVC</p>
-            </div>
-            <a href="index.html" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3.5 py-2 rounded-lg transition font-medium whitespace-nowrap shadow">
-                ← Volver al inicio
-            </a>
-        </div>
+<body class="min-h-screen flex flex-col">
 
-        <!-- Formulario -->
-        <form id="formEstudiante" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <label class="block text-xs font-medium text-slate-300 mb-1">Número de Control / Matrícula</label>
-                <input type="text" id="matricula" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-sky-500 outline-none transition">
-            </div>
-            <div>
-                <label class="block text-xs font-medium text-slate-300 mb-1">Nombre Completo</label>
-                <input type="text" id="nombreCompleto" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white uppercase focus:border-sky-500 outline-none transition">
-            </div>
-            <div class="md:col-span-2">
-                <label class="block text-xs font-medium text-slate-300 mb-1">Especialidad Técnica</label>
-                <select id="especialidad" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-sky-500 outline-none transition">
-                    <option value="Administración de Recursos Humanos">Administración de Recursos Humanos</option>
-                    <option value="Comercio Internacional y Aduanas">Comercio Internacional y Aduanas</option>
-                    <option value="E-Commerce">E-Commerce</option>
-                    <option value="Laboratorista Clínico">Laboratorista Clínico</option>
-                    <option value="Mantenimiento Automotriz">Mantenimiento Automotriz</option>
-                    <option value="Programación">Programación</option>
-                </select>
-            </div>
-            <div class="grid grid-cols-2 gap-3 md:col-span-2">
+    <!-- Encabezado Institucional Guinda / Dorado (Idéntico al Index) -->
+    <header class="header-guinda px-5 py-6 shadow-2xl">
+        <div class="max-w-3xl mx-auto">
+            <div class="flex items-start gap-4">
+                <!-- Insignia 116 -->
+                <div class="w-12 h-16 rounded-2xl badge-gold flex items-center justify-center font-extrabold text-lg tracking-tighter flex-shrink-0 shadow-inner mt-1">
+                    116
+                </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Semestre</label>
-                    <select id="semestre" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-sky-500 outline-none transition">
-                        <option value="1">1° Semestre</option>
-                        <option value="2">2° Semestre</option>
-                        <option value="3">3° Semestre</option>
-                        <option value="4">4° Semestre</option>
-                        <option value="5">5° Semestre</option>
-                        <option value="6">6° Semestre</option>
+                    <span class="inline-block text-[10px] uppercase tracking-widest px-3 py-0.5 rounded-full badge-gold font-semibold mb-2">
+                        SEP • SEMS • DGETI
+                    </span>
+                    <h1 class="text-xl md:text-2xl font-extrabold text-white leading-tight">
+                        CETis No. 116 "Antonia Nava de Catalán"
+                    </h1>
+                    <p class="text-xs text-rose-200/80 mt-1">
+                        Plataforma Oficial de Emisión de Credenciales PVC • Zebra ZC300
+                    </p>
+                </div>
+            </div>
+
+            <!-- Botones de Navegación en el Header -->
+            <div class="mt-5 flex flex-wrap gap-3">
+                <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold badge-gold hover:bg-black/40 transition shadow">
+                    <span>⬅</span> Volver al Padrón Principal
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenedor Principal del Formulario -->
+    <main class="flex-grow p-4 md:p-6">
+        <div class="max-w-3xl mx-auto bg-[#0f1626] border border-slate-800/80 rounded-2xl p-6 md:p-8 shadow-2xl">
+            
+            <div class="border-b border-slate-800 pb-4 mb-6 flex items-center justify-between">
+                <div>
+                    <h2 id="tituloForm" class="text-lg font-bold text-white uppercase tracking-wide">
+                        Registro de Nuevo Estudiante
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-0.5">
+                        Captura los datos oficiales para impresión en tarjeta CR-80
+                    </p>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-lg">
+                    🪪
+                </div>
+            </div>
+
+            <form id="formEstudiante" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                        Número de Control / Matrícula
+                    </label>
+                    <input type="text" id="matricula" placeholder="Ej. 24312051160001" required class="w-full input-dgeti rounded-xl p-3 text-sm font-mono">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                        Nombre Completo del Estudiante
+                    </label>
+                    <input type="text" id="nombreCompleto" placeholder="APELLIDOS Y NOMBRES" required class="w-full input-dgeti rounded-xl p-3 text-sm uppercase">
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                        Especialidad Técnica (Oferta DGETI)
+                    </label>
+                    <select id="especialidad" class="w-full input-dgeti rounded-xl p-3 text-sm">
+                        <option value="Administración de Recursos Humanos">Administración de Recursos Humanos</option>
+                        <option value="Comercio Internacional y Aduanas">Comercio Internacional y Aduanas</option>
+                        <option value="E-Commerce">E-Commerce</option>
+                        <option value="Laboratorista Clínico">Laboratorista Clínico</option>
+                        <option value="Mantenimiento Automotriz">Mantenimiento Automotriz</option>
+                        <option value="Programación">Programación</option>
                     </select>
                 </div>
-                <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Grupo</label>
-                    <input type="text" id="grupo" placeholder="Ej. A, B, F..." required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white uppercase focus:border-sky-500 outline-none transition">
-                </div>
-            </div>
-            <div>
-                <label class="block text-xs font-medium text-slate-300 mb-1">CURP</label>
-                <input type="text" id="curp" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white uppercase focus:border-sky-500 outline-none transition">
-            </div>
-            <div>
-                <label class="block text-xs font-medium text-slate-300 mb-1">Tipo de Sangre</label>
-                <select id="tipoSangre" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-sky-500 outline-none transition">
-                    <option value="O POSITIVO (O+)">O POSITIVO (O+)</option>
-                    <option value="O NEGATIVO (O-)">O NEGATIVO (O-)</option>
-                    <option value="A POSITIVO (A+)">A POSITIVO (A+)</option>
-                    <option value="A NEGATIVO (A-)">A NEGATIVO (A-)</option>
-                    <option value="B POSITIVO (B+)">B POSITIVO (B+)</option>
-                    <option value="B NEGATIVO (B-)">B NEGATIVO (B-)</option>
-                    <option value="AB POSITIVO (AB+)">AB POSITIVO (AB+)</option>
-                    <option value="AB NEGATIVO (AB-)">AB NEGATIVO (AB-)</option>
-                </select>
-            </div>
 
-            <!-- Sección de Fotografía Optimizada -->
-            <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4 items-center bg-slate-950 p-4 rounded-xl border border-slate-800">
-                <div>
-                    <label id="labelFoto" class="block text-xs font-medium text-slate-300 mb-1">Fotografía del Alumno</label>
-                    <input type="file" id="fotoFile" accept="image/*" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-slate-300 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-sky-600 file:text-white hover:file:bg-sky-500">
-                    <p id="notaFoto" class="text-[10px] text-slate-500 mt-1">Se adapta automáticamente para la credencial.</p>
-                </div>
-                <div class="flex justify-center">
-                    <div class="w-24 h-28 bg-slate-900 border-2 border-dashed border-slate-700 rounded-lg flex items-center justify-center overflow-hidden relative shadow-inner">
-                        <img id="previewImg" src="" alt="Vista previa" class="w-full h-full object-cover hidden">
-                        <span id="previewText" class="text-[10px] text-slate-500 text-center p-1">Sin foto</span>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                            Semestre
+                        </label>
+                        <select id="semestre" required class="w-full input-dgeti rounded-xl p-3 text-sm">
+                            <option value="1">1° Semestre</option>
+                            <option value="2">2° Semestre</option>
+                            <option value="3">3° Semestre</option>
+                            <option value="4">4° Semestre</option>
+                            <option value="5">5° Semestre</option>
+                            <option value="6">6° Semestre</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                            Grupo
+                        </label>
+                        <input type="text" id="grupo" placeholder="Ej. A, B, G..." required class="w-full input-dgeti rounded-xl p-3 text-sm uppercase">
                     </div>
                 </div>
-                <div class="text-[11px] text-slate-400">
-                    <p class="font-semibold text-sky-400 mb-0.5">Optimización CR-80:</p>
-                    <p>La foto se procesa directo en memoria para guardarse de forma ligera en Firestore sin ocupar espacio extra en Storage.</p>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                        Tipo de Sangre
+                    </label>
+                    <select id="tipoSangre" required class="w-full input-dgeti rounded-xl p-3 text-sm">
+                        <option value="O POSITIVO (O+)">O POSITIVO (O+)</option>
+                        <option value="O NEGATIVO (O-)">O NEGATIVO (O-)</option>
+                        <option value="A POSITIVO (A+)">A POSITIVO (A+)</option>
+                        <option value="A NEGATIVO (A-)">A NEGATIVO (A-)</option>
+                        <option value="B POSITIVO (B+)">B POSITIVO (B+)</option>
+                        <option value="B NEGATIVO (B-)">B NEGATIVO (B-)</option>
+                        <option value="AB POSITIVO (AB+)">AB POSITIVO (AB+)</option>
+                        <option value="AB NEGATIVO (AB-)">AB NEGATIVO (AB-)</option>
+                    </select>
                 </div>
-            </div>
 
-            <div class="md:col-span-2 mt-2">
-                <button type="submit" id="btnGuardar" class="w-full bg-sky-600 hover:bg-sky-500 font-semibold py-3 rounded-lg transition duration-200 text-white text-sm shadow-lg">
-                    Guardar Alumno y Generar Registro
-                </button>
-            </div>
-        </form>
-    </div>
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                        Clave CURP
+                    </label>
+                    <input type="text" id="curp" placeholder="18 CARACTERES OFICIALES" maxlength="18" required class="w-full input-dgeti rounded-xl p-3 text-sm uppercase font-mono">
+                </div>
 
-    <!-- Script de Guardado, Edición y Conversión a Base64 -->
+                <!-- Tarjeta de Fotografía con estilo DGETI -->
+                <div class="md:col-span-2 bg-[#0a0f1a] border border-slate-800 p-5 rounded-2xl grid grid-cols-1 md:grid-cols-3 gap-4 items-center mt-2">
+                    <div>
+                        <label class="block text-xs font-semibold text-amber-400 uppercase tracking-wider mb-1.5">
+                            Fotografía Oficial
+                        </label>
+                        <input type="file" id="fotoFile" accept="image/*" required class="w-full bg-[#0f1626] border border-slate-700 rounded-xl p-2 text-xs text-slate-300 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#c59b4d] file:text-slate-950 hover:file:bg-[#d4b26f]">
+                        <p id="notaFoto" class="text-[11px] text-slate-400 mt-2">
+                            Auto-recorte inteligente a proporción carnet vertical.
+                        </p>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <div class="w-24 h-32 bg-[#0f1626] border-2 border-dashed border-amber-500/40 rounded-xl flex items-center justify-center overflow-hidden relative shadow-lg">
+                            <img id="previewImg" src="" alt="Vista previa" class="w-full h-full object-cover hidden">
+                            <span id="previewText" class="text-[10px] text-slate-500 text-center px-2">Vista Previa PVC</span>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 space-y-1">
+                        <p class="font-bold text-emerald-400 flex items-center gap-1">
+                            <span>●</span> Optimización Firestore
+                        </p>
+                        <p class="text-[11px] leading-relaxed">
+                            La fotografía se comprime en memoria para impresión nítida en Zebra ZC300 sin saturar el almacenamiento.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Botón Dorado Institucional -->
+                <div class="md:col-span-2 mt-4">
+                    <button type="submit" id="btnGuardar" class="w-full btn-gold font-extrabold py-3.5 rounded-xl transition duration-200 text-sm shadow-xl flex items-center justify-center gap-2">
+                        <span>+</span> Guardar Estudiante en el Padrón
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Script conectado a Firebase (Soporta Registro Nuevo y Edición) -->
     <script type="module">
         import { db } from "./firebase-config.js";
         import { collection, addDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -119,14 +215,13 @@
         const alumnoId = params.get('id');
         let fotoBase64 = "";
 
-        // Si existe un ID en la URL, activamos el Modo Edición
         async function verificarModoEdicion() {
             if (!alumnoId) return;
 
-            document.getElementById('subtituloPagina').innerText = "Editar Datos de Credencial del Alumno";
-            document.getElementById('btnGuardar').innerText = "Guardar Cambios";
+            document.getElementById('tituloForm').innerText = "Editar Estudiante del Padrón";
+            document.getElementById('btnGuardar').innerHTML = "<span>💾</span> Actualizar Datos de Credencial";
             document.getElementById('fotoFile').removeAttribute('required');
-            document.getElementById('notaFoto').innerText = "Opcional: selecciona otra solo si deseas cambiar la foto actual.";
+            document.getElementById('notaFoto').innerText = "Opcional: sube otra imagen solo si deseas reemplazar la foto actual.";
 
             try {
                 const docRef = doc(db, "estudiantes_credenciales", alumnoId);
@@ -151,11 +246,10 @@
                     }
                 }
             } catch (error) {
-                console.error("Error al cargar datos del alumno:", error);
+                console.error("Error al cargar datos del estudiante:", error);
             }
         }
 
-        // Procesamiento y recorte automático de fotografía en memoria
         document.getElementById('fotoFile').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -191,12 +285,11 @@
             reader.readAsDataURL(file);
         });
 
-        // Guardar o Actualizar en Firestore
         document.getElementById('formEstudiante').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('btnGuardar');
             btn.disabled = true;
-            btn.innerText = "Guardando en Firebase...";
+            btn.innerText = "Sincronizando con Firestore...";
 
             const datosAlumno = {
                 matricula: document.getElementById('matricula').value.trim(),
@@ -212,21 +305,19 @@
 
             try {
                 if (alumnoId) {
-                    // Actualizar alumno existente
                     await updateDoc(doc(db, "estudiantes_credenciales", alumnoId), datosAlumno);
-                    alert("¡Datos actualizados correctamente!");
+                    alert("¡Datos actualizados correctamente en el padrón!");
                 } else {
-                    // Crear nuevo registro
                     datosAlumno.fechaRegistro = new Date().toISOString();
                     await addDoc(collection(db, "estudiantes_credenciales"), datosAlumno);
-                    alert("¡Alumno registrado correctamente!");
+                    alert("¡Estudiante registrado exitosamente!");
                 }
                 window.location.href = "index.html";
             } catch (error) {
                 console.error("Error al guardar:", error);
-                alert("Hubo un error al guardar los datos en Firebase.");
+                alert("Error al conectar con Firestore. Verifica tus permisos.");
                 btn.disabled = false;
-                btn.innerText = alumnoId ? "Guardar Cambios" : "Guardar Alumno y Generar Registro";
+                btn.innerText = alumnoId ? "Actualizar Datos de Credencial" : "+ Guardar Estudiante en el Padrón";
             }
         });
 
