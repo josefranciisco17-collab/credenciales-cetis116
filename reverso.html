@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reverso Oficial - Credencial CETis No. 116</title>
+    <title>Reverso Oficial Vertical - Credencial CETis No. 116</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         * {
@@ -26,10 +26,10 @@
             min-height: 100vh;
         }
 
-        /* TARJETA CR-80 HORIZONTAL EXACTA (85.6mm x 54mm) */
-        .cr80-card-horizontal {
-            width: 85.6mm;
-            height: 54mm;
+        /* TARJETA CR-80 VERTICAL EXACTA (54mm x 85.6mm) */
+        .cr80-card-vertical-rev {
+            width: 54mm;
+            height: 85.6mm;
             background-color: #fcfaf5;
             position: relative;
             overflow: hidden;
@@ -37,6 +37,7 @@
             box-shadow: 0 12px 30px rgba(0,0,0,0.6);
             border: 0.3mm solid #c59b4d;
             display: flex;
+            flex-direction: column;
             justify-content: space-between;
         }
 
@@ -44,16 +45,19 @@
             background: linear-gradient(135deg, #d4b26f 0%, #c59b4d 100%);
             color: #1a1205;
         }
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #e0c283 0%, #d1a95b 100%);
+        }
 
-        /* IMPRESIÓN PERFECTA SIN ROMPER EL DISEÑO */
+        /* IMPRESIÓN PERFECTA */
         @media print {
             @page {
-                size: 85.6mm 54mm;
+                size: 54mm 85.6mm;
                 margin: 0 !important;
             }
             html, body {
-                width: 85.6mm !important;
-                height: 54mm !important;
+                width: 54mm !important;
+                height: 85.6mm !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 background: #fcfaf5 !important;
@@ -66,14 +70,14 @@
                 position: fixed !important;
                 top: 0 !important;
                 left: 0 !important;
-                width: 85.6mm !important;
-                height: 54mm !important;
+                width: 54mm !important;
+                height: 85.6mm !important;
                 margin: 0 !important;
                 padding: 0 !important;
             }
-            .cr80-card-horizontal {
-                width: 85.6mm !important;
-                height: 54mm !important;
+            .cr80-card-vertical-rev {
+                width: 54mm !important;
+                height: 85.6mm !important;
                 border-radius: 0 !important;
                 box-shadow: none !important;
                 border: none !important;
@@ -85,104 +89,100 @@
 <body>
 
     <!-- Barra de Navegación (Se oculta al imprimir) -->
-    <div class="no-print" style="width: 85.6mm; display: flex; justify-content: space-between; margin-bottom: 12px;">
+    <div class="no-print" style="width: 54mm; display: flex; justify-content: space-between; margin-bottom: 12px;">
         <a id="linkAnverso" href="credencial.html" style="font-size: 11px; background: #0f172a; color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); padding: 6px 10px; border-radius: 8px; text-decoration: none; font-weight: bold;">
             ⬅ Ver Anverso
         </a>
         <span style="font-size: 11px; color: #fcd34d; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
-            Reverso Oficial CR-80
+            Reverso Vertical
         </span>
     </div>
 
-    <!-- ÁREA DE IMPRESIÓN REVERSO -->
+    <!-- ÁREA DE IMPRESIÓN REVERSO VERTICAL -->
     <div id="areaImpresionReverso">
-        <div class="cr80-card-horizontal select-none">
+        <div class="cr80-card-vertical-rev select-none">
 
             <!-- 1. DISEÑO DE FONDO REAL (SVG INSTITUCIONAL CON TRAMA DE SEGURIDAD) -->
-            <svg style="position: absolute; top: 0; left: 0; width: 85.6mm; height: 54mm; z-index: 1; pointer-events: none;" viewBox="0 0 323 204" xmlns="http://www.w3.org/2000/svg">
+            <svg style="position: absolute; top: 0; left: 0; width: 54mm; height: 85.6mm; z-index: 1; pointer-events: none;" viewBox="0 0 204 323" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                    <linearGradient id="bgGradH" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <linearGradient id="bgGradV" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stop-color="#fdfbf7"/>
                         <stop offset="50%" stop-color="#f5efe2"/>
                         <stop offset="100%" stop-color="#ebe1cd"/>
                     </linearGradient>
-                    <pattern id="gridGuillocheH" width="12" height="12" patternUnits="userSpaceOnUse">
+                    <pattern id="gridGuillocheV" width="12" height="12" patternUnits="userSpaceOnUse">
                         <path d="M 12 0 L 0 12 M 0 0 L 12 12" fill="none" stroke="#c59b4d" stroke-width="0.35" stroke-opacity="0.22"/>
                     </pattern>
                 </defs>
-                <rect width="323" height="204" fill="url(#bgGradH)"/>
-                <rect width="323" height="204" fill="url(#gridGuillocheH)"/>
+                <rect width="204" height="323" fill="url(#bgGradV)"/>
+                <rect width="204" height="323" fill="url(#gridGuillocheV)"/>
                 
                 <!-- Vectores decorativos institucionales -->
-                <path d="M 0 35 Q 120 15 240 45 T 323 30 L 323 204 L 0 204 Z" fill="#c59b4d" fill-opacity="0.07"/>
-                <path d="M 270 204 L 323 85 L 323 204 Z" fill="#4a0e1e" fill-opacity="0.06"/>
+                <path d="M -10 75 Q 60 55 120 80 T 215 65 L 215 323 L -10 323 Z" fill="#c59b4d" fill-opacity="0.08"/>
+                <path d="M 204 165 L 145 323 L 204 323 Z" fill="#4a0e1e" fill-opacity="0.07"/>
             </svg>
 
-            <!-- 2. CONTENEDOR CENTRAL DE DATOS (IZQUIERDA) -->
-            <div style="position: relative; z-index: 2; width: 73.6mm; height: 54mm; padding: 2.2mm 2.5mm; display: flex; flex-direction: column; justify-content: space-between;">
+            <!-- 2. CONTENIDO INTERIOR VERTICAL -->
+            <div style="position: relative; z-index: 2; width: 54mm; height: 85.6mm; display: flex; flex-direction: column; justify-content: space-between; padding: 2.2mm;">
 
-                <!-- Fila Superior: Semestres y Firma del Alumno -->
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 3mm;">
-                    
-                    <!-- Cuadro de Semestres / Periodos SEP -->
-                    <div style="width: 28mm; border: 0.3mm solid #4a0e1e; border-radius: 1mm; text-align: center; background-color: rgba(255,255,255,0.85); overflow: hidden;">
-                        <div style="background-color: #4a0e1e; border-bottom: 0.3mm solid #c59b4d; padding: 0.5mm 0;">
-                            <p style="font-size: 5.5pt; font-weight: 900; letter-spacing: 0.6px; color: #fcd34d; text-transform: uppercase; margin: 0;">SEMESTRE</p>
-                        </div>
-                        <div style="padding: 1mm 0; border-bottom: 0.2mm solid #cbd5e1; font-size: 6.2pt; font-weight: 900; color: #0f172a; font-family: monospace;">
-                            SEP 26 / ENE 27
-                        </div>
-                        <div style="padding: 1mm 0; font-size: 6.2pt; font-weight: 900; color: #0f172a; font-family: monospace;">
-                            FEB 27 / AGO 27
-                        </div>
+                <!-- Cabecera institucional superior estilo anverso -->
+                <div style="background-color: #4a0e1e; border: 0.3mm solid #c59b4d; border-radius: 1mm; padding: 1mm; text-align: center;">
+                    <p style="font-size: 5pt; font-weight: 900; letter-spacing: 0.6px; color: #fcd34d; text-transform: uppercase; margin: 0;">PERIODOS / SEMESTRES SEP</p>
+                </div>
+
+                <!-- Cuadros de Periodos SEP en Bloque Vertical -->
+                <div style="display: flex; flex-direction: column; gap: 1mm;">
+                    <div style="border: 0.3mm solid #4a0e1e; border-radius: 1mm; padding: 1mm; text-align: center; background-color: rgba(255,255,255,0.9);">
+                        <span style="font-size: 4.5pt; font-weight: 800; color: #64748b; display: block; text-transform: uppercase;">PRIMER PERIODO</span>
+                        <span style="font-size: 6.5pt; font-weight: 900; color: #0f172a; font-family: monospace;">SEP 26 / ENE 27</span>
                     </div>
-
-                    <!-- Cuadro de Firma del Alumno -->
-                    <div style="flex-grow: 1; border: 0.3mm solid #4a0e1e; border-radius: 1mm; padding: 1mm 1.5mm; text-align: center; height: 17.5mm; background-color: rgba(255,255,255,0.85); display: flex; flex-direction: column; justify-content: space-between;">
-                        <div style="height: 8mm; display: flex; align-items: center; justify-content: center;">
-                            <span style="font-size: 6pt; font-style: italic; color: #94a3b8; font-family: serif;">Firma de Conformidad</span>
-                        </div>
-                        <div style="border-top: 0.2mm solid #64748b; padding-top: 0.4mm;">
-                            <p style="font-size: 4.8pt; font-weight: 900; text-transform: uppercase; color: #334155; letter-spacing: 0.4px; margin: 0;">FIRMA DEL ALUMNO</p>
-                        </div>
+                    <div style="border: 0.3mm solid #4a0e1e; border-radius: 1mm; padding: 1mm; text-align: center; background-color: rgba(255,255,255,0.9);">
+                        <span style="font-size: 4.5pt; font-weight: 800; color: #64748b; display: block; text-transform: uppercase;">SEGUNDO PERIODO</span>
+                        <span style="font-size: 6.5pt; font-weight: 900; color: #0f172a; font-family: monospace;">FEB 27 / AGO 27</span>
                     </div>
                 </div>
 
-                <!-- Fila Inferior: Dirección y Datos del Director (SIN LOGOS SOBRANTES) -->
-                <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 2mm;">
-                    
-                    <!-- Dirección del Plantel -->
-                    <div style="width: 33mm;">
-                        <p style="font-size: 4.5pt; font-weight: 900; text-transform: uppercase; color: #4a0e1e; letter-spacing: 0.3px; margin: 0 0 0.5mm 0;">DIRECCIÓN DEL PLANTEL</p>
-                        <p style="font-size: 4.8pt; font-weight: 700; color: #334155; line-height: 1.2; text-transform: uppercase; margin: 0;">
-                            BLDV. VICENTE GUERRERO L1 CD. RENACIMIENTO CP. 39715
-                        </p>
+                <!-- Cuadro de Firma del Alumno -->
+                <div style="border: 0.3mm solid #4a0e1e; border-radius: 1mm; padding: 1.5mm; text-align: center; background-color: rgba(255,255,255,0.9);">
+                    <div style="height: 10mm; display: flex; align-items: center; justify-content: center;">
+                        <span style="font-size: 6pt; font-style: italic; color: #94a3b8; font-family: serif;">Firma de Conformidad</span>
                     </div>
-
-                    <!-- Cuadro del Director (Limpio y formal) -->
-                    <div style="width: 35mm; border: 0.3mm solid #4a0e1e; border-radius: 1mm; padding: 1mm; text-align: center; background-color: #ffffff;">
-                        <div style="font-size: 4.5pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1.1; margin-bottom: 0.8mm;">
-                            SEP • SEMS • DGETI
-                        </div>
-                        <div style="font-size: 5.8pt; font-weight: 900; color: #0f172a; text-transform: uppercase; line-height: 1.1; margin-bottom: 0.3mm;">
-                            LIC. JOSÉ MARCELO OLEA
-                        </div>
-                        <div style="font-size: 4.8pt; font-weight: 900; color: #4a0e1e; text-transform: uppercase; letter-spacing: -0.2px; border-top: 0.2mm solid #cbd5e1; padding-top: 0.4mm; margin-top: 0.3mm;">
-                            DIRECTOR DEL PLANTEL
-                        </div>
+                    <div style="border-top: 0.2mm solid #64748b; padding-top: 0.4mm;">
+                        <p style="font-size: 4.8pt; font-weight: 900; text-transform: uppercase; color: #334155; letter-spacing: 0.4px; margin: 0;">FIRMA DEL ALUMNO</p>
                     </div>
                 </div>
+
+                <!-- Dirección del Plantel -->
+                <div style="border: 0.3mm solid #4a0e1e; border-radius: 1mm; padding: 1mm; background-color: rgba(255,255,255,0.9); text-align: center;">
+                    <p style="font-size: 4.5pt; font-weight: 900; text-transform: uppercase; color: #4a0e1e; margin: 0 0 0.3mm 0;">DIRECCIÓN DEL PLANTEL</p>
+                    <p style="font-size: 4.5pt; font-weight: 700; color: #334155; line-height: 1.2; text-transform: uppercase; margin: 0;">
+                        BLDV. VICENTE GUERRERO L1 CD. RENACIMIENTO CP. 39715
+                    </p>
+                </div>
+
+                <!-- Cuadro del Director del Plantel -->
+                <div style="border: 0.3mm solid #4a0e1e; border-radius: 1mm; padding: 1mm; text-align: center; background-color: #ffffff;">
+                    <div style="font-size: 4.5pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1.1; margin-bottom: 0.5mm;">
+                        SEP • SEMS • DGETI
+                    </div>
+                    <div style="font-size: 5.5pt; font-weight: 900; color: #0f172a; text-transform: uppercase; line-height: 1.1; margin-bottom: 0.2mm;">
+                        LIC. JOSÉ MARCELO OLEA
+                    </div>
+                    <div style="font-size: 4.5pt; font-weight: 900; color: #4a0e1e; text-transform: uppercase; border-top: 0.2mm solid #cbd5e1; padding-top: 0.3mm; margin-top: 0.2mm;">
+                        DIRECTOR DEL PLANTEL
+                    </div>
+                </div>
+
             </div>
 
-            <!-- 3. FRANJA LATERAL DERECHA: SISTEMA ESCOLARIZADO Y FECHA DE EMISIÓN -->
-            <div style="position: relative; z-index: 2; width: 12mm; height: 54mm; background-color: #4a0e1e; border-left: 0.6mm solid #c59b4d; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 2.5mm 0; user-select: none;">
-                <span style="font-size: 7.2pt; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; writing-mode: vertical-rl; transform: rotate(180deg); color: #ffffff;">
+            <!-- 3. PIE INFERIOR VERTICAL: SISTEMA ESCOLARIZADO -->
+            <div style="position: relative; z-index: 2; width: 54mm; height: 4.8mm; background-color: #4a0e1e; border-top: 0.5mm solid #c59b4d; padding: 0 2.2mm; display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 5pt; font-weight: 900; letter-spacing: 1px; color: #ffffff; text-transform: uppercase;">
                     SISTEMA ESCOLARIZADO
                 </span>
-                <div style="text-align: center; writing-mode: vertical-rl; transform: rotate(180deg);">
-                    <span style="font-size: 4.5pt; font-weight: 800; letter-spacing: 0.5px; color: #fcd34d; text-transform: uppercase; display: block;">EMISIÓN</span>
-                    <span style="font-size: 5.2pt; font-weight: 900; color: #f1f5f9; text-transform: uppercase; margin-top: 0.5mm; display: block;">SEP 2026</span>
-                </div>
+                <span style="font-size: 5pt; font-weight: 900; color: #fcd34d; text-transform: uppercase;">
+                    SEP 2026
+                </span>
             </div>
 
         </div>
@@ -191,7 +191,7 @@
     <!-- Botón de Impresión -->
     <div class="no-print" style="margin-top: 16px;">
         <button onclick="window.print()" class="btn-gold" style="font-weight: 900; padding: 10px 24px; border-radius: 12px; border: none; cursor: pointer; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 10px 20px rgba(0,0,0,0.4);">
-            🖨️ Imprimir Reverso Horizontal (ZC300)
+            🖨️ Imprimir Reverso Vertical
         </button>
     </div>
 
