@@ -88,13 +88,15 @@
 </head>
 <body>
 
-    <!-- Barra de Navegación (Se oculta al imprimir) -->
-    <div class="no-print" style="width: 54mm; display: flex; justify-content: space-between; margin-bottom: 12px;">
-        <a id="linkAnverso" href="credencial.html" style="font-size: 11px; background: #0f172a; color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); padding: 6px 10px; border-radius: 8px; text-decoration: none; font-weight: bold;">
-            ⬅ Ver Anverso
-        </a>
-        <span style="font-size: 11px; color: #fcd34d; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
-            Reverso Vertical
+    <!-- Barra de Navegación y Título Superior corregidos sin solapamiento -->
+    <div class="no-print" style="width: 54mm; display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 12px;">
+        <div style="width: 100%; display: flex; justify-content: flex-start;">
+            <a id="linkAnverso" href="credencial.html" style="font-size: 11px; background: #0f172a; color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); padding: 6px 12px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+                ⬅ Ver Anverso
+            </a>
+        </div>
+        <span style="font-size: 10px; color: #fcd34d; font-weight: bold; text-transform: uppercase; letter-spacing: 1.2px; text-align: center;">
+            REVERSO VERTICAL OFICIAL
         </span>
     </div>
 
