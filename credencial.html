@@ -13,7 +13,7 @@
             margin: 0;
             padding: 0;
         }
-        /* Proporción exacta CR-80 Vertical para tarjeta PVC (54mm x 85.6mm) -> 270px por 428px */
+        /* Proporción exacta CR-80 Vertical para tarjeta PVC (54mm x 85.6mm) */
         .cr80-card-vertical {
             width: 270px;
             height: 428px;
@@ -30,7 +30,7 @@
             background: linear-gradient(135deg, #e0c283 0%, #d1a95b 100%);
         }
         
-        /* REGLAS ESTRICTAS DE IMPRESIÓN EXCLUSIVA (EVITA HOJAS EN BLANCO Y DIVISIÓN) */
+        /* REGLAS ESTRICTAS DE IMPRESIÓN MÓVIL Y ZEBRA ZC300 */
         @media print {
             @page {
                 size: 54mm 85.6mm;
@@ -59,7 +59,7 @@
                 height: 85.6mm !important;
                 margin: 0 !important;
                 padding: 0 !important;
-                z-index: 99999;
+                transform: scale(1);
             }
             .no-print {
                 display: none !important;
@@ -79,19 +79,19 @@
         </a>
     </div>
 
-    <!-- CONTENEDOR EXCLUSIVO PARA IMPRESIÓN (EVITA PAGINACIÓN DOBLE) -->
+    <!-- CONTENEDOR EXCLUSIVO PARA IMPRESIÓN -->
     <div id="areaImpresion">
         <!-- TARJETA CR-80 VERTICAL (ANVERSO OFICIAL) -->
         <div class="cr80-card-vertical rounded-xl shadow-2xl border border-slate-300 overflow-hidden flex flex-col justify-between select-none mx-auto">
             
-            <!-- ENCABEZADO INSTITUCIONAL SUPERIOR (TÍTULOS AGRANDADOS Y LOGOS NÍTIDOS) -->
+            <!-- ENCABEZADO INSTITUCIONAL SUPERIOR -->
             <div class="bg-[#4a0e1e] text-white px-2.5 py-2 border-b-2 border-[#c59b4d] flex items-center justify-between gap-1 shadow-md">
-                <!-- Logo DGETI -->
-                <div class="w-11 h-11 bg-white/95 rounded-lg p-1 flex items-center justify-center flex-shrink-0 shadow border border-amber-400/50">
-                    <img src="logotipodgti.png" alt="DGETI" class="w-full h-full object-contain">
+                <!-- Logo DGETI (Sin recuadros estorbosos, limpio sobre guinda) -->
+                <div class="w-11 h-11 flex items-center justify-center flex-shrink-0">
+                    <img src="logotipodgti.png" alt="DGETI" class="w-full h-full object-contain drop-shadow">
                 </div>
                 
-                <!-- Textos Centrales Más Grandes y Claros -->
+                <!-- Textos Centrales Grandes y Claros -->
                 <div class="text-center flex-grow leading-tight px-0.5">
                     <p class="text-[7px] font-extrabold tracking-[0.1em] text-amber-300 uppercase">SEP • SEMS • DGETI</p>
                     <h1 class="text-[12px] font-black tracking-wide uppercase mt-0.5 text-white drop-shadow">CETis No. 116</h1>
@@ -99,8 +99,8 @@
                 </div>
 
                 <!-- Logo CETis 116 -->
-                <div class="w-11 h-11 bg-white/95 rounded-lg p-1 flex items-center justify-center flex-shrink-0 shadow border border-amber-400/50">
-                    <img src="logotipocetis116.png" alt="CETis 116" class="w-full h-full object-contain">
+                <div class="w-11 h-11 flex items-center justify-center flex-shrink-0">
+                    <img src="logotipocetis116.png" alt="CETis 116" class="w-full h-full object-contain drop-shadow">
                 </div>
             </div>
 
@@ -157,7 +157,7 @@
                 </div>
             </div>
 
-            <!-- PIE DE CREDENCIAL INFERIOR (SUBIDO Y AJUSTADO) -->
+            <!-- PIE DE CREDENCIAL INFERIOR (BIEN ACOMODADO Y SUBIDO) -->
             <div class="bg-slate-900 text-slate-200 px-3 py-1 flex justify-between items-center text-[7.5px] border-t border-[#c59b4d]">
                 <span>VIGENCIA: <strong class="text-amber-400">2026 - 2027</strong></span>
                 <span class="font-mono text-slate-300">C.C.T. 12DCT0007F</span>
