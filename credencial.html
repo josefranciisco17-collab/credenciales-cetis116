@@ -3,113 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Credencial Estudiantil - CETis 116</title>
+    <title>Credencial Oficial - CETis No. 116</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        body {
+            background-color: #070b14;
+            color: #f1f5f9;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
         /* Proporción exacta CR-80 para tarjeta PVC (85.6mm x 54mm) */
         .cr80-card {
             width: 428px;
             height: 270px;
-            background: linear-gradient(135deg, #090d16 0%, #111e38 50%, #0a1124 100%);
+            background: linear-gradient(135deg, #0b111e 0%, #152238 55%, #090d16 100%);
             position: relative;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
-        /* Patrón de fondo geométrico sutil y elegante */
+        /* Franja Superior Institucional Guinda DGETI */
+        .header-credencial {
+            background: linear-gradient(90deg, #4a0e1e 0%, #68142b 50%, #4a0e1e 100%);
+            border-bottom: 2px solid #c59b4d;
+        }
+        /* Patrón geométrico y seguridad visual */
         .card-pattern {
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: radial-gradient(rgba(56, 189, 248, 0.1) 1px, transparent 1px);
-            background-size: 16px 16px;
+            inset: 0;
+            background-image: radial-gradient(rgba(197, 155, 77, 0.1) 1px, transparent 1px);
+            background-size: 14px 14px;
             pointer-events: none;
         }
+        .btn-gold {
+            background: linear-gradient(135deg, #d4b26f 0%, #c59b4d 100%);
+            color: #1a1205;
+        }
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #e0c283 0%, #d1a95b 100%);
+        }
+        /* Configuración exacta para impresora Zebra ZC300 */
         @media print {
-            body { background: none; }
-            .no-print { display: none; }
-            .cr80-card { box-shadow: none; margin: 0; }
+            @page {
+                size: 85.6mm 54mm;
+                margin: 0;
+            }
+            body {
+                background: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .cr80-card {
+                width: 85.6mm !important;
+                height: 54mm !important;
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                margin: 0 !important;
+            }
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-4">
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
 
-    <!-- Contenedor Centrado de la Credencial -->
-    <div class="flex flex-col items-center justify-center w-full max-w-md my-auto">
-        <h2 class="text-xs uppercase tracking-widest text-sky-400 mb-3 font-semibold text-center">Credencial Oficial - CETis 116</h2>
+    <!-- Barra Superior de Navegación (Oculta al imprimir) -->
+    <div class="no-print w-full max-w-[428px] flex justify-between items-center mb-4">
+        <a href="index.html" class="text-xs bg-slate-900 hover:bg-slate-800 text-amber-300 border border-amber-500/30 px-3.5 py-2 rounded-xl transition font-semibold shadow">
+            ⬅ Volver al Padrón
+        </a>
+        <span class="text-[11px] uppercase tracking-widest text-amber-400/90 font-bold">
+            Vista Previa CR-80
+        </span>
+    </div>
+
+    <!-- TARJETA CR-80 (ANVERSO OFICIAL) -->
+    <div class="cr80-card rounded-2xl shadow-2xl border border-amber-500/30 overflow-hidden flex flex-col justify-between select-none">
         
-        <div class="cr80-card rounded-xl p-4 shadow-2xl border border-slate-700/80 overflow-hidden flex flex-col justify-between">
-            <!-- Patrón Gráfico de Fondo -->
-            <div class="card-pattern"></div>
+        <!-- Patrón de seguridad y Marca de Agua al centro -->
+        <div class="card-pattern"></div>
+        <img src="logotipocetis116.png" alt="" class="absolute right-20 bottom-4 w-32 h-32 object-contain opacity-[0.05] pointer-events-none">
+
+        <!-- ENCABEZADO CON AMBOS LOGOS -->
+        <div class="header-credencial px-3.5 py-2 flex items-center justify-between gap-2 relative z-10 shadow-md">
+            <!-- Logo DGETI (Izquierda) -->
+            <div class="w-11 h-11 bg-white/95 rounded-lg p-1 flex items-center justify-center shadow flex-shrink-0 border border-amber-300/60">
+                <img src="logotipodgti.png" alt="Logo DGETI" class="w-full h-full object-contain">
+            </div>
+
+            <!-- Textos Institucionales Centrales -->
+            <div class="text-center flex-grow leading-tight px-1">
+                <p class="text-[8px] font-bold tracking-[0.18em] text-amber-300 uppercase">
+                    SEP • SEMS • DGETI
+                </p>
+                <h1 class="text-[12px] font-black text-white tracking-wide uppercase mt-0.5 drop-shadow">
+                    CETis No. 116
+                </h1>
+                <p class="text-[8.5px] text-rose-100/90 font-medium italic">
+                    "Antonia Nava de Catalán"
+                </p>
+            </div>
+
+            <!-- Logo CETis 116 (Derecha) -->
+            <div class="w-11 h-11 bg-white/95 rounded-lg p-1 flex items-center justify-center shadow flex-shrink-0 border border-amber-300/60">
+                <img src="logotipocetis116.png" alt="Logo CETis 116" class="w-full h-full object-contain">
+            </div>
+        </div>
+
+        <!-- CUERPO CENTRAL: FOTO, DATOS DEL ALUMNO Y QR -->
+        <div class="px-3.5 py-2 flex items-center justify-between gap-2.5 my-auto relative z-10">
             
-            <!-- Encabezado Institucional -->
-            <div class="flex items-center justify-between border-b border-slate-700/60 pb-2 relative z-10">
+            <!-- Fotografía del Estudiante -->
+            <div class="w-[78px] h-[98px] bg-slate-900 border-2 border-[#c59b4d] rounded-lg overflow-hidden flex-shrink-0 shadow-lg relative">
+                <img id="cardFoto" src="" alt="Foto Estudiante" class="w-full h-full object-cover">
+            </div>
+
+            <!-- Datos del Estudiante -->
+            <div class="flex-grow flex flex-col justify-center space-y-1 overflow-hidden">
                 <div>
-                    <h1 class="text-xs font-bold text-white tracking-wider">CETis No. 116</h1>
-                    <p class="text-[9px] text-slate-400">Antonia Nava de Catalán</p>
+                    <span class="inline-block text-[7.5px] uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 py-0.2 rounded font-bold mb-0.5">
+                        ESTUDIANTE ACREDITADO
+                    </span>
+                    <p id="cardNombre" class="font-extrabold text-white text-[11px] leading-tight uppercase truncate">
+                        CARGANDO...
+                    </p>
                 </div>
-                <span class="text-[9px] bg-sky-600 text-white px-2 py-0.5 rounded-full font-semibold shadow">SEMS SEP</span>
-            </div>
 
-            <!-- Cuerpo Central: Foto, Datos y Código QR -->
-            <div class="flex items-center justify-between my-auto gap-3 relative z-10">
-                <div class="flex items-center gap-3">
-                    <!-- Foto del Alumno -->
-                    <div class="w-20 h-24 bg-slate-900 border-2 border-sky-400/80 rounded-md overflow-hidden flex-shrink-0 shadow-lg">
-                        <img id="cardFoto" src="" alt="Foto Alumno" class="w-full h-full object-cover">
+                <div>
+                    <p class="text-[7.5px] text-slate-400 uppercase font-semibold tracking-wider">Especialidad Técnica:</p>
+                    <p id="cardEspecialidad" class="text-amber-300 font-bold text-[9.5px] leading-tight truncate">
+                        Cargando...
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-1 pt-0.5">
+                    <div>
+                        <p class="text-[7px] text-slate-400 uppercase font-semibold">No. Control:</p>
+                        <p id="cardMatricula" class="font-mono text-white font-bold text-[9.5px] leading-tight">-</p>
                     </div>
-                    <!-- Datos Dinámicos del Alumno -->
-                    <div class="flex flex-col justify-center text-xs space-y-1 overflow-hidden max-w-[180px]">
-                        <div>
-                            <p class="text-[8px] text-slate-400 uppercase tracking-wider font-medium">Nombre:</p>
-                            <p id="cardNombre" class="font-bold text-white truncate text-[11px] leading-tight">Cargando...</p>
-                        </div>
-                        <div>
-                            <p class="text-[8px] text-slate-400 uppercase tracking-wider font-medium">Especialidad:</p>
-                            <p id="cardEspecialidad" class="text-sky-300 truncate text-[10px] leading-tight">Cargando...</p>
-                        </div>
-                        <div class="flex gap-3 pt-0.5">
-                            <div>
-                                <p class="text-[8px] text-slate-400 uppercase tracking-wider font-medium">Matrícula:</p>
-                                <p id="cardMatricula" class="font-mono text-slate-200 text-[10px]">-</p>
-                            </div>
-                            <div>
-                                <p class="text-[8px] text-slate-400 uppercase tracking-wider font-medium">Grupo:</p>
-                                <p id="cardGrupo" class="font-mono text-slate-200 text-[10px]">-</p>
-                            </div>
-                        </div>
+                    <div>
+                        <p class="text-[7px] text-slate-400 uppercase font-semibold">Semestre / Grupo:</p>
+                        <p id="cardGrupo" class="font-mono text-white font-bold text-[9.5px] leading-tight">-</p>
                     </div>
                 </div>
 
-                <!-- Código QR Dinámico -->
-                <div class="bg-white p-1 rounded-md shadow-md flex-shrink-0 flex flex-col items-center justify-center">
-                    <img id="cardQR" src="" alt="QR Alumno" class="w-16 h-16 object-contain">
-                    <span class="text-[7px] text-slate-900 font-bold mt-0.5 tracking-tighter">VALIDAR</span>
+                <div class="grid grid-cols-3 gap-1 pt-0.5 border-t border-slate-800/80">
+                    <div class="col-span-2">
+                        <p class="text-[7px] text-slate-400 uppercase font-semibold">CURP:</p>
+                        <p id="cardCurp" class="font-mono text-slate-200 text-[8.5px] leading-tight truncate">-</p>
+                    </div>
+                    <div>
+                        <p class="text-[7px] text-slate-400 uppercase font-semibold">Sangre:</p>
+                        <p id="cardSangre" class="font-bold text-rose-400 text-[8.5px] leading-tight truncate">-</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Pie de Credencial / Vigencia -->
-            <div class="border-t border-slate-700/60 pt-1.5 flex justify-between items-center text-[9px] text-slate-400 relative z-10">
-                <span>Vigencia: <strong class="text-white">2026 - 2027</strong></span>
-                <span class="italic text-sky-400 font-medium">Acapulco, Gro.</span>
+            <!-- Código QR de Validación -->
+            <div class="bg-white p-1.5 rounded-lg shadow-lg border border-amber-400/60 flex-shrink-0 flex flex-col items-center justify-center">
+                <img id="cardQR" src="" alt="QR" class="w-16 h-16 object-contain">
+                <span class="text-[6.5px] text-slate-900 font-black tracking-widest mt-0.5 uppercase">
+                    VALIDACIÓN
+                </span>
             </div>
+        </div>
+
+        <!-- PIE DE CREDENCIAL -->
+        <div class="bg-[#060911]/90 border-t border-amber-500/30 px-3.5 py-1.5 flex justify-between items-center text-[8.5px] text-slate-300 relative z-10">
+            <span>VIGENCIA: <strong id="cardVigencia" class="text-amber-400 font-bold">2026 - 2027</strong></span>
+            <span class="text-slate-400 font-medium">C.C.T. 12DCT0007F • Acapulco, Gro.</span>
         </div>
     </div>
 
-    <!-- Botón de Impresión -->
-    <div class="mt-6 no-print">
-        <button onclick="window.print()" class="bg-sky-600 hover:bg-sky-500 text-white font-semibold px-6 py-2.5 rounded-lg shadow-lg transition duration-200 text-sm">
-            Imprimir Credencial (Zebra ZC300)
+    <!-- Botones de Acción (Ocultos al imprimir) -->
+    <div class="mt-6 flex gap-3 no-print">
+        <button onclick="window.print()" class="btn-gold font-extrabold px-6 py-3 rounded-xl shadow-xl transition duration-200 text-xs uppercase tracking-wider flex items-center gap-2">
+            <span>🖨️</span> Imprimir en Zebra ZC300
         </button>
     </div>
 
-    <!-- Script para conectar con Firestore y generar QR -->
+    <!-- Script de Conexión con Firebase Firestore -->
     <script type="module">
-        import { db } from "./firebase-config.js";
-        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { db, doc, getDoc } from "./firebase-config.js";
 
         async function cargarDatosCredencial() {
             const params = new URLSearchParams(window.location.search);
             const alumnoId = params.get('id');
 
             if (!alumnoId) {
-                alert("No se especificó un alumno para generar la credencial.");
+                alert("No se especificó un estudiante para generar la credencial.");
                 return;
             }
 
@@ -122,18 +204,21 @@
                     document.getElementById('cardNombre').innerText = data.nombreCompleto || '';
                     document.getElementById('cardEspecialidad').innerText = data.especialidad || '';
                     document.getElementById('cardMatricula').innerText = data.matricula || '';
-                    document.getElementById('cardGrupo').innerText = `${data.semestre || ''} ${data.grupo || ''}`;
-                    
+                    document.getElementById('cardGrupo').innerText = `${data.semestre || ''}° "${data.grupo || ''}"`;
+                    document.getElementById('cardCurp').innerText = data.curp || '-';
+                    document.getElementById('cardSangre').innerText = data.tipoSangre || '-';
+                    document.getElementById('cardVigencia').innerText = data.vigencia || '2026 - 2027';
+
                     if (data.fotoBase64) {
                         document.getElementById('cardFoto').src = data.fotoBase64;
                     }
 
-                    const textoQR = `CETis 116\nMatrícula: ${data.matricula}\nNombre: ${data.nombreCompleto}\nCURP: ${data.curp}\nSangre: ${data.tipoSangre}`;
-                    const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(textoQR)}&size=150&margin=1`;
+                    const textoQR = `CETis No. 116\nMatricula: ${data.matricula}\nAlumno: ${data.nombreCompleto}\nCURP: ${data.curp}\nEspecialidad: ${data.especialidad}\nSangre: ${data.tipoSangre}`;
+                    const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(textoQR)}&size=160&margin=1`;
                     document.getElementById('cardQR').src = qrUrl;
 
                 } else {
-                    alert("No se encontró el registro del alumno en la base de datos.");
+                    alert("No se encontró el registro del estudiante en la base de datos.");
                 }
             } catch (error) {
                 console.error("Error al cargar los datos:", error);
