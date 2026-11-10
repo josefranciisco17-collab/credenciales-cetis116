@@ -20,7 +20,7 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-4">
 
-    <!-- Contenedor de la Credencial (Anverso) -->
+    <!-- Contenedor de la Credencial (Anverso con QR integrado) -->
     <div class="mb-6">
         <h2 class="text-xs uppercase tracking-widest text-sky-400 mb-2 font-semibold text-center">Credencial Oficial - CETis 116</h2>
         <div class="cr80-card rounded-xl p-4 shadow-2xl border border-slate-700 relative overflow-hidden flex flex-col justify-between">
@@ -34,32 +34,40 @@
                 <span class="text-[9px] bg-sky-600 text-white px-2 py-0.5 rounded-full font-medium">SEMS SEP</span>
             </div>
 
-            <!-- Cuerpo Central: Foto y Datos -->
-            <div class="flex items-center gap-4 my-auto">
-                <!-- Foto del Alumno -->
-                <div class="w-20 h-24 bg-slate-800 border-2 border-sky-500 rounded-md overflow-hidden flex-shrink-0 shadow-md">
-                    <img id="cardFoto" src="" alt="Foto Alumno" class="w-full h-full object-cover">
+            <!-- Cuerpo Central: Foto, Datos y Código QR -->
+            <div class="flex items-center justify-between my-auto gap-2">
+                <div class="flex items-center gap-3">
+                    <!-- Foto del Alumno -->
+                    <div class="w-20 h-24 bg-slate-800 border-2 border-sky-500 rounded-md overflow-hidden flex-shrink-0 shadow-md">
+                        <img id="cardFoto" src="" alt="Foto Alumno" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Datos Dinámicos del Alumno -->
+                    <div class="flex flex-col justify-center text-xs space-y-1 overflow-hidden max-w-[170px]">
+                        <div>
+                            <p class="text-[9px] text-slate-400 uppercase">Nombre:</p>
+                            <p id="cardNombre" class="font-bold text-white truncate text-[11px]">Cargando...</p>
+                        </div>
+                        <div>
+                            <p class="text-[9px] text-slate-400 uppercase">Especialidad:</p>
+                            <p id="cardEspecialidad" class="text-sky-300 truncate text-[10px]">Cargando...</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <div>
+                                <p class="text-[9px] text-slate-400 uppercase">Matrícula:</p>
+                                <p id="cardMatricula" class="font-mono text-slate-200 text-[10px]">-</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-slate-400 uppercase">Grupo:</p>
+                                <p id="cardGrupo" class="font-mono text-slate-200 text-[10px]">-</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- Datos Dinámicos del Alumno -->
-                <div class="flex flex-col justify-center text-xs space-y-1 overflow-hidden">
-                    <div>
-                        <p class="text-[9px] text-slate-400 uppercase">Nombre:</p>
-                        <p id="cardNombre" class="font-bold text-white truncate">Cargando...</p>
-                    </div>
-                    <div>
-                        <p class="text-[9px] text-slate-400 uppercase">Especialidad:</p>
-                        <p id="cardEspecialidad" class="text-sky-300 truncate">Cargando...</p>
-                    </div>
-                    <div class="flex gap-4">
-                        <div>
-                            <p class="text-[9px] text-slate-400 uppercase">Matrícula:</p>
-                            <p id="cardMatricula" class="font-mono text-slate-200">-</p>
-                        </div>
-                        <div>
-                            <p class="text-[9px] text-slate-400 uppercase">Grupo:</p>
-                            <p id="cardGrupo" class="font-mono text-slate-200">-</p>
-                        </div>
-                    </div>
+
+                <!-- Código QR Dinámico -->
+                <div class="bg-white p-1 rounded-md shadow-md flex-shrink-0 flex flex-col items-center justify-center">
+                    <img id="cardQR" src="" alt="QR Alumno" class="w-16 h-16 object-contain">
+                    <span class="text-[7px] text-slate-900 font-bold mt-0.5 tracking-tighter">VALIDAR</span>
                 </div>
             </div>
 
@@ -76,13 +84,12 @@
         Imprimir Credencial (Zebra ZC300)
     </button>
 
-    <!-- Script para conectar con Firestore -->
+    <!-- Script para conectar con Firestore y generar QR -->
     <script type="module">
         import { db } from "./firebase-config.js";
         import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         async function cargarDatosCredencial() {
-            // Obtenemos el ID o Matrícula desde los parámetros de la URL (ej: credencial.html?id=MATRICULA)
             const params = new URLSearchParams(window.location.search);
             const alumnoId = params.get('id');
 
@@ -100,10 +107,17 @@
                     document.getElementById('cardNombre').innerText = data.nombreCompleto || '';
                     document.getElementById('cardEspecialidad').innerText = data.especialidad || '';
                     document.getElementById('cardMatricula').innerText = data.matricula || '';
-                    document.getElementById('cardGrupo').innerText = data.grupo || '';
+                    document.getElementById('cardGrupo').innerText = `${data.semestre || ''} ${data.grupo || ''}`;
+                    
                     if (data.fotoBase64) {
                         document.getElementById('cardFoto').src = data.fotoBase64;
                     }
+
+                    // Generar Código QR con la información clave del alumno
+                    const textoQR = `CETis 116\nMatrícula: ${data.matricula}\nNombre: ${data.nombreCompleto}\nCURP: ${data.curp}\nSangre: ${data.tipoSangre}`;
+                    const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(textoQR)}&size=150&margin=1`;
+                    document.getElementById('cardQR').src = qrUrl;
+
                 } else {
                     alert("No se encontró el registro del alumno en la base de datos.");
                 }
