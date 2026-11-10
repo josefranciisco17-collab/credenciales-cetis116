@@ -6,10 +6,20 @@
     <title>Credencial Estudiantil - CETis 116</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* Proporción exacta CR-80 para tarjeta PVC (85.6mm x 54mm) */
         .cr80-card {
             width: 428px;
             height: 270px;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            background: linear-gradient(135deg, #090d16 0%, #111e38 50%, #0a1124 100%);
+            position: relative;
+        }
+        /* Patrón de fondo geométrico sutil y elegante */
+        .card-pattern {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(rgba(56, 189, 248, 0.1) 1px, transparent 1px);
+            background-size: 16px 16px;
+            pointer-events: none;
         }
         @media print {
             body { background: none; }
@@ -20,44 +30,47 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-4">
 
-    <!-- Contenedor de la Credencial (Anverso con QR integrado) -->
-    <div class="mb-6">
-        <h2 class="text-xs uppercase tracking-widest text-sky-400 mb-2 font-semibold text-center">Credencial Oficial - CETis 116</h2>
-        <div class="cr80-card rounded-xl p-4 shadow-2xl border border-slate-700 relative overflow-hidden flex flex-col justify-between">
+    <!-- Contenedor Centrado de la Credencial -->
+    <div class="flex flex-col items-center justify-center w-full max-w-md my-auto">
+        <h2 class="text-xs uppercase tracking-widest text-sky-400 mb-3 font-semibold text-center">Credencial Oficial - CETis 116</h2>
+        
+        <div class="cr80-card rounded-xl p-4 shadow-2xl border border-slate-700/80 overflow-hidden flex flex-col justify-between">
+            <!-- Patrón Gráfico de Fondo -->
+            <div class="card-pattern"></div>
             
             <!-- Encabezado Institucional -->
-            <div class="flex items-center justify-between border-b border-slate-700 pb-2">
+            <div class="flex items-center justify-between border-b border-slate-700/60 pb-2 relative z-10">
                 <div>
                     <h1 class="text-xs font-bold text-white tracking-wider">CETis No. 116</h1>
                     <p class="text-[9px] text-slate-400">Antonia Nava de Catalán</p>
                 </div>
-                <span class="text-[9px] bg-sky-600 text-white px-2 py-0.5 rounded-full font-medium">SEMS SEP</span>
+                <span class="text-[9px] bg-sky-600 text-white px-2 py-0.5 rounded-full font-semibold shadow">SEMS SEP</span>
             </div>
 
             <!-- Cuerpo Central: Foto, Datos y Código QR -->
-            <div class="flex items-center justify-between my-auto gap-2">
+            <div class="flex items-center justify-between my-auto gap-3 relative z-10">
                 <div class="flex items-center gap-3">
                     <!-- Foto del Alumno -->
-                    <div class="w-20 h-24 bg-slate-800 border-2 border-sky-500 rounded-md overflow-hidden flex-shrink-0 shadow-md">
+                    <div class="w-20 h-24 bg-slate-900 border-2 border-sky-400/80 rounded-md overflow-hidden flex-shrink-0 shadow-lg">
                         <img id="cardFoto" src="" alt="Foto Alumno" class="w-full h-full object-cover">
                     </div>
                     <!-- Datos Dinámicos del Alumno -->
-                    <div class="flex flex-col justify-center text-xs space-y-1 overflow-hidden max-w-[170px]">
+                    <div class="flex flex-col justify-center text-xs space-y-1 overflow-hidden max-w-[180px]">
                         <div>
-                            <p class="text-[9px] text-slate-400 uppercase">Nombre:</p>
-                            <p id="cardNombre" class="font-bold text-white truncate text-[11px]">Cargando...</p>
+                            <p class="text-[8px] text-slate-400 uppercase tracking-wider font-medium">Nombre:</p>
+                            <p id="cardNombre" class="font-bold text-white truncate text-[11px] leading-tight">Cargando...</p>
                         </div>
                         <div>
-                            <p class="text-[9px] text-slate-400 uppercase">Especialidad:</p>
-                            <p id="cardEspecialidad" class="text-sky-300 truncate text-[10px]">Cargando...</p>
+                            <p class="text-[8px] text-slate-400 uppercase tracking-wider font-medium">Especialidad:</p>
+                            <p id="cardEspecialidad" class="text-sky-300 truncate text-[10px] leading-tight">Cargando...</p>
                         </div>
-                        <div class="flex gap-2">
+                        <div class="flex gap-3 pt-0.5">
                             <div>
-                                <p class="text-[9px] text-slate-400 uppercase">Matrícula:</p>
+                                <p class="text-[8px] text-slate-400 uppercase tracking-wider font-medium">Matrícula:</p>
                                 <p id="cardMatricula" class="font-mono text-slate-200 text-[10px]">-</p>
                             </div>
                             <div>
-                                <p class="text-[9px] text-slate-400 uppercase">Grupo:</p>
+                                <p class="text-[8px] text-slate-400 uppercase tracking-wider font-medium">Grupo:</p>
                                 <p id="cardGrupo" class="font-mono text-slate-200 text-[10px]">-</p>
                             </div>
                         </div>
@@ -72,17 +85,19 @@
             </div>
 
             <!-- Pie de Credencial / Vigencia -->
-            <div class="border-t border-slate-700 pt-1.5 flex justify-between items-center text-[9px] text-slate-400">
+            <div class="border-t border-slate-700/60 pt-1.5 flex justify-between items-center text-[9px] text-slate-400 relative z-10">
                 <span>Vigencia: <strong class="text-white">2026 - 2027</strong></span>
-                <span class="italic text-sky-400">Acapulco, Gro.</span>
+                <span class="italic text-sky-400 font-medium">Acapulco, Gro.</span>
             </div>
         </div>
     </div>
 
     <!-- Botón de Impresión -->
-    <button onclick="window.print()" class="no-print bg-sky-600 hover:bg-sky-500 text-white font-semibold px-6 py-2.5 rounded-lg shadow-lg transition duration-200 text-sm">
-        Imprimir Credencial (Zebra ZC300)
-    </button>
+    <div class="mt-6 no-print">
+        <button onclick="window.print()" class="bg-sky-600 hover:bg-sky-500 text-white font-semibold px-6 py-2.5 rounded-lg shadow-lg transition duration-200 text-sm">
+            Imprimir Credencial (Zebra ZC300)
+        </button>
+    </div>
 
     <!-- Script para conectar con Firestore y generar QR -->
     <script type="module">
@@ -113,7 +128,6 @@
                         document.getElementById('cardFoto').src = data.fotoBase64;
                     }
 
-                    // Generar Código QR con la información clave del alumno
                     const textoQR = `CETis 116\nMatrícula: ${data.matricula}\nNombre: ${data.nombreCompleto}\nCURP: ${data.curp}\nSangre: ${data.tipoSangre}`;
                     const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(textoQR)}&size=150&margin=1`;
                     document.getElementById('cardQR').src = qrUrl;
