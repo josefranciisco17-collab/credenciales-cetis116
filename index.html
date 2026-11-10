@@ -23,43 +23,80 @@
         .btn-gold:hover {
             background: linear-gradient(135deg, #e0c283 0%, #d1a95b 100%);
         }
+        .app-card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center p-4">
+<body class="min-h-screen flex flex-col items-center p-3 md:p-6">
 
-    <!-- ENCABEZADO INSTITUCIONAL HORIZONTAL ORIGINAL -->
-    <div class="w-full max-w-4xl bg-[#4a0e1e] text-white border-b-4 border-[#c59b4d] rounded-2xl shadow-2xl p-4 mb-6 flex items-center justify-between gap-2">
+    <!-- ENCABEZADO ESTILO APP DE MANTENIMIENTO (CORPORATIVO / JFAM TECH) -->
+    <div class="w-full max-w-4xl bg-[#4a0e1e] text-white border-b-4 border-[#c59b4d] rounded-2xl app-card-shadow p-4 mb-4 flex items-center justify-between gap-3">
         <div class="w-12 h-12 bg-white rounded-xl p-1 flex items-center justify-center shadow border border-amber-400 flex-shrink-0">
             <img src="logo-dgti.png" alt="DGETI" class="w-full h-full object-contain">
         </div>
         <div class="text-center flex-grow px-1">
-            <p class="text-[9px] font-extrabold tracking-widest text-amber-300 uppercase">SEP • SEMS • DGETI</p>
-            <h1 class="text-base md:text-lg font-black tracking-wider uppercase text-white mt-0.5">CETis No. 116</h1>
-            <p class="text-[10px] text-rose-100 italic">"Antonia Nava de Catalán"</p>
+            <p class="text-[9px] font-extrabold tracking-widest text-amber-300 uppercase">CETis 116 - Antonia Nava de Catalán</p>
+            <h1 class="text-base md:text-lg font-black tracking-wider uppercase text-white mt-0.5">Gestión de Credenciales PVC</h1>
+            <p class="text-[10px] text-amber-200/90 font-mono tracking-wide">By J.F.A.M • Sistema Oficial Escolarizado</p>
         </div>
         <div class="w-12 h-12 bg-white rounded-xl p-1 flex items-center justify-center shadow border border-amber-400 flex-shrink-0">
             <img src="logo116.png" alt="CETis 116" class="w-full h-full object-contain">
         </div>
     </div>
 
-    <!-- PANEL DE ACCIONES Y BÚSQUEDA -->
-    <div class="w-full max-w-4xl bg-white rounded-2xl shadow-xl p-5 mb-6 border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div>
-            <h2 class="text-lg font-black text-slate-900 uppercase tracking-tight">Padrón de Estudiantes</h2>
-            <p class="text-xs text-slate-500">Selecciona un alumno para emitir o imprimir anverso y reverso.</p>
+    <!-- PANEL DE ESTADÍSTICAS Y CONTROL RÁPIDO (ESTILO TÉCNICO/MODERNO) -->
+    <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+        <!-- Tarjeta Total Alumnos -->
+        <div class="bg-slate-900 border border-amber-500/30 rounded-xl p-3 text-white flex items-center justify-between shadow-lg">
+            <div>
+                <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Padrón Activo</p>
+                <p id="statTotal" class="text-lg font-black text-amber-300 font-mono mt-0.5">Cargando...</p>
+            </div>
+            <div class="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-base">
+                👥
+            </div>
         </div>
-        <div class="flex items-center gap-3 w-full md:w-auto">
-            <a href="registro.html" class="btn-gold font-extrabold px-5 py-2.5 rounded-xl shadow-lg transition duration-200 text-xs uppercase tracking-wider flex items-center justify-center gap-2 w-full md:w-auto">
+        <!-- Tarjeta Plantel -->
+        <div class="bg-slate-900 border border-amber-500/30 rounded-xl p-3 text-white flex items-center justify-between shadow-lg">
+            <div>
+                <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Clave C.C.T.</p>
+                <p class="text-sm font-black text-white font-mono mt-0.5">12DCT0007F</p>
+            </div>
+            <div class="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-base">
+                🏫
+            </div>
+        </div>
+        <!-- Tarjeta Impresión Zebra -->
+        <div class="bg-slate-900 border border-amber-500/30 rounded-xl p-3 text-white flex items-center justify-between shadow-lg">
+            <div>
+                <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Impresora ZC300</p>
+                <p class="text-xs font-black text-emerald-400 font-mono mt-0.5">CR-80 Configurada</p>
+            </div>
+            <div class="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-base">
+                🖨️
+            </div>
+        </div>
+    </div>
+
+    <!-- PANEL DE ACCIONES Y NUEVO REGISTRO -->
+    <div class="w-full max-w-4xl bg-white rounded-2xl app-card-shadow p-4 mb-4 border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-3">
+        <div>
+            <h2 class="text-sm font-black text-slate-900 uppercase tracking-tight">Directorio de Estudiantes</h2>
+            <p class="text-[11px] text-slate-500">Selecciona un alumno para emitir o imprimir anverso y reverso.</p>
+        </div>
+        <div class="flex items-center gap-2 w-full md:w-auto">
+            <a href="registro.html" class="btn-gold font-extrabold px-4 py-2 rounded-xl shadow transition duration-200 text-xs uppercase tracking-wider flex items-center justify-center gap-2 w-full md:w-auto">
                 <span>➕</span> Nuevo Registro
             </a>
         </div>
     </div>
 
     <!-- LISTADO / TABLA DE ESTUDIANTES DESDE FIRESTORE -->
-    <div class="w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200 flex-grow mb-6">
-        <div class="p-4 bg-slate-900 text-amber-300 font-bold text-xs uppercase tracking-wider flex justify-between items-center">
-            <span>Estudiantes Registrados</span>
-            <span id="totalAlumnos" class="text-white font-mono">Cargando...</span>
+    <div class="w-full max-w-4xl bg-white rounded-2xl app-card-shadow overflow-hidden border border-slate-200 flex-grow mb-4">
+        <div class="p-3 bg-slate-900 text-amber-300 font-bold text-xs uppercase tracking-wider flex justify-between items-center">
+            <span>Listado General de Alumnos</span>
+            <span id="totalAlumnosBadge" class="bg-amber-400/20 text-amber-300 border border-amber-400/30 px-2 py-0.5 rounded text-[10px] font-mono">Sincronizando...</span>
         </div>
         
         <div class="overflow-x-auto">
@@ -75,9 +112,8 @@
                     </tr>
                 </thead>
                 <tbody id="tablaEstudiantes" class="divide-y divide-slate-200 text-xs text-slate-800">
-                    <!-- Los datos se cargan dinámicamente desde Firebase -->
                     <tr>
-                        <td colspan="6" class="p-6 text-center text-slate-400 italic">Conectando con la base de datos...</td>
+                        <td colspan="6" class="p-6 text-center text-slate-400 italic">Conectando con Firebase Firestore...</td>
                     </tr>
                 </tbody>
             </table>
@@ -85,9 +121,9 @@
     </div>
 
     <!-- PIE DE PÁGINA INSTITUCIONAL -->
-    <footer class="w-full max-w-4xl text-center text-slate-400 text-[10px] py-4 border-t border-slate-800">
+    <footer class="w-full max-w-4xl text-center text-slate-400 text-[10px] py-3 border-t border-slate-800">
         <p>CETis No. 116 • C.C.T. 12DCT0007F • Acapulco, Guerrero</p>
-        <p class="text-amber-400/80 mt-0.5">Módulo de Impresión ZEBRA ZC300 & Gestor APK</p>
+        <p class="text-amber-400/80 mt-0.5">Plataforma Inteligente de Credencialización PVC • JFAM Tecno-Energy</p>
     </footer>
 
     <!-- SCRIPT DE CONEXIÓN A FIRESTORE Y CARGA DE PADRÓN -->
@@ -96,7 +132,9 @@
 
         async function cargarPadron() {
             const tbody = document.getElementById('tablaEstudiantes');
-            const totalAlumnosSpan = document.getElementById('totalAlumnos');
+            const totalAlumnosBadge = document.getElementById('totalAlumnosBadge');
+            const statTotal = document.getElementById('statTotal');
+            
             tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500 italic">Cargando registros...</td></tr>`;
 
             try {
@@ -106,7 +144,8 @@
                 let contador = 0;
                 if (querySnapshot.empty) {
                     tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400 italic">No hay estudiantes registrados todavía.</td></tr>`;
-                    totalAlumnosSpan.innerText = "0 Registros";
+                    totalAlumnosBadge.innerText = "0 Registros";
+                    statTotal.innerText = "0";
                     return;
                 }
 
@@ -141,12 +180,14 @@
                     tbody.appendChild(tr);
                 });
 
-                totalAlumnosSpan.innerText = `${contador} Registros`;
+                totalAlumnosBadge.innerText = `${contador} Registros`;
+                statTotal.innerText = contador;
 
             } catch (error) {
                 console.error("Error al cargar el padrón:", error);
                 tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-rose-600 font-bold">Error al conectar con Firebase Firestore.</td></tr>`;
-                totalAlumnosSpan.innerText = "Error de conexión";
+                totalAlumnosBadge.innerText = "Error";
+                statTotal.innerText = "Error";
             }
         }
 
