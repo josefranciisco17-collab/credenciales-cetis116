@@ -14,3 +14,4 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 export { db, collection, addDoc, getDocs, doc, deleteDoc, getDoc };
+
