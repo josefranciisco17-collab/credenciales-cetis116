@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Previsualización de Credencial - CETis 116</title>
+    <title>Credencial Estudiantil - CETis 116</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Proporción exacta CR-80 para tarjeta PVC (85.6mm x 54mm -> Relación ~1.58:1) */
         .cr80-card {
             width: 428px;
             height: 270px;
@@ -14,7 +13,7 @@
         }
         @media print {
             body { background: none; }
-            no-print { display: none; }
+            .no-print { display: none; }
             .cr80-card { box-shadow: none; margin: 0; }
         }
     </style>
@@ -23,7 +22,7 @@
 
     <!-- Contenedor de la Credencial (Anverso) -->
     <div class="mb-6">
-        <h2 class="text-xs uppercase tracking-widest text-sky-400 mb-2 font-semibold text-center">Anverso - Credencial Estudiantil</h2>
+        <h2 class="text-xs uppercase tracking-widest text-sky-400 mb-2 font-semibold text-center">Credencial Oficial - CETis 116</h2>
         <div class="cr80-card rounded-xl p-4 shadow-2xl border border-slate-700 relative overflow-hidden flex flex-col justify-between">
             
             <!-- Encabezado Institucional -->
@@ -41,24 +40,24 @@
                 <div class="w-20 h-24 bg-slate-800 border-2 border-sky-500 rounded-md overflow-hidden flex-shrink-0 shadow-md">
                     <img id="cardFoto" src="" alt="Foto Alumno" class="w-full h-full object-cover">
                 </div>
-                <!-- Datos del Alumno -->
+                <!-- Datos Dinámicos del Alumno -->
                 <div class="flex flex-col justify-center text-xs space-y-1 overflow-hidden">
                     <div>
                         <p class="text-[9px] text-slate-400 uppercase">Nombre:</p>
-                        <p id="cardNombre" class="font-bold text-white truncate">ABARCA MARCELO JOSE FRANCISCO</p>
+                        <p id="cardNombre" class="font-bold text-white truncate">Cargando...</p>
                     </div>
                     <div>
                         <p class="text-[9px] text-slate-400 uppercase">Especialidad:</p>
-                        <p id="cardEspecialidad" class="text-sky-300 truncate">Soporte y Mantenimiento</p>
+                        <p id="cardEspecialidad" class="text-sky-300 truncate">Cargando...</p>
                     </div>
                     <div class="flex gap-4">
                         <div>
                             <p class="text-[9px] text-slate-400 uppercase">Matrícula:</p>
-                            <p id="cardMatricula" class="font-mono text-slate-200">12DCT0007F</p>
+                            <p id="cardMatricula" class="font-mono text-slate-200">-</p>
                         </div>
                         <div>
                             <p class="text-[9px] text-slate-400 uppercase">Grupo:</p>
-                            <p id="cardGrupo" class="font-mono text-slate-200">501</p>
+                            <p id="cardGrupo" class="font-mono text-slate-200">-</p>
                         </div>
                     </div>
                 </div>
@@ -72,10 +71,48 @@
         </div>
     </div>
 
-    <!-- Botón de Impresión Directa para Zebra ZC300 -->
+    <!-- Botón de Impresión -->
     <button onclick="window.print()" class="no-print bg-sky-600 hover:bg-sky-500 text-white font-semibold px-6 py-2.5 rounded-lg shadow-lg transition duration-200 text-sm">
         Imprimir Credencial (Zebra ZC300)
     </button>
 
+    <!-- Script para conectar con Firestore -->
+    <script type="module">
+        import { db } from "./firebase-config.js";
+        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        async function cargarDatosCredencial() {
+            // Obtenemos el ID o Matrícula desde los parámetros de la URL (ej: credencial.html?id=MATRICULA)
+            const params = new URLSearchParams(window.location.search);
+            const alumnoId = params.get('id');
+
+            if (!alumnoId) {
+                alert("No se especificó un alumno para generar la credencial.");
+                return;
+            }
+
+            try {
+                const docRef = doc(db, "estudiantes_credenciales", alumnoId);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('cardNombre').innerText = data.nombreCompleto || '';
+                    document.getElementById('cardEspecialidad').innerText = data.especialidad || '';
+                    document.getElementById('cardMatricula').innerText = data.matricula || '';
+                    document.getElementById('cardGrupo').innerText = data.grupo || '';
+                    if (data.fotoBase64) {
+                        document.getElementById('cardFoto').src = data.fotoBase64;
+                    }
+                } else {
+                    alert("No se encontró el registro del alumno en la base de datos.");
+                }
+            } catch (error) {
+                console.error("Error al cargar los datos:", error);
+            }
+        }
+
+        cargarDatosCredencial();
+    </script>
 </body>
 </html>
