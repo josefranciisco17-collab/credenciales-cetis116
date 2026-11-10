@@ -19,11 +19,15 @@
             min-height: 100vh;
         }
 
-        /* TAMAÑO REAL CR-80 VERTICAL (54mm x 85.6mm) */
+        /* TAMAÑO REAL CR-80 VERTICAL (54mm x 85.6mm) CON DISEÑO DE FONDO INSTITUCIONAL */
         .cr80-vertical {
             width: 54mm;
             height: 85.6mm;
-            background: #ffffff;
+            background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+            background-image: 
+                radial-gradient(rgba(197, 155, 77, 0.08) 1px, transparent 1px),
+                linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+            background-size: 4mm 4mm, 100% 100%;
             position: relative;
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             border-radius: 3mm;
@@ -99,7 +103,7 @@
             
             <!-- ENCABEZADO GUINDA INSTITUCIONAL -->
             <div style="background-color: #4a0e1e; border-bottom: 1.5mm solid #c59b4d;" class="text-white px-2 py-1.5 flex items-center justify-between">
-                <div class="w-7 h-7 bg-white rounded p-0.5 flex items-center justify-center flex-shrink-0 shadow">
+                <div class="w-7 h-7 bg-white/95 rounded p-0.5 flex items-center justify-center flex-shrink-0 shadow border border-amber-300/40">
                     <img src="logotipodgti.png" alt="DGETI" class="w-full h-full object-contain">
                 </div>
                 <div class="text-center flex-grow leading-none px-0.5">
@@ -107,17 +111,17 @@
                     <h1 style="font-size: 8.5px;" class="font-black uppercase text-white mt-0.5">CETis No. 116</h1>
                     <p style="font-size: 5.5px;" class="text-rose-100 italic">"Antonia Nava de Catalán"</p>
                 </div>
-                <div class="w-7 h-7 bg-white rounded p-0.5 flex items-center justify-center flex-shrink-0 shadow">
+                <div class="w-7 h-7 bg-white/95 rounded p-0.5 flex items-center justify-center flex-shrink-0 shadow border border-amber-300/40">
                     <img src="logotipocetis116.png" alt="CETis 116" class="w-full h-full object-contain">
                 </div>
             </div>
 
             <!-- CUERPO DE DATOS Y FOTOGRAFÍA -->
-            <div class="px-2 py-1 flex flex-col justify-between flex-grow">
+            <div class="px-2.5 py-1.5 flex flex-col justify-between flex-grow">
                 
                 <!-- Nombre del Alumno -->
                 <div class="text-center">
-                    <span style="font-size: 5px;" class="inline-block font-bold bg-amber-500/20 text-amber-900 px-2 py-0.2 rounded-full uppercase">
+                    <span style="font-size: 5px;" class="inline-block font-bold bg-amber-500/20 text-amber-900 px-2 py-0.2 rounded-full uppercase border border-amber-500/30">
                         Estudiante Acreditado
                     </span>
                     <p id="cardNombre" style="font-size: 8.5px;" class="font-black text-slate-900 uppercase leading-tight mt-0.5">
@@ -125,48 +129,52 @@
                     </p>
                 </div>
 
-                <!-- Especialidad Técnica -->
-                <div style="background-color: #0f172a;" class="text-amber-300 text-center py-0.5 rounded shadow-inner">
-                    <p style="font-size: 5px;" class="text-slate-400 font-semibold uppercase">Especialidad:</p>
-                    <p id="cardEspecialidad" style="font-size: 7.5px;" class="font-black uppercase tracking-tight text-amber-300">
+                <!-- Especialidad Técnica Mejorada (Separada y limpia) -->
+                <div style="background-color: #0f172a;" class="text-amber-300 text-center py-1 px-1 rounded shadow-inner">
+                    <p style="font-size: 4.5px;" class="text-slate-400 font-semibold uppercase tracking-wider">Especialidad Técnica:</p>
+                    <p id="cardEspecialidad" style="font-size: 7.5px;" class="font-black uppercase tracking-tight text-amber-300 leading-tight">
                         Cargando...
                     </p>
                 </div>
 
-                <!-- Datos Secundarios en Rejilla Compacta -->
-                <div class="grid grid-cols-2 gap-1 bg-slate-100 p-1 rounded border border-slate-200" style="font-size: 6.5px;">
-                    <div>
-                        <span class="text-slate-500 font-bold block" style="font-size: 5px;">NO. CONTROL:</span>
-                        <span id="cardMatricula" class="font-mono font-bold text-slate-900">-</span>
+                <!-- Datos Secundarios con CURP Amplia y Sin Desbordes -->
+                <div class="bg-white/80 p-1 rounded border border-slate-300 shadow-sm space-y-1" style="font-size: 6px;">
+                    <div class="flex justify-between">
+                        <div>
+                            <span class="text-slate-500 font-bold block" style="font-size: 4.5px;">NO. CONTROL:</span>
+                            <span id="cardMatricula" class="font-mono font-bold text-slate-900">-</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-slate-500 font-bold block" style="font-size: 4.5px;">SEMESTRE / GRUPO:</span>
+                            <span id="cardSemestreGrupo" class="font-mono font-bold text-slate-900">-</span>
+                        </div>
                     </div>
                     <div>
-                        <span class="text-slate-500 font-bold block" style="font-size: 5px;">SEMESTRE / GRUPO:</span>
-                        <span id="cardSemestreGrupo" class="font-mono font-bold text-slate-900">-</span>
+                        <span class="text-slate-500 font-bold block" style="font-size: 4.5px;">CURP:</span>
+                        <span id="cardCurp" class="font-mono font-bold text-slate-900 block tracking-tight" style="font-size: 6.5px;">-</span>
                     </div>
-                    <div class="col-span-2">
-                        <span class="text-slate-500 font-bold block" style="font-size: 5px;">CURP:</span>
-                        <span id="cardCurp" class="font-mono font-bold text-slate-900 truncate block">-</span>
-                    </div>
-                    <div>
-                        <span class="text-slate-500 font-bold block" style="font-size: 5px;">TURNO:</span>
-                        <span class="font-bold text-slate-900 uppercase">MATUTINO</span>
-                    </div>
-                    <div>
-                        <span class="text-slate-500 font-bold block" style="font-size: 5px;">SANGRE:</span>
-                        <span id="cardSangre" class="font-bold text-rose-700 uppercase">-</span>
+                    <div class="flex justify-between pt-0.5 border-t border-slate-200">
+                        <div>
+                            <span class="text-slate-500 font-bold block" style="font-size: 4.5px;">TURNO:</span>
+                            <span class="font-bold text-slate-900 uppercase">MATUTINO</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-slate-500 font-bold block" style="font-size: 4.5px;">SANGRE:</span>
+                            <span id="cardSangre" class="font-bold text-rose-700 uppercase">-</span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- FOTOGRAFÍA OFICIAL CENTRADA -->
                 <div class="flex justify-center items-center my-0.5">
-                    <div style="width: 21mm; height: 26.5mm;" class="bg-slate-200 border border-[#c59b4d] rounded overflow-hidden shadow relative">
+                    <div style="width: 20mm; height: 25mm;" class="bg-slate-200 border-2 border-[#c59b4d] rounded overflow-hidden shadow relative">
                         <img id="cardFoto" src="" alt="Foto Alumno" class="w-full h-full object-cover">
                     </div>
                 </div>
             </div>
 
             <!-- PIE DE CREDENCIAL -->
-            <div style="background-color: #0f172a; border-top: 1px solid #c59b4d; font-size: 6px;" class="text-slate-200 px-2 py-1 flex justify-between items-center">
+            <div style="background-color: #0f172a; border-top: 1px solid #c59b4d; font-size: 6px;" class="text-slate-200 px-2.5 py-1 flex justify-between items-center">
                 <span>VIGENCIA: <strong class="text-amber-400">2026 - 2027</strong></span>
                 <span class="font-mono text-slate-300">C.C.T. 12DCT0007F</span>
             </div>
