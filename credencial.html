@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Previsualización de Credencial - CETis 116</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Proporción exacta CR-80 para tarjeta PVC (85.6mm x 54mm -> Relación ~1.58:1) */
+        .cr80-card {
+            width: 428px;
+            height: 270px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+        @media print {
+            body { background: none; }
+            no-print { display: none; }
+            .cr80-card { box-shadow: none; margin: 0; }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- Contenedor de la Credencial (Anverso) -->
+    <div class="mb-6">
+        <h2 class="text-xs uppercase tracking-widest text-sky-400 mb-2 font-semibold text-center">Anverso - Credencial Estudiantil</h2>
+        <div class="cr80-card rounded-xl p-4 shadow-2xl border border-slate-700 relative overflow-hidden flex flex-col justify-between">
+            
+            <!-- Encabezado Institucional -->
+            <div class="flex items-center justify-between border-b border-slate-700 pb-2">
+                <div>
+                    <h1 class="text-xs font-bold text-white tracking-wider">CETis No. 116</h1>
+                    <p class="text-[9px] text-slate-400">Antonia Nava de Catalán</p>
+                </div>
+                <span class="text-[9px] bg-sky-600 text-white px-2 py-0.5 rounded-full font-medium">SEMS SEP</span>
+            </div>
+
+            <!-- Cuerpo Central: Foto y Datos -->
+            <div class="flex items-center gap-4 my-auto">
+                <!-- Foto del Alumno -->
+                <div class="w-20 h-24 bg-slate-800 border-2 border-sky-500 rounded-md overflow-hidden flex-shrink-0 shadow-md">
+                    <img id="cardFoto" src="" alt="Foto Alumno" class="w-full h-full object-cover">
+                </div>
+                <!-- Datos del Alumno -->
+                <div class="flex flex-col justify-center text-xs space-y-1 overflow-hidden">
+                    <div>
+                        <p class="text-[9px] text-slate-400 uppercase">Nombre:</p>
+                        <p id="cardNombre" class="font-bold text-white truncate">ABARCA MARCELO JOSE FRANCISCO</p>
+                    </div>
+                    <div>
+                        <p class="text-[9px] text-slate-400 uppercase">Especialidad:</p>
+                        <p id="cardEspecialidad" class="text-sky-300 truncate">Soporte y Mantenimiento</p>
+                    </div>
+                    <div class="flex gap-4">
+                        <div>
+                            <p class="text-[9px] text-slate-400 uppercase">Matrícula:</p>
+                            <p id="cardMatricula" class="font-mono text-slate-200">12DCT0007F</p>
+                        </div>
+                        <div>
+                            <p class="text-[9px] text-slate-400 uppercase">Grupo:</p>
+                            <p id="cardGrupo" class="font-mono text-slate-200">501</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pie de Credencial / Vigencia -->
+            <div class="border-t border-slate-700 pt-1.5 flex justify-between items-center text-[9px] text-slate-400">
+                <span>Vigencia: <strong class="text-white">2026 - 2027</strong></span>
+                <span class="italic text-sky-400">Acapulco, Gro.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón de Impresión Directa para Zebra ZC300 -->
+    <button onclick="window.print()" class="no-print bg-sky-600 hover:bg-sky-500 text-white font-semibold px-6 py-2.5 rounded-lg shadow-lg transition duration-200 text-sm">
+        Imprimir Credencial (Zebra ZC300)
+    </button>
+
+</body>
+</html>
