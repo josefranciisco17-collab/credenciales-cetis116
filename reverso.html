@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reverso Oficial - Credencial CETis No. 116</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #070b14;
+            color: #f1f5f9;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        /* Proporción exacta CR-80 para tarjeta PVC orientada horizontalmente (85.6mm x 54mm) */
+        .cr80-card {
+            width: 428px;
+            height: 270px;
+            background: #ffffff;
+            color: #0f172a;
+            position: relative;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .btn-gold {
+            background: linear-gradient(135deg, #d4b26f 0%, #c59b4d 100%);
+            color: #1a1205;
+        }
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #e0c283 0%, #d1a95b 100%);
+        }
+        
+        /* REGLAS ESTRICTAS PARA IMPRESIÓN EN ZEBRA ZC300 */
+        @media print {
+            @page {
+                size: 85.6mm 54mm;
+                margin: 0;
+            }
+            body, html {
+                width: 85.6mm !important;
+                height: 54mm !important;
+                background: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+            }
+            body * {
+                visibility: hidden !important;
+            }
+            .cr80-card, .cr80-card * {
+                visibility: visible !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .cr80-card {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 85.6mm !important;
+                height: 54mm !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- Barra Superior de Navegación (Oculta al imprimir) -->
+    <div class="no-print w-full max-w-[428px] flex justify-between items-center mb-4">
+        <a id="linkAnverso" href="#" class="text-xs bg-slate-900 hover:bg-slate-800 text-amber-300 border border-amber-500/30 px-3.5 py-2 rounded-xl transition font-semibold shadow">
+            ⬅ Ver Anverso
+        </a>
+        <span class="text-[11px] uppercase tracking-widest text-amber-400/90 font-bold">
+            Reverso Oficial CR-80
+        </span>
+    </div>
+
+    <!-- TARJETA CR-80 (REVERSO OFICIAL ESTILO IDÉNTICO A LA REFERENCIA) -->
+    <div class="cr80-card rounded-2xl shadow-2xl border border-slate-300 overflow-hidden flex justify-between select-none">
+        
+        <!-- Contenido Central del Reverso -->
+        <div class="flex-grow p-3 flex flex-col justify-between relative">
+            
+            <!-- Fila Superior: Semestres y Firma del Alumno -->
+            <div class="flex justify-between items-start gap-3">
+                
+                <!-- Cuadro de Semestres / Periodos SEP -->
+                <div class="w-32 border border-slate-800 rounded text-center">
+                    <div class="bg-slate-200 border-b border-slate-800 py-0.5">
+                        <p class="text-[8px] font-black tracking-widest text-slate-900 uppercase">SEMESTRE</p>
+                    </div>
+                    <div class="py-1 border-b border-slate-400 text-[8.5px] font-bold text-slate-800">
+                        SEP 26 / ENE 27
+                    </div>
+                    <div class="py-1 text-[8.5px] font-bold text-slate-800">
+                        FEB 27 / AGO 27
+                    </div>
+                </div>
+
+                <!-- Cuadro de Firma del Alumno -->
+                <div class="flex-grow border border-slate-800 rounded p-1 text-center h-16 flex flex-col justify-between">
+                    <div class="h-8 flex items-center justify-center">
+                        <span class="text-[9px] italic text-slate-400 font-serif">Firma del Alumno</span>
+                    </div>
+                    <div class="border-t border-slate-400 pt-0.5">
+                        <p class="text-[7px] font-bold uppercase text-slate-700 tracking-wider">FIRMA DEL ALUMNO</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fila Inferior: Dirección y Datos del Director -->
+            <div class="flex justify-between items-end gap-2 mt-2">
+                
+                <!-- Dirección del Plantel (Vertical a la izquierda) -->
+                <div class="w-1/2">
+                    <p class="text-[6.5px] font-black uppercase text-slate-800 tracking-wider mb-0.5">DIRECCIÓN DEL PLANTEL</p>
+                    <p class="text-[6.5px] font-semibold text-slate-700 leading-tight uppercase">
+                        BLDV. VICENTE GUERRERO L1 CD. RENACIMIENTO CP. 39715
+                    </p>
+                </div>
+
+                <!-- Cuadro del Director con Sello y Firma -->
+                <div class="w-44 border border-slate-800 rounded p-1 text-center flex flex-col justify-between bg-slate-50">
+                    <div class="flex justify-between items-center px-1">
+                        <!-- Sello / Escudo pequeño -->
+                        <div class="w-6 h-6 flex-shrink-0">
+                            <img src="logotipocetis116.png" alt="Sello" class="w-full h-full object-contain opacity-80">
+                        </div>
+                        <div class="text-[5.5px] leading-tight text-slate-600 text-right font-semibold">
+                            SECRETARÍA DE<br>EDUCACIÓN PÚBLICA<br>DGETI
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-[7.5px] font-black text-slate-900 uppercase leading-none">LIC. JOSÉ MARCELO OLEA</p>
+                        <p class="text-[6.5px] font-bold text-slate-700 uppercase tracking-tight">DIRECTOR DEL PLANTEL</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Franja Lateral Derecha: Sistema Escolarizado y Fecha de Emisión -->
+        <div class="w-14 bg-slate-900 text-white flex flex-col justify-between items-center py-3 px-1 select-none flex-shrink-0">
+            <span class="text-[8.5px] font-black tracking-[0.2em] uppercase [writing-mode:vertical-rl] rotate-180 text-slate-100">
+                SISTEMA ESCOLARIZADO
+            </span>
+            <div class="text-center [writing-mode:vertical-rl] rotate-180">
+                <span class="text-[6px] font-bold tracking-wider text-amber-400 uppercase">FECHA DE EMISIÓN</span>
+                <span class="text-[7px] font-bold text-slate-200 mt-1 uppercase">SEPTIEMBRE 2026</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botones de Acción (Ocultos al imprimir) -->
+    <div class="mt-6 flex gap-3 no-print">
+        <button onclick="window.print()" class="btn-gold font-extrabold px-6 py-3 rounded-xl shadow-xl transition duration-200 text-xs uppercase tracking-wider flex items-center gap-2">
+            <span>🖨️</span> Imprimir Reverso (Zebra ZC300)
+        </button>
+    </div>
+
+    <!-- Script para mantener el ID del alumno al navegar -->
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const alumnoId = params.get('id');
+        if (alumnoId) {
+            document.getElementById('linkAnverso').href = `credencial.html?id=${alumnoId}`;
+        } else {
+            document.getElementById('linkAnverso').href = 'index.html';
+        }
+    </script>
+</body>
+</html>
