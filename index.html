@@ -3,132 +3,325 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Institucional de Credencialización - CETis 116</title>
+    <title>Padrón de Credenciales - CETis No. 116</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Montserrat', sans-serif; }
-        .bg-guinda { background-color: #691C32; }
-        .text-dorado { color: #BC955C; }
-        .border-dorado { border-color: #BC955C; }
-        .bg-dorado { background-color: #BC955C; }
-        .gradiente-gob {
-            background: linear-gradient(135deg, #4A1222 0%, #691C32 55%, #3a0d1a 100%);
+        body {
+            background-color: #070b14;
+            color: #f1f5f9;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        .header-guinda {
+            background: linear-gradient(145deg, #4a0e1e 0%, #631328 50%, #380915 100%);
+            border-bottom: 2px solid #8a6d3b;
+        }
+        .btn-gold {
+            background: linear-gradient(135deg, #d4b26f 0%, #c59b4d 100%);
+            color: #1a1205;
+        }
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #e0c283 0%, #d1a95b 100%);
+        }
+        .badge-gold {
+            border: 1px solid rgba(212, 178, 111, 0.5);
+            color: #e2c68d;
+            background: rgba(0, 0, 0, 0.25);
+        }
+        .input-dgeti {
+            background-color: #0b111e;
+            border: 1px solid #1e293b;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .input-dgeti:focus {
+            border-color: #c59b4d;
+            box-shadow: 0 0 0 2px rgba(197, 155, 77, 0.2);
+            outline: none;
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between">
+<body class="min-h-screen flex flex-col">
 
-    <!-- Barra Superior Institucional GOB / SEP -->
-    <header class="gradiente-gob border-b-2 border-dorado shadow-2xl">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 rounded-xl bg-white/10 border border-dorado/50 flex items-center justify-center font-extrabold text-xl text-dorado shadow-inner">
+    <!-- Encabezado Institucional Guinda -->
+    <header class="header-guinda px-5 py-6 shadow-2xl">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex items-start gap-4">
+                <div class="w-12 h-16 rounded-2xl badge-gold flex items-center justify-center font-extrabold text-lg tracking-tighter flex-shrink-0 shadow-inner mt-1">
                     116
                 </div>
                 <div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-[10px] uppercase tracking-widest bg-black/30 text-dorado px-2.5 py-0.5 rounded-full font-bold border border-dorado/30">SEP • SEMS • DGETI</span>
-                    </div>
-                    <h1 class="text-xl md:text-2xl font-extrabold text-white tracking-tight mt-0.5">CETis No. 116 "Antonia Nava de Catalán"</h1>
-                    <p class="text-xs text-rose-200/80">Plataforma Oficial de Emisión de Credenciales PVC • Zebra ZC300</p>
+                    <span class="inline-block text-[10px] uppercase tracking-widest px-3 py-0.5 rounded-full badge-gold font-semibold mb-2">
+                        SEP • SEMS • DGETI
+                    </span>
+                    <h1 class="text-xl md:text-2xl font-extrabold text-white leading-tight">
+                        CETis No. 116 "Antonia Nava de Catalán"
+                    </h1>
+                    <p class="text-xs text-rose-200/80 mt-1">
+                        Plataforma Oficial de Emisión de Credenciales PVC • Zebra ZC300
+                    </p>
                 </div>
             </div>
-            <div class="flex flex-wrap gap-3">
-                <button onclick="exportarCSV()" class="bg-slate-900/60 hover:bg-slate-900 text-amber-300 border border-amber-500/40 font-semibold px-4 py-2.5 rounded-xl text-xs transition duration-200 flex items-center gap-2 shadow-lg">
+
+            <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                <button id="btnExportarCSV" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold badge-gold hover:bg-black/40 transition shadow">
                     <span>📥</span> Exportar Padrón (CSV)
                 </button>
-                <a href="registro.html" class="bg-dorado hover:bg-amber-600 text-slate-950 font-bold px-5 py-2.5 rounded-xl text-xs transition duration-200 shadow-lg flex items-center gap-2">
-                    <span>＋</span> Registrar Nuevo Estudiante
+                <a href="registro.html" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-extrabold btn-gold transition shadow-lg">
+                    <span>+</span> Registrar Nuevo Estudiante
                 </a>
             </div>
         </div>
     </header>
 
     <!-- Contenido Principal -->
-    <main class="max-w-7xl w-full mx-auto px-6 py-8 flex-grow">
-        
-        <!-- Tarjetas de Estadísticas en Tiempo Real -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-lg flex items-center justify-between">
+    <main class="flex-grow p-4 md:p-6 max-w-6xl mx-auto w-full space-y-6">
+
+        <!-- Tarjetas de Estadísticas -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Total Padrón -->
+            <div class="bg-[#0f1626] border border-slate-800/80 p-5 rounded-2xl flex items-center justify-between shadow-lg">
                 <div>
-                    <p class="text-xs text-slate-400 uppercase font-semibold">Total Padrón</p>
-                    <p id="statTotal" class="text-3xl font-extrabold text-white mt-1">0</p>
-                    <p class="text-[11px] text-emerald-400 mt-1">● Activos en Firestore</p>
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Padrón</p>
+                    <p id="statTotal" class="text-3xl font-black text-white mt-1">0</p>
+                    <p class="text-[11px] text-emerald-400 mt-1 font-medium">● Activos en Firestore</p>
                 </div>
-                <div class="w-12 h-12 rounded-2xl bg-rose-950/60 border border-rose-800/50 flex items-center justify-center text-2xl">🎓</div>
+                <div class="w-12 h-12 rounded-2xl bg-rose-950/60 border border-rose-800/40 flex items-center justify-center text-xl">
+                    🎓
+                </div>
             </div>
 
-            <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-lg flex items-center justify-between">
+            <!-- Con Fotografía -->
+            <div class="bg-[#0f1626] border border-slate-800/80 p-5 rounded-2xl flex items-center justify-between shadow-lg">
                 <div>
-                    <p class="text-xs text-slate-400 uppercase font-semibold">Con Fotografía</p>
-                    <p id="statFotos" class="text-3xl font-extrabold text-amber-400 mt-1">0</p>
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Con Fotografía</p>
+                    <p id="statFotos" class="text-3xl font-black text-amber-400 mt-1">0</p>
                     <p class="text-[11px] text-slate-400 mt-1">Listos para impresión PVC</p>
                 </div>
-                <div class="w-12 h-12 rounded-2xl bg-amber-950/40 border border-amber-800/40 flex items-center justify-center text-2xl">🪪</div>
+                <div class="w-12 h-12 rounded-2xl bg-amber-950/50 border border-amber-800/40 flex items-center justify-center text-xl">
+                    🪪
+                </div>
             </div>
 
-            <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-lg flex items-center justify-between">
+            <!-- Especialidades -->
+            <div class="bg-[#0f1626] border border-slate-800/80 p-5 rounded-2xl flex items-center justify-between shadow-lg">
                 <div>
-                    <p class="text-xs text-slate-400 uppercase font-semibold">Especialidades</p>
-                    <p class="text-3xl font-extrabold text-sky-400 mt-1">6</p>
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Especialidades</p>
+                    <p class="text-3xl font-black text-sky-400 mt-1">6</p>
                     <p class="text-[11px] text-slate-400 mt-1">Oferta educativa DGETI</p>
                 </div>
-                <div class="w-12 h-12 rounded-2xl bg-sky-950/50 border border-sky-800/40 flex items-center justify-center text-2xl">🏛️</div>
+                <div class="w-12 h-12 rounded-2xl bg-sky-950/50 border border-sky-800/40 flex items-center justify-center text-xl">
+                    🏛️
+                </div>
             </div>
 
-            <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-lg flex items-center justify-between">
+            <!-- Ciclo Escolar -->
+            <div class="bg-[#0f1626] border border-slate-800/80 p-5 rounded-2xl flex items-center justify-between shadow-lg">
                 <div>
-                    <p class="text-xs text-slate-400 uppercase font-semibold">Ciclo Escolar</p>
-                    <p class="text-2xl font-extrabold text-white mt-1">2026 - 2027</p>
-                    <p class="text-[11px] text-amber-400/90 mt-1">Formato oficial CR-80</p>
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Ciclo Escolar</p>
+                    <p class="text-2xl font-black text-white mt-1">2026 - 2027</p>
+                    <p class="text-[11px] text-amber-400/90 mt-1 font-medium">Formato oficial CR-80</p>
                 </div>
-                <div class="w-12 h-12 rounded-2xl bg-emerald-950/50 border border-emerald-800/40 flex items-center justify-center text-2xl">🖨️</div>
+                <div class="w-12 h-12 rounded-2xl bg-emerald-950/50 border border-emerald-800/40 flex items-center justify-center text-xl">
+                    🖨️
+                </div>
             </div>
         </div>
 
-        <!-- Barra de Herramientas y Filtros -->
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden">
-            <div class="p-6 border-b border-slate-800 flex flex-col lg:flex-row justify-between items-center gap-4">
+        <!-- Panel de Padrón y Filtros -->
+        <div class="bg-[#0f1626] border border-slate-800/80 rounded-2xl p-5 md:p-6 shadow-2xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
                 <div>
-                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                    <h2 class="text-lg font-extrabold text-white leading-snug">
                         Padrón de Credenciales Estudiantiles
-                        <span id="badgeContador" class="text-xs bg-rose-950 text-rose-300 border border-rose-800 px-2.5 py-0.5 rounded-full">0 registros</span>
                     </h2>
-                    <p class="text-xs text-slate-400">Filtra, edita o envía directamente a impresión en la Zebra ZC300</p>
+                    <p class="text-xs text-slate-400 mt-0.5">
+                        Filtra, edita o envía directamente a impresión en la Zebra ZC300
+                    </p>
                 </div>
+                <span id="contadorRegistros" class="px-3.5 py-1 rounded-full text-xs font-bold bg-rose-950/80 border border-rose-800/60 text-rose-200">
+                    0 registros
+                </span>
+            </div>
 
-                <div class="flex flex-col sm:flex-row w-full lg:w-auto gap-3">
-                    <select id="filtroEspecialidad" class="bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:border-amber-500 outline-none">
-                        <option value="">Todas las especialidades</option>
-                        <option value="Administración de Recursos Humanos">Administración de Recursos Humanos</option>
-                        <option value="Comercio Internacional y Aduanas">Comercio Internacional y Aduanas</option>
-                        <option value="E-Commerce">E-Commerce</option>
-                        <option value="Laboratorista Clínico">Laboratorista Clínico</option>
-                        <option value="Mantenimiento Automotriz">Mantenimiento Automotriz</option>
-                        <option value="Programación">Programación</option>
-                    </select>
+            <!-- Barra de Filtros -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+                <select id="filtroEspecialidad" class="w-full input-dgeti rounded-xl p-3 text-sm">
+                    <option value="TODAS">Todas las Especialidades (6)</option>
+                    <option value="Administración de Recursos Humanos">Administración de Recursos Humanos</option>
+                    <option value="Comercio Internacional y Aduanas">Comercio Internacional y Aduanas</option>
+                    <option value="E-Commerce">E-Commerce</option>
+                    <option value="Laboratorista Clínico">Laboratorista Clínico</option>
+                    <option value="Mantenimiento Automotriz">Mantenimiento Automotriz</option>
+                    <option value="Programación">Programación</option>
+                </select>
 
-                    <div class="relative w-full sm:w-72">
-                        <input type="text" id="buscador" placeholder="Buscar por nombre, matrícula o CURP..." class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-4 pr-9 py-2 text-xs text-white focus:border-amber-500 outline-none">
-                        <span class="absolute right-3 top-2 text-slate-500 text-xs">🔍</span>
-                    </div>
+                <div class="relative">
+                    <input type="text" id="buscador" placeholder="Buscar por nombre, matrícula o CURP..." class="w-full input-dgeti rounded-xl p-3 pr-10 text-sm">
+                    <span class="absolute right-3.5 top-3 text-slate-400">🔍</span>
                 </div>
             </div>
 
             <!-- Tabla de Estudiantes -->
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto border-t border-slate-800/80">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-950/60 border-b border-slate-800 text-[11px] text-slate-400 uppercase tracking-wider">
+                        <tr class="border-b border-slate-800 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
                             <th class="py-3.5 px-4">Estudiante</th>
                             <th class="py-3.5 px-4">Matrícula / CURP</th>
-                            <th class="py-3.5 px-4">Especialidad Técnica</th>
+                            <th class="py-3.5 px-4">Especialidad</th>
                             <th class="py-3.5 px-4 text-center">Semestre / Grupo</th>
                             <th class="py-3.5 px-4 text-center">Sangre</th>
                             <th class="py-3.5 px-4 text-center">Acciones de Credencial</th>
                         </tr>
                     </thead>
-                    <tbody id="tablaAlumnos" class="divide-y divide-slate-800/80 text-sm">
+                    <tbody id="tablaAlumnos" class="divide-y divide-slate-800/60 text-sm">
                         <tr>
-                            <td colspan="6" class="py-12
+                            <td colspan="6" class="py-8 text-center text-slate-500">
+                                Sincronizando padrón con Firebase Firestore...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Lógica de Firestore -->
+    <script type="module">
+        import { db, collection, getDocs, doc, deleteDoc } from "./firebase-config.js";
+
+        let listaAlumnos = [];
+
+        async function cargarAlumnos() {
+            const tbody = document.getElementById('tablaAlumnos');
+            try {
+                const querySnapshot = await getDocs(collection(db, "estudiantes_credenciales"));
+                listaAlumnos = [];
+                querySnapshot.forEach((docSnap) => {
+                    listaAlumnos.push({ id: docSnap.id, ...docSnap.data() });
+                });
+
+                actualizarEstadisticas();
+                aplicarFiltros();
+            } catch (error) {
+                console.error("Error al cargar alumnos:", error);
+                tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-rose-400">Error al conectar con Firebase Firestore. Verifica tus reglas o conexión.</td></tr>`;
+            }
+        }
+
+        function actualizarEstadisticas() {
+            const total = listaAlumnos.length;
+            const conFoto = listaAlumnos.filter(a => a.fotoBase64 && a.fotoBase64.length > 50).length;
+            document.getElementById('statTotal').innerText = total;
+            document.getElementById('statFotos').innerText = conFoto;
+        }
+
+        function renderizarTabla(alumnos) {
+            const tbody = document.getElementById('tablaAlumnos');
+            document.getElementById('contadorRegistros').innerText = `${alumnos.length} ${alumnos.length === 1 ? 'registro' : 'registros'}`;
+
+            if (alumnos.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-500">No se encontraron estudiantes con los filtros seleccionados.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = alumnos.map(alumno => `
+                <tr class="hover:bg-slate-800/40 transition">
+                    <td class="py-3.5 px-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-12 rounded-lg bg-slate-800 border border-amber-500/40 overflow-hidden flex-shrink-0">
+                                ${alumno.fotoBase64 ? `<img src="${alumno.fotoBase64}" class="w-full h-full object-cover">` : `<div class="w-full h-full flex items-center justify-center text-[10px] text-slate-500">Sin foto</div>`}
+                            </div>
+                            <span class="font-bold text-white uppercase text-xs md:text-sm">${alumno.nombreCompleto || '-'}</span>
+                        </div>
+                    </td>
+                    <td class="py-3.5 px-4">
+                        <p class="font-mono text-amber-400 text-xs font-semibold">${alumno.matricula || '-'}</p>
+                        <p class="font-mono text-slate-400 text-[11px]">${alumno.curp || ''}</p>
+                    </td>
+                    <td class="py-3.5 px-4 text-xs text-slate-200">${alumno.especialidad || '-'}</td>
+                    <td class="py-3.5 px-4 text-center font-mono text-xs text-slate-200">${alumno.semestre || ''}° "${alumno.grupo || ''}"</td>
+                    <td class="py-3.5 px-4 text-center">
+                        <span class="px-2 py-0.5 rounded bg-rose-950/70 border border-rose-800/50 text-rose-200 text-[11px] font-bold">
+                            ${alumno.tipoSangre || '-'}
+                        </span>
+                    </td>
+                    <td class="py-3.5 px-4 text-center">
+                        <div class="flex justify-center items-center gap-2">
+                            <a href="credencial.html?id=${alumno.id}" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition shadow">
+                                🪪 Credencial
+                            </a>
+                            <a href="registro.html?id=${alumno.id}" class="bg-amber-600 hover:bg-amber-500 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow">
+                                ✏️ Editar
+                            </a>
+                            <button onclick="eliminarAlumno('${alumno.id}')" class="bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition">
+                                🗑️
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function aplicarFiltros() {
+            const especialidad = document.getElementById('filtroEspecialidad').value;
+            const texto = document.getElementById('buscador').value.toLowerCase().trim();
+
+            const filtrados = listaAlumnos.filter(a => {
+                const coincideEsp = (especialidad === "TODAS") || (a.especialidad === especialidad);
+                const coincideTexto = !texto ||
+                    (a.nombreCompleto && a.nombreCompleto.toLowerCase().includes(texto)) ||
+                    (a.matricula && a.matricula.toLowerCase().includes(texto)) ||
+                    (a.curp && a.curp.toLowerCase().includes(texto));
+                return coincideEsp && coincideTexto;
+            });
+
+            renderizarTabla(filtrados);
+        }
+
+        document.getElementById('filtroEspecialidad').addEventListener('change', aplicarFiltros);
+        document.getElementById('buscador').addEventListener('input', aplicarFiltros);
+
+        window.eliminarAlumno = async function(id) {
+            if (confirm("¿Estás seguro de eliminar a este estudiante del padrón?")) {
+                try {
+                    await deleteDoc(doc(db, "estudiantes_credenciales", id));
+                    cargarAlumnos();
+                } catch (error) {
+                    console.error("Error al eliminar:", error);
+                    alert("No se pudo eliminar el registro.");
+                }
+            }
+        };
+
+        // Exportar a CSV
+        document.getElementById('btnExportarCSV').addEventListener('click', () => {
+            if (listaAlumnos.length === 0) {
+                alert("No hay registros en el padrón para exportar.");
+                return;
+            }
+            const encabezados = ["Matricula", "Nombre Completo", "CURP", "Especialidad", "Semestre", "Grupo", "Tipo de Sangre", "Vigencia"];
+            const filas = listaAlumnos.map(a => [
+                `"${a.matricula || ''}"`,
+                `"${a.nombreCompleto || ''}"`,
+                `"${a.curp || ''}"`,
+                `"${a.especialidad || ''}"`,
+                `"${a.semestre || ''}"`,
+                `"${a.grupo || ''}"`,
+                `"${a.tipoSangre || ''}"`,
+                `"${a.vigencia || '2026 - 2027'}"`
+            ].join(","));
+
+            const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [encabezados.join(","), ...filas].join("\n");
+            const link = document.createElement("a");
+            link.setAttribute("href", encodeURI(csvContent));
+            link.setAttribute("download", "Padron_Credenciales_CETis116.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        cargarAlumnos();
+    </script>
+</body>
+</html>
