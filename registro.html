@@ -3,31 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Alumnos - Credenciales CETis 116</title>
+    <title>Registro y Edición - Credenciales CETis 116</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .bg-pattern {
+            background-color: #020617;
+            background-image: radial-gradient(rgba(56, 189, 248, 0.08) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen p-6 flex items-center justify-center">
-    <div class="max-w-2xl w-full bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-xl">
-        <div class="border-b border-slate-800 pb-4 mb-6 flex justify-between items-center">
+<body class="bg-pattern text-slate-100 min-h-screen p-4 md:p-6 flex items-center justify-center">
+    <div class="max-w-2xl w-full bg-slate-900/95 backdrop-blur-sm border border-slate-800 p-6 md:p-8 rounded-2xl shadow-2xl my-auto">
+        
+        <!-- Encabezado -->
+        <div class="border-b border-slate-800 pb-4 mb-6 flex justify-between items-center gap-2">
             <div>
-                <h1 class="text-xl font-bold text-sky-400">CETis No. 116</h1>
-                <p class="text-xs text-slate-400">Registro de Alumno para Credencial PVC</p>
+                <h1 id="tituloPagina" class="text-xl font-bold text-sky-400 tracking-wide">CETis No. 116</h1>
+                <p id="subtituloPagina" class="text-xs text-slate-400">Registro de Alumno para Credencial PVC</p>
             </div>
-            <a href="index.html" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg transition">← Volver al inicio</a>
+            <a href="index.html" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3.5 py-2 rounded-lg transition font-medium whitespace-nowrap shadow">
+                ← Volver al inicio
+            </a>
         </div>
 
+        <!-- Formulario -->
         <form id="formEstudiante" class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <label class="block text-xs font-medium text-slate-300 mb-1">Número de Control / Matrícula</label>
-                <input type="text" id="matricula" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-sky-500 outline-none">
+                <input type="text" id="matricula" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-sky-500 outline-none transition">
             </div>
             <div>
                 <label class="block text-xs font-medium text-slate-300 mb-1">Nombre Completo</label>
-                <input type="text" id="nombreCompleto" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white uppercase focus:border-sky-500 outline-none">
+                <input type="text" id="nombreCompleto" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white uppercase focus:border-sky-500 outline-none transition">
             </div>
-            <div>
+            <div class="md:col-span-2">
                 <label class="block text-xs font-medium text-slate-300 mb-1">Especialidad Técnica</label>
-                <select id="especialidad" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-sky-500 outline-none">
+                <select id="especialidad" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-sky-500 outline-none transition">
                     <option value="Administración de Recursos Humanos">Administración de Recursos Humanos</option>
                     <option value="Comercio Internacional y Aduanas">Comercio Internacional y Aduanas</option>
                     <option value="E-Commerce">E-Commerce</option>
@@ -36,41 +48,57 @@
                     <option value="Programación">Programación</option>
                 </select>
             </div>
-            <div class="grid grid-cols-2 gap-2">
+            <div class="grid grid-cols-2 gap-3 md:col-span-2">
                 <div>
                     <label class="block text-xs font-medium text-slate-300 mb-1">Semestre</label>
-                    <input type="text" id="semestre" placeholder="Ej. 5to" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-sky-500 outline-none">
+                    <select id="semestre" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-sky-500 outline-none transition">
+                        <option value="1">1° Semestre</option>
+                        <option value="2">2° Semestre</option>
+                        <option value="3">3° Semestre</option>
+                        <option value="4">4° Semestre</option>
+                        <option value="5">5° Semestre</option>
+                        <option value="6">6° Semestre</option>
+                    </select>
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-slate-300 mb-1">Grupo</label>
-                    <input type="text" id="grupo" placeholder="Ej. 501" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-sky-500 outline-none">
+                    <input type="text" id="grupo" placeholder="Ej. A, B, F..." required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white uppercase focus:border-sky-500 outline-none transition">
                 </div>
             </div>
             <div>
                 <label class="block text-xs font-medium text-slate-300 mb-1">CURP</label>
-                <input type="text" id="curp" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white uppercase focus:border-sky-500 outline-none">
+                <input type="text" id="curp" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white uppercase focus:border-sky-500 outline-none transition">
             </div>
             <div>
                 <label class="block text-xs font-medium text-slate-300 mb-1">Tipo de Sangre</label>
-                <input type="text" id="tipoSangre" placeholder="Ej. O+" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white uppercase focus:border-sky-500 outline-none">
+                <select id="tipoSangre" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-sky-500 outline-none transition">
+                    <option value="O POSITIVO (O+)">O POSITIVO (O+)</option>
+                    <option value="O NEGATIVO (O-)">O NEGATIVO (O-)</option>
+                    <option value="A POSITIVO (A+)">A POSITIVO (A+)</option>
+                    <option value="A NEGATIVO (A-)">A NEGATIVO (A-)</option>
+                    <option value="B POSITIVO (B+)">B POSITIVO (B+)</option>
+                    <option value="B NEGATIVO (B-)">B NEGATIVO (B-)</option>
+                    <option value="AB POSITIVO (AB+)">AB POSITIVO (AB+)</option>
+                    <option value="AB NEGATIVO (AB-)">AB NEGATIVO (AB-)</option>
+                </select>
             </div>
 
             <!-- Sección de Fotografía Optimizada -->
             <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4 items-center bg-slate-950 p-4 rounded-xl border border-slate-800">
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Fotografía del Alumno</label>
-                    <input type="file" id="fotoFile" accept="image/*" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-slate-300 file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-sky-600 file:text-white hover:file:bg-sky-500">
-                    <p class="text-[10px] text-slate-500 mt-1">Se adapta automáticamente para la credencial.</p>
+                    <label id="labelFoto" class="block text-xs font-medium text-slate-300 mb-1">Fotografía del Alumno</label>
+                    <input type="file" id="fotoFile" accept="image/*" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-slate-300 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-sky-600 file:text-white hover:file:bg-sky-500">
+                    <p id="notaFoto" class="text-[10px] text-slate-500 mt-1">Se adapta automáticamente para la credencial.</p>
                 </div>
                 <div class="flex justify-center">
-                    <div class="w-20 h-24 bg-slate-900 border-2 border-dashed border-slate-700 rounded-lg flex items-center justify-center overflow-hidden relative">
+                    <div class="w-24 h-28 bg-slate-900 border-2 border-dashed border-slate-700 rounded-lg flex items-center justify-center overflow-hidden relative shadow-inner">
                         <img id="previewImg" src="" alt="Vista previa" class="w-full h-full object-cover hidden">
                         <span id="previewText" class="text-[10px] text-slate-500 text-center p-1">Sin foto</span>
                     </div>
                 </div>
                 <div class="text-[11px] text-slate-400">
-                    <p class="font-semibold text-sky-400 mb-0.5">Optimización:</p>
-                    <p>La foto se procesa directo en memoria para guardarse de forma ligera en Firestore sin usar Firebase Storage.</p>
+                    <p class="font-semibold text-sky-400 mb-0.5">Optimización CR-80:</p>
+                    <p>La foto se procesa directo en memoria para guardarse de forma ligera en Firestore sin ocupar espacio extra en Storage.</p>
                 </div>
             </div>
 
@@ -82,13 +110,52 @@
         </form>
     </div>
 
-    <!-- Script de Guardado y Conversión a Base64 -->
+    <!-- Script de Guardado, Edición y Conversión a Base64 -->
     <script type="module">
         import { db } from "./firebase-config.js";
-        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { collection, addDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        const params = new URLSearchParams(window.location.search);
+        const alumnoId = params.get('id');
         let fotoBase64 = "";
 
+        // Si existe un ID en la URL, activamos el Modo Edición
+        async function verificarModoEdicion() {
+            if (!alumnoId) return;
+
+            document.getElementById('subtituloPagina').innerText = "Editar Datos de Credencial del Alumno";
+            document.getElementById('btnGuardar').innerText = "Guardar Cambios";
+            document.getElementById('fotoFile').removeAttribute('required');
+            document.getElementById('notaFoto').innerText = "Opcional: selecciona otra solo si deseas cambiar la foto actual.";
+
+            try {
+                const docRef = doc(db, "estudiantes_credenciales", alumnoId);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('matricula').value = data.matricula || '';
+                    document.getElementById('nombreCompleto').value = data.nombreCompleto || '';
+                    document.getElementById('especialidad').value = data.especialidad || 'Administración de Recursos Humanos';
+                    document.getElementById('semestre').value = data.semestre || '1';
+                    document.getElementById('grupo').value = data.grupo || '';
+                    document.getElementById('curp').value = data.curp || '';
+                    document.getElementById('tipoSangre').value = data.tipoSangre || 'O POSITIVO (O+)';
+
+                    if (data.fotoBase64) {
+                        fotoBase64 = data.fotoBase64;
+                        const previewImg = document.getElementById('previewImg');
+                        previewImg.src = fotoBase64;
+                        previewImg.classList.remove('hidden');
+                        document.getElementById('previewText').classList.add('hidden');
+                    }
+                }
+            } catch (error) {
+                console.error("Error al cargar datos del alumno:", error);
+            }
+        }
+
+        // Procesamiento y recorte automático de fotografía en memoria
         document.getElementById('fotoFile').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -114,8 +181,9 @@
 
                     fotoBase64 = canvas.toDataURL('image/jpeg', 0.85);
 
-                    document.getElementById('previewImg').src = fotoBase64;
-                    document.getElementById('previewImg').classList.remove('hidden');
+                    const previewImg = document.getElementById('previewImg');
+                    previewImg.src = fotoBase64;
+                    previewImg.classList.remove('hidden');
                     document.getElementById('previewText').classList.add('hidden');
                 };
                 img.src = event.target.result;
@@ -123,36 +191,46 @@
             reader.readAsDataURL(file);
         });
 
+        // Guardar o Actualizar en Firestore
         document.getElementById('formEstudiante').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('btnGuardar');
             btn.disabled = true;
             btn.innerText = "Guardando en Firebase...";
 
-            const nuevoAlumno = {
+            const datosAlumno = {
                 matricula: document.getElementById('matricula').value.trim(),
                 nombreCompleto: document.getElementById('nombreCompleto').value.trim().toUpperCase(),
                 especialidad: document.getElementById('especialidad').value,
                 semestre: document.getElementById('semestre').value.trim(),
-                grupo: document.getElementById('grupo').value.trim(),
+                grupo: document.getElementById('grupo').value.trim().toUpperCase(),
                 curp: document.getElementById('curp').value.trim().toUpperCase(),
-                tipoSangre: document.getElementById('tipoSangre').value.trim().toUpperCase(),
+                tipoSangre: document.getElementById('tipoSangre').value,
                 vigencia: "2026 - 2027",
-                fotoBase64: fotoBase64,
-                fechaRegistro: new Date().toISOString()
+                fotoBase64: fotoBase64
             };
 
             try {
-                await addDoc(collection(db, "estudiantes_credenciales"), nuevoAlumno);
-                alert("¡Alumno registrado correctamente!");
+                if (alumnoId) {
+                    // Actualizar alumno existente
+                    await updateDoc(doc(db, "estudiantes_credenciales", alumnoId), datosAlumno);
+                    alert("¡Datos actualizados correctamente!");
+                } else {
+                    // Crear nuevo registro
+                    datosAlumno.fechaRegistro = new Date().toISOString();
+                    await addDoc(collection(db, "estudiantes_credenciales"), datosAlumno);
+                    alert("¡Alumno registrado correctamente!");
+                }
                 window.location.href = "index.html";
             } catch (error) {
                 console.error("Error al guardar:", error);
-                alert("Hubo un error al registrar al alumno.");
+                alert("Hubo un error al guardar los datos en Firebase.");
                 btn.disabled = false;
-                btn.innerText = "Guardar Alumno y Generar Registro";
+                btn.innerText = alumnoId ? "Guardar Cambios" : "Guardar Alumno y Generar Registro";
             }
         });
+
+        verificarModoEdicion();
     </script>
 </body>
 </html>
