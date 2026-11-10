@@ -117,7 +117,7 @@
                 <path d="M -10 75 Q 60 55 120 80 T 215 65 L 215 323 L -10 323 Z" fill="#c59b4d" fill-opacity="0.08"/>
                 <path d="M 204 165 L 145 323 L 204 323 Z" fill="#4a0e1e" fill-opacity="0.07"/>
                 <path d="M 0 185 L 55 323 L 0 323 Z" fill="#c59b4d" fill-opacity="0.12"/>
-                <circle cx="102" cy="240" r="46" fill="none" stroke="#c59b4d" stroke-width="0.6" stroke-dasharray="3,2" stroke-opacity="0.45"/>
+                <circle cx="102" cy="259" r="42" fill="none" stroke="#c59b4d" stroke-width="0.6" stroke-dasharray="3,2" stroke-opacity="0.45"/>
             </svg>
 
             <!-- Escudo Marca de Agua Central -->
@@ -175,7 +175,7 @@
                     </div>
 
                     <!-- Tabla de Datos (Blindada contra desbordamientos) -->
-                    <div style="background-color: rgba(255, 255, 255, 0.88); border: 0.3mm solid #94a3b8; border-radius: 1.5mm; padding: 1mm 1.5mm; margin-bottom: 1.8mm;">
+                    <div style="background-color: rgba(255, 255, 255, 0.88); border: 0.3mm solid #94a3b8; border-radius: 1.5mm; padding: 1mm 1.5mm;">
                         <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
                             <!-- Fila 1: No. Control y Semestre/Grupo -->
                             <tr>
@@ -197,29 +197,25 @@
                             </tr>
                             <!-- Fila 3: Turno y Tipo de Sangre -->
                             <tr>
-                                <td style="padding-top: 0.7mm; vertical-align: bottom;">
+                                <td style="width: 40%; padding-top: 0.7mm; vertical-align: bottom;">
                                     <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">TURNO:</div>
                                     <div style="font-size: 6pt; font-weight: 900; color: #0f172a; text-transform: uppercase; line-height: 1.15; margin-top: 0.2mm;">MATUTINO</div>
                                 </td>
-                                <td style="padding-top: 0.7mm; vertical-align: bottom; text-align: right;">
+                                <td style="width: 60%; padding-top: 0.7mm; vertical-align: bottom; text-align: right;">
                                     <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">TIPO DE SANGRE:</div>
-                                    <div id="cardSangre" style="font-size: 6pt; font-weight: 900; color: #be123c; text-transform: uppercase; line-height: 1.15; margin-top: 0.2mm;">-</div>
+                                    <div id="cardSangre" style="font-size: 5.8pt; font-weight: 900; color: #be123c; text-transform: uppercase; line-height: 1.15; margin-top: 0.2mm; white-space: nowrap;">-</div>
                                 </td>
                             </tr>
                         </table>
                     </div>
 
-                    <!-- FOTOGRAFÍA MÁS COMPACTA Y CENTRADA ENTRE EL CUADRO BLANCO Y LA BARRA VINO -->
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <tr>
-                            <td style="text-align: center; vertical-align: middle;">
-                                <div style="width: 19.5mm; height: 23.5mm; margin: 0 auto; background-color: #e2e8f0; border: 0.6mm solid #4a0e1e; outline: 0.3mm solid #c59b4d; border-radius: 1.5mm; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
-                                    <img id="cardFoto" src="" alt="Foto Alumno" style="width: 100%; height: 100%; object-fit: cover; display: block;">
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
+                </div>
 
+                <!-- FOTOGRAFÍA ANCLADA MILIMÉTRICAMENTE ARRIBA DE LA BARRA VINO Y DEBAJO DEL CUADRO BLANCO -->
+                <div style="position: absolute; bottom: 6.2mm; left: 0; width: 54mm; display: flex; justify-content: center; align-items: center;">
+                    <div style="width: 17.5mm; height: 21mm; background-color: #e2e8f0; border: 0.6mm solid #4a0e1e; outline: 0.3mm solid #c59b4d; border-radius: 1.5mm; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+                        <img id="cardFoto" src="" alt="Foto Alumno" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                    </div>
                 </div>
 
                 <!-- PIE DE CREDENCIAL FIJO AL FONDO -->
