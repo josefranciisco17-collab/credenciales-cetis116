@@ -80,25 +80,30 @@
     <!-- TARJETA CR-80 VERTICAL (ANVERSO OFICIAL) -->
     <div class="cr80-card-vertical rounded-xl shadow-2xl border border-slate-300 overflow-hidden flex flex-col justify-between select-none">
         
-        <!-- ENCABEZADO INSTITUCIONAL SUPERIOR -->
-        <div class="bg-[#4a0e1e] text-white px-3 py-2 border-b-2 border-[#c59b4d] flex items-center justify-between gap-1">
-            <div class="w-9 h-9 bg-white rounded-md p-0.5 flex items-center justify-center flex-shrink-0 shadow">
-                <img src="logotipodgti.png" alt="DGETI" class="w-full h-full object-contain">
+        <!-- ENCABEZADO INSTITUCIONAL SUPERIOR CON LOGOS GRANDES Y TRANSPARENTES -->
+        <div class="bg-[#4a0e1e] text-white px-2.5 py-2 border-b-2 border-[#c59b4d] flex items-center justify-between gap-1">
+            <!-- Logo DGETI (Más grande, sin cajas blancas) -->
+            <div class="w-12 h-12 flex items-center justify-center flex-shrink-0">
+                <img src="logotipodgti.png" alt="DGETI" class="w-full h-full object-contain drop-shadow-md">
             </div>
-            <div class="text-center flex-grow leading-tight">
-                <p class="text-[7px] font-bold tracking-[0.12em] text-amber-300 uppercase">SEP • SEMS • DGETI</p>
-                <h1 class="text-[10px] font-black tracking-wider uppercase mt-0.5 text-white">CETis No. 116</h1>
-                <p class="text-[7px] text-rose-100 italic">"Antonia Nava de Catalán"</p>
+            
+            <!-- Textos Centrales -->
+            <div class="text-center flex-grow leading-tight px-0.5">
+                <p class="text-[6.5px] font-bold tracking-[0.1em] text-amber-300 uppercase">SEP • SEMS • DGETI</p>
+                <h1 class="text-[9.5px] font-black tracking-wider uppercase mt-0.5 text-white">CETis No. 116</h1>
+                <p class="text-[6.5px] text-rose-100 italic">"Antonia Nava de Catalán"</p>
             </div>
-            <div class="w-9 h-9 bg-white rounded-md p-0.5 flex items-center justify-center flex-shrink-0 shadow">
-                <img src="logotipocetis116.png" alt="CETis 116" class="w-full h-full object-contain">
+
+            <!-- Logo CETis 116 (Más grande, sin cajas blancas) -->
+            <div class="w-12 h-12 flex items-center justify-center flex-shrink-0">
+                <img src="logotipocetis116.png" alt="CETis 116" class="w-full h-full object-contain drop-shadow-md">
             </div>
         </div>
 
         <!-- CUERPO CENTRAL CON FOTO CENTRADA Y TEXTOS AMPLIOS -->
         <div class="px-3.5 py-2 flex flex-col justify-between flex-grow">
             
-            <!-- Nombre del Alumno (Más grande y destacado) -->
+            <!-- Nombre del Alumno -->
             <div class="text-center mt-1">
                 <span class="inline-block text-[7px] font-bold bg-amber-500/20 text-amber-900 border border-amber-500/40 px-2 py-0.5 rounded-full uppercase tracking-wider mb-0.5">
                     Estudiante Acreditado
@@ -116,7 +121,7 @@
                 </p>
             </div>
 
-            <!-- Datos Secundarios (Matrícula, Semestre, CURP, Turno) -->
+            <!-- Datos Secundarios -->
             <div class="grid grid-cols-2 gap-x-2 gap-y-1 bg-slate-100 p-2 rounded-lg border border-slate-200 text-[8.5px]">
                 <div>
                     <span class="text-slate-500 font-bold block text-[6.5px]">NO. CONTROL:</span>
