@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Alumnos - Credenciales CETis 116</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-6 flex items-center justify-center">
+    <div class="max-w-2xl w-full bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-xl">
+        <div class="border-b border-slate-800 pb-4 mb-6 flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold text-sky-400">CETis No. 116</h1>
+                <p class="text-xs text-slate-400">Registro de Alumno para Credencial PVC</p>
+            </div>
+            <a href="index.html" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg transition">← Volver al inicio</a>
+        </div>
+
+        <form id="formEstudiante" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Número de Control / Matrícula</label>
+                <input type="text" id="matricula" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-sky-500 outline-none">
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Nombre Completo</label>
+                <input type="text" id="nombreCompleto" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white uppercase focus:border-sky-500 outline-none">
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Especialidad Técnica</label>
+                <select id="especialidad" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-sky-500 outline-none">
+                    <option value="Soporte y Mantenimiento de Equipos de Cómputo">Soporte y Mantenimiento de Equipos de Cómputo</option>
+                    <option value="Programación">Programación</option>
+                    <option value="Electricidad">Electricidad</option>
+                    <option value="Contabilidad">Contabilidad</option>
+                    <option value="Ofimática">Ofimática</option>
+                </select>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Semestre</label>
+                    <input type="text" id="semestre" placeholder="Ej. 5to" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-sky-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Grupo</label>
+                    <input type="text" id="grupo" placeholder="Ej. 501" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-sky-500 outline-none">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">CURP</label>
+                <input type="text" id="curp" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white uppercase focus:border-sky-500 outline-none">
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Tipo de Sangre</label>
+                <input type="text" id="tipoSangre" placeholder="Ej. O+" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white uppercase focus:border-sky-500 outline-none">
+            </div>
+
+            <!-- Sección de Fotografía Optimizada -->
+            <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4 items-center bg-slate-950 p-4 rounded-xl border border-slate-800">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Fotografía del Alumno</label>
+                    <input type="file" id="fotoFile" accept="image/*" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-slate-300 file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-sky-600 file:text-white hover:file:bg-sky-500">
+                    <p class="text-[10px] text-slate-500 mt-1">Se adapta automáticamente para la credencial.</p>
+                </div>
+                <div class="flex justify-center">
+                    <div class="w-20 h-24 bg-slate-900 border-2 border-dashed border-slate-700 rounded-lg flex items-center justify-center overflow-hidden relative">
+                        <img id="previewImg" src="" alt="Vista previa" class="w-full h-full object-cover hidden">
+                        <span id="previewText" class="text-[10px] text-slate-500 text-center p-1">Sin foto</span>
+                    </div>
+                </div>
+                <div class="text-[11px] text-slate-400">
+                    <p class="font-semibold text-sky-400 mb-0.5">Optimización:</p>
+                    <p>La foto se procesa directo en memoria para guardarse de forma ligera en Firestore sin usar Firebase Storage.</p>
+                </div>
+            </div>
+
+            <div class="md:col-span-2 mt-2">
+                <button type="submit" id="btnGuardar" class="w-full bg-sky-600 hover:bg-sky-500 font-semibold py-3 rounded-lg transition duration-200 text-white text-sm shadow-lg">
+                    Guardar Alumno y Generar Registro
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Script de Guardado y Conversión a Base64 -->
+    <script type="module">
+        import { db } from "./firebase-config.js";
+        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        let fotoBase64 = "";
+
+        document.getElementById('fotoFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    canvas.width = 300;
+                    canvas.height = 380;
+
+                    let hRatio = canvas.width / img.width;
+                    let vRatio = canvas.height / img.height;
+                    let ratio = Math.max(hRatio, vRatio);
+                    let centerShiftX = (canvas.width - img.width * ratio) / 2;
+                    let centerShiftY = (canvas.height - img.height * ratio) / 2;
+
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0, img.width, img.height, centerShiftX, centerShiftY, img.width * ratio, img.height * ratio);
+
+                    fotoBase64 = canvas.toDataURL('image/jpeg', 0.85);
+
+                    document.getElementById('previewImg').src = fotoBase64;
+                    document.getElementById('previewImg').classList.remove('hidden');
+                    document.getElementById('previewText').classList.add('hidden');
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('formEstudiante').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnGuardar');
+            btn.disabled = true;
+            btn.innerText = "Guardando en Firebase...";
+
+            const nuevoAlumno = {
+                matricula: document.getElementById('matricula').value.trim(),
+                nombreCompleto: document.getElementById('nombreCompleto').value.trim().toUpperCase(),
+                especialidad: document.getElementById('especialidad').value,
+                semestre: document.getElementById('semestre').value.trim(),
+                grupo: document.getElementById('grupo').value.trim(),
+                curp: document.getElementById('curp').value.trim().toUpperCase(),
+                tipoSangre: document.getElementById('tipoSangre').value.trim().toUpperCase(),
+                vigencia: "2026 - 2027",
+                fotoBase64: fotoBase64,
+                fechaRegistro: new Date().toISOString()
+            };
+
+            try {
+                await addDoc(collection(db, "estudiantes_credenciales"), nuevoAlumno);
+                alert("¡Alumno registrado correctamente!");
+                window.location.href = "index.html";
+            } catch (error) {
+                console.error("Error al guardar:", error);
+                alert("Hubo un error al registrar al alumno.");
+                btn.disabled = false;
+                btn.innerText = "Guardar Alumno y Generar Registro";
+            }
+        });
+    </script>
+</body>
+</html>
