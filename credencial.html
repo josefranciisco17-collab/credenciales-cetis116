@@ -6,12 +6,19 @@
     <title>Credencial Oficial - CETis No. 116</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+        }
+
         body {
             background-color: #070b14;
             color: #0f172a;
-            font-family: system-ui, -apple-system, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -19,36 +26,24 @@
             min-height: 100vh;
         }
 
-        /* TAMAÑO REAL CR-80 VERTICAL (54mm x 85.6mm) CON DISEÑO DE FONDO INSTITUCIONAL */
-        .cr80-vertical {
+        /* TARJETA CR-80 VERTICAL EXACTA (54mm x 85.6mm) */
+        .cr80-card {
             width: 54mm;
             height: 85.6mm;
-            background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
-            background-image: 
-                radial-gradient(rgba(197, 155, 77, 0.08) 1px, transparent 1px),
-                linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
-            background-size: 4mm 4mm, 100% 100%;
+            background-color: #fcfaf5;
             position: relative;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            border-radius: 3mm;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-sizing: border-box;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
+            border-radius: 2.5mm;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+            border: 0.3mm solid #c59b4d;
         }
 
         .btn-gold {
             background: linear-gradient(135deg, #d4b26f 0%, #c59b4d 100%);
             color: #1a1205;
         }
-        .btn-gold:hover {
-            background: linear-gradient(135deg, #e0c283 0%, #d1a95b 100%);
-        }
 
-        /* REGLAS ESTRICTAS DE IMPRESIÓN PARA LA ZEBRA ZC300 */
+        /* IMPRESIÓN PERFECTA SIN ROMPER EL DISEÑO INTERNO */
         @media print {
             @page {
                 size: 54mm 85.6mm;
@@ -57,134 +52,198 @@
             html, body {
                 width: 54mm !important;
                 height: 85.6mm !important;
-                background: none !important;
                 margin: 0 !important;
                 padding: 0 !important;
+                background: #fcfaf5 !important;
                 overflow: hidden !important;
             }
-            body * {
+            .no-print {
                 display: none !important;
             }
-            #areaImpresion, #areaImpresion * {
-                display: flex !important;
-                visibility: visible !important;
-            }
             #areaImpresion {
-                position: absolute !important;
-                left: 0 !important;
+                position: fixed !important;
                 top: 0 !important;
+                left: 0 !important;
                 width: 54mm !important;
                 height: 85.6mm !important;
                 margin: 0 !important;
                 padding: 0 !important;
-                z-index: 99999;
             }
-            .no-print {
-                display: none !important;
+            .cr80-card {
+                width: 54mm !important;
+                height: 85.6mm !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+                margin: 0 !important;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Barra de Navegación (Oculta al imprimir) -->
-    <div class="no-print w-[54mm] flex justify-between items-center mb-3">
-        <a href="index.html" class="text-[11px] bg-slate-900 text-amber-300 border border-amber-500/30 px-3 py-1.5 rounded-lg font-semibold shadow">
+    <!-- Barra de Navegación (Se oculta al imprimir) -->
+    <div class="no-print" style="width: 54mm; display: flex; justify-content: space-between; margin-bottom: 12px;">
+        <a href="index.html" style="font-size: 11px; background: #0f172a; color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); padding: 6px 10px; border-radius: 8px; text-decoration: none; font-weight: bold;">
             ⬅ Padrón
         </a>
-        <a id="linkReverso" href="reverso.html" class="text-[11px] bg-slate-900 text-amber-300 border border-amber-500/30 px-3 py-1.5 rounded-lg font-semibold shadow">
+        <a id="linkReverso" href="reverso.html" style="font-size: 11px; background: #0f172a; color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); padding: 6px 10px; border-radius: 8px; text-decoration: none; font-weight: bold;">
             Ver Reverso ➡
         </a>
     </div>
 
-    <!-- CONTENEDOR DE IMPRESIÓN -->
+    <!-- ÁREA DE IMPRESIÓN -->
     <div id="areaImpresion">
-        <div class="cr80-vertical select-none">
-            
-            <!-- ENCABEZADO GUINDA INSTITUCIONAL -->
-            <div style="background-color: #4a0e1e; border-bottom: 1.5mm solid #c59b4d;" class="text-white px-2 py-1.5 flex items-center justify-between">
-                <div class="w-7 h-7 bg-white/95 rounded p-0.5 flex items-center justify-center flex-shrink-0 shadow border border-amber-300/40">
-                    <img src="logotipodgti.png" alt="DGETI" class="w-full h-full object-contain">
-                </div>
-                <div class="text-center flex-grow leading-none px-0.5">
-                    <p style="font-size: 5px;" class="font-extrabold text-amber-300 uppercase tracking-tighter">SEP • SEMS • DGETI</p>
-                    <h1 style="font-size: 8.5px;" class="font-black uppercase text-white mt-0.5">CETis No. 116</h1>
-                    <p style="font-size: 5.5px;" class="text-rose-100 italic">"Antonia Nava de Catalán"</p>
-                </div>
-                <div class="w-7 h-7 bg-white/95 rounded p-0.5 flex items-center justify-center flex-shrink-0 shadow border border-amber-300/40">
-                    <img src="logotipocetis116.png" alt="CETis 116" class="w-full h-full object-contain">
-                </div>
-            </div>
+        <div class="cr80-card">
 
-            <!-- CUERPO DE DATOS Y FOTOGRAFÍA -->
-            <div class="px-2.5 py-1.5 flex flex-col justify-between flex-grow">
+            <!-- 1. DISEÑO DE FONDO REAL (SVG + MARCA DE AGUA QUE SÍ SE IMPRIME) -->
+            <svg style="position: absolute; top: 0; left: 0; width: 54mm; height: 85.6mm; z-index: 1; pointer-events: none;" viewBox="0 0 204 323" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#fdfbf7"/>
+                        <stop offset="50%" stop-color="#f5efe2"/>
+                        <stop offset="100%" stop-color="#ebe1cd"/>
+                    </linearGradient>
+                    <pattern id="gridGuilloche" width="12" height="12" patternUnits="userSpaceOnUse">
+                        <path d="M 12 0 L 0 12 M 0 0 L 12 12" fill="none" stroke="#c59b4d" stroke-width="0.35" stroke-opacity="0.22"/>
+                    </pattern>
+                </defs>
+                <!-- Fondo base tono crema/perla oficial -->
+                <rect width="204" height="323" fill="url(#bgGrad)"/>
+                <!-- Textura de seguridad cruzada -->
+                <rect width="204" height="323" fill="url(#gridGuilloche)"/>
                 
-                <!-- Nombre del Alumno -->
-                <div class="text-center">
-                    <span style="font-size: 5px;" class="inline-block font-bold bg-amber-500/20 text-amber-900 px-2 py-0.2 rounded-full uppercase border border-amber-500/30">
-                        Estudiante Acreditado
-                    </span>
-                    <p id="cardNombre" style="font-size: 8.5px;" class="font-black text-slate-900 uppercase leading-tight mt-0.5">
+                <!-- Olas y vectores decorativos institucionales (Guinda y Dorado) -->
+                <path d="M -10 75 Q 60 55 120 80 T 215 65 L 215 323 L -10 323 Z" fill="#c59b4d" fill-opacity="0.08"/>
+                <path d="M 204 165 L 145 323 L 204 323 Z" fill="#4a0e1e" fill-opacity="0.07"/>
+                <path d="M 0 185 L 55 323 L 0 323 Z" fill="#c59b4d" fill-opacity="0.12"/>
+                <circle cx="102" cy="242" r="52" fill="none" stroke="#c59b4d" stroke-width="0.6" stroke-dasharray="3,2" stroke-opacity="0.45"/>
+            </svg>
+
+            <!-- Escudo Marca de Agua Central -->
+            <img src="logotipocetis116.png" alt="" style="position: absolute; top: 31mm; left: 11mm; width: 32mm; height: 32mm; object-fit: contain; opacity: 0.08; z-index: 1; pointer-events: none;">
+
+            <!-- 2. CONTENIDO ESTRUCTURADO Y FIJO ENCIMA DEL FONDO -->
+            <div style="position: relative; z-index: 2; width: 54mm; height: 85.6mm;">
+
+                <!-- ENCABEZADO GUINDA (Altura exacta: 13.5mm) -->
+                <div style="width: 54mm; height: 13.5mm; background-color: #4a0e1e; border-bottom: 0.8mm solid #c59b4d; padding: 1.2mm 1.8mm;">
+                    <table style="width: 100%; height: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="width: 9mm; vertical-align: middle; text-align: left;">
+                                <div style="width: 8.5mm; height: 8.5mm; background-color: #ffffff; border-radius: 1.2mm; padding: 0.5mm; border: 0.3mm solid #c59b4d;">
+                                    <img src="logotipodgti.png" alt="DGETI" style="width: 100%; height: 100%; object-fit: contain; display: block;">
+                                </div>
+                            </td>
+                            <td style="vertical-align: middle; text-align: center; padding: 0 1mm;">
+                                <div style="font-size: 5pt; font-weight: 800; color: #fcd34d; letter-spacing: 0.4px; line-height: 1.1;">SEP • SEMS • DGETI</div>
+                                <div style="font-size: 8.5pt; font-weight: 900; color: #ffffff; letter-spacing: 0.3px; line-height: 1.15; margin-top: 0.3mm;">CETis No. 116</div>
+                                <div style="font-size: 5pt; color: #fecdd3; font-style: italic; line-height: 1.1;">"Antonia Nava de Catalán"</div>
+                            </td>
+                            <td style="width: 9mm; vertical-align: middle; text-align: right;">
+                                <div style="width: 8.5mm; height: 8.5mm; background-color: #ffffff; border-radius: 1.2mm; padding: 0.5mm; border: 0.3mm solid #c59b4d; margin-left: auto;">
+                                    <img src="logotipocetis116.png" alt="CETis 116" style="width: 100%; height: 100%; object-fit: contain; display: block;">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- CUERPO DE DATOS DEL ALUMNO -->
+                <div style="padding: 1.2mm 2.2mm 0 2.2mm;">
+
+                    <!-- Etiqueta Estudiante Acreditado (Centrada arriba) -->
+                    <div style="text-align: center; margin-bottom: 0.6mm;">
+                        <span style="display: inline-block; background-color: #fef3c7; color: #78350f; border: 0.25mm solid #d97706; font-size: 4.8pt; font-weight: 800; padding: 0.3mm 2.5mm; border-radius: 3mm; text-transform: uppercase; letter-spacing: 0.4px;">
+                            ESTUDIANTE ACREDITADO
+                        </span>
+                    </div>
+
+                    <!-- Nombre del Alumno (Centrado, grande y sin desbordarse) -->
+                    <div id="cardNombre" style="text-align: center; font-size: 7.2pt; font-weight: 900; color: #0f172a; text-transform: uppercase; line-height: 1.15; min-height: 6.5mm; display: flex; align-items: center; justify-content: center; word-wrap: break-word; margin-bottom: 1mm;">
                         CARGANDO...
-                    </p>
-                </div>
+                    </div>
 
-                <!-- Especialidad Técnica Mejorada (Separada y limpia) -->
-                <div style="background-color: #0f172a;" class="text-amber-300 text-center py-1 px-1 rounded shadow-inner">
-                    <p style="font-size: 4.5px;" class="text-slate-400 font-semibold uppercase tracking-wider">Especialidad Técnica:</p>
-                    <p id="cardEspecialidad" style="font-size: 7.5px;" class="font-black uppercase tracking-tight text-amber-300 leading-tight">
-                        Cargando...
-                    </p>
-                </div>
-
-                <!-- Datos Secundarios con CURP Amplia y Sin Desbordes -->
-                <div class="bg-white/80 p-1 rounded border border-slate-300 shadow-sm space-y-1" style="font-size: 6px;">
-                    <div class="flex justify-between">
-                        <div>
-                            <span class="text-slate-500 font-bold block" style="font-size: 4.5px;">NO. CONTROL:</span>
-                            <span id="cardMatricula" class="font-mono font-bold text-slate-900">-</span>
+                    <!-- Barra de Especialidad Técnica (Título arriba, carrera abajo) -->
+                    <div style="background-color: #1e293b; border: 0.3mm solid #c59b4d; border-radius: 1.2mm; padding: 0.7mm 1.5mm; text-align: center; margin-bottom: 1.2mm;">
+                        <div style="font-size: 4.3pt; color: #cbd5e1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; line-height: 1.1;">
+                            ESPECIALIDAD TÉCNICA
                         </div>
-                        <div class="text-right">
-                            <span class="text-slate-500 font-bold block" style="font-size: 4.5px;">SEMESTRE / GRUPO:</span>
-                            <span id="cardSemestreGrupo" class="font-mono font-bold text-slate-900">-</span>
+                        <div id="cardEspecialidad" style="font-size: 6.5pt; color: #fbbf24; font-weight: 900; text-transform: uppercase; line-height: 1.2; margin-top: 0.2mm;">
+                            LABORATORISTA CLÍNICO
                         </div>
                     </div>
-                    <div>
-                        <span class="text-slate-500 font-bold block" style="font-size: 4.5px;">CURP:</span>
-                        <span id="cardCurp" class="font-mono font-bold text-slate-900 block tracking-tight" style="font-size: 6.5px;">-</span>
+
+                    <!-- Tabla de Datos (Blindada contra desbordamientos) -->
+                    <div style="background-color: rgba(255, 255, 255, 0.88); border: 0.3mm solid #94a3b8; border-radius: 1.5mm; padding: 1mm 1.5mm; margin-bottom: 1.2mm;">
+                        <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                            <!-- Fila 1: No. Control y Semestre/Grupo -->
+                            <tr>
+                                <td style="width: 58%; padding-bottom: 0.8mm; vertical-align: top;">
+                                    <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">NO. CONTROL:</div>
+                                    <div id="cardMatricula" style="font-size: 6.5pt; font-weight: 900; color: #0f172a; font-family: monospace; line-height: 1.15; margin-top: 0.2mm;">-</div>
+                                </td>
+                                <td style="width: 42%; padding-bottom: 0.8mm; vertical-align: top; text-align: right;">
+                                    <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">SEMESTRE / GRUPO:</div>
+                                    <div id="cardSemestreGrupo" style="font-size: 6.5pt; font-weight: 900; color: #0f172a; font-family: monospace; line-height: 1.15; margin-top: 0.2mm;">-</div>
+                                </td>
+                            </tr>
+                            <!-- Fila 2: CURP de ancho completo (100%) para que jamás se salga -->
+                            <tr>
+                                <td colspan="2" style="padding: 0.7mm 0; border-top: 0.2mm solid #e2e8f0; border-bottom: 0.2mm solid #e2e8f0; vertical-align: middle;">
+                                    <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">CURP:</div>
+                                    <div id="cardCurp" style="font-size: 6.2pt; font-weight: 900; color: #0f172a; font-family: monospace; letter-spacing: 0.2px; line-height: 1.2; margin-top: 0.2mm; word-break: break-all;">-</div>
+                                </td>
+                            </tr>
+                            <!-- Fila 3: Turno y Tipo de Sangre -->
+                            <tr>
+                                <td style="padding-top: 0.7mm; vertical-align: bottom;">
+                                    <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">TURNO:</div>
+                                    <div style="font-size: 6pt; font-weight: 900; color: #0f172a; text-transform: uppercase; line-height: 1.15; margin-top: 0.2mm;">MATUTINO</div>
+                                </td>
+                                <td style="padding-top: 0.7mm; vertical-align: bottom; text-align: right;">
+                                    <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">TIPO DE SANGRE:</div>
+                                    <div id="cardSangre" style="font-size: 6pt; font-weight: 900; color: #be123c; text-transform: uppercase; line-height: 1.15; margin-top: 0.2mm;">-</div>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                    <div class="flex justify-between pt-0.5 border-t border-slate-200">
-                        <div>
-                            <span class="text-slate-500 font-bold block" style="font-size: 4.5px;">TURNO:</span>
-                            <span class="font-bold text-slate-900 uppercase">MATUTINO</span>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-slate-500 font-bold block" style="font-size: 4.5px;">SANGRE:</span>
-                            <span id="cardSangre" class="font-bold text-rose-700 uppercase">-</span>
-                        </div>
-                    </div>
+
+                    <!-- FOTOGRAFÍA PERFECTAMENTE CENTRADA -->
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="text-align: center; vertical-align: middle;">
+                                <div style="width: 22mm; height: 26.5mm; margin: 0 auto; background-color: #e2e8f0; border: 0.6mm solid #4a0e1e; outline: 0.3mm solid #c59b4d; border-radius: 1.5mm; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+                                    <img id="cardFoto" src="" alt="Foto Alumno" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
                 </div>
 
-                <!-- FOTOGRAFÍA OFICIAL CENTRADA -->
-                <div class="flex justify-center items-center my-0.5">
-                    <div style="width: 20mm; height: 25mm;" class="bg-slate-200 border-2 border-[#c59b4d] rounded overflow-hidden shadow relative">
-                        <img id="cardFoto" src="" alt="Foto Alumno" class="w-full h-full object-cover">
-                    </div>
+                <!-- PIE DE CREDENCIAL FIJO AL FONDO -->
+                <div style="position: absolute; bottom: 0; left: 0; width: 54mm; height: 4.8mm; background-color: #4a0e1e; border-top: 0.5mm solid #c59b4d; padding: 0 2.2mm;">
+                    <table style="width: 100%; height: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="text-align: left; vertical-align: middle; font-size: 5pt; color: #f1f5f9; font-weight: 700;">
+                                VIGENCIA: <span style="color: #fcd34d; font-weight: 900;">2026 - 2027</span>
+                            </td>
+                            <td style="text-align: right; vertical-align: middle; font-size: 5pt; color: #e2e8f0; font-family: monospace; font-weight: 700;">
+                                C.C.T. 12DCT0007F
+                            </td>
+                        </tr>
+                    </table>
                 </div>
-            </div>
 
-            <!-- PIE DE CREDENCIAL -->
-            <div style="background-color: #0f172a; border-top: 1px solid #c59b4d; font-size: 6px;" class="text-slate-200 px-2.5 py-1 flex justify-between items-center">
-                <span>VIGENCIA: <strong class="text-amber-400">2026 - 2027</strong></span>
-                <span class="font-mono text-slate-300">C.C.T. 12DCT0007F</span>
             </div>
         </div>
     </div>
 
     <!-- Botón de Impresión -->
-    <div class="mt-4 no-print">
-        <button onclick="window.print()" class="btn-gold font-extrabold px-6 py-2.5 rounded-xl shadow-xl transition text-xs uppercase tracking-wider flex items-center gap-2">
-            <span>🖨️</span> Imprimir Anverso Vertical (ZC300)
+    <div class="no-print" style="margin-top: 16px;">
+        <button onclick="window.print()" class="btn-gold" style="font-weight: 900; padding: 10px 24px; border-radius: 12px; border: none; cursor: pointer; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 10px 20px rgba(0,0,0,0.4);">
+            🖨️ Imprimir Anverso Vertical (ZC300)
         </button>
     </div>
 
