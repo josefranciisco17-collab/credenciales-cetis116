@@ -1,0 +1,17 @@
+{
+  "name": "Credenciales CETis 116",
+  "short_name": "CETis 116",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#070b14",
+  "theme_color": "#4a0e1e",
+  "description": "Sistema oficial de gestión y emisión de credenciales escolares para el CETis No. 116",
+  "icons": [
+    {
+      "src": "logo-app.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
