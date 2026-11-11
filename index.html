@@ -6,6 +6,9 @@
     <title>Padrón y Gestión - Credenciales CETis No. 116</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Librería para exportar PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <style>
         body {
             background-color: #070b14;
@@ -31,7 +34,6 @@
         }
     </style>
 
-    <!-- CONTROL DE SESIÓN DIRECTO Y SIN PANTALLA DE BLOQUEO -->
     <script>
         const sesionActiva = localStorage.getItem("cetis116_user_email");
         if (!sesionActiva) {
@@ -74,8 +76,8 @@
         </div>
     </div>
 
-    <!-- PANEL DE ESTADÍSTICAS -->
-    <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+    <!-- PANEL DE CONTROL Y FILTROS POR LOTE -->
+    <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
         <div class="bg-slate-900 border border-amber-500/30 rounded-xl p-3 text-white flex items-center justify-between shadow-lg">
             <div>
                 <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Padrón Activo</p>
@@ -83,12 +85,19 @@
             </div>
             <div class="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-base">👥</div>
         </div>
-        <div class="bg-slate-900 border border-amber-500/30 rounded-xl p-3 text-white flex items-center justify-between shadow-lg">
-            <div>
-                <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Clave C.C.T.</p>
-                <p class="text-sm font-black text-white font-mono mt-0.5">12DCT0007F</p>
-            </div>
-            <div class="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-base">🏫</div>
+        
+        <div class="bg-slate-900 border border-amber-500/30 rounded-xl p-3 text-white flex flex-col justify-center shadow-lg">
+            <label class="text-[10px] uppercase font-bold text-amber-300 tracking-wider mb-1">Filtrar por Grupo / Lote</label>
+            <select id="filtroGrupo" onchange="filtrarTabla()" class="w-full bg-slate-800 border border-amber-500/40 rounded-lg p-1.5 text-xs text-white font-medium focus:outline-none focus:border-amber-400">
+                <option value="TODOS">🔍 Todos los grupos (General)</option>
+            </select>
+        </div>
+
+        <div class="bg-slate-900 border border-amber-500/30 rounded-xl p-3 text-white flex flex-col justify-center shadow-lg">
+            <p class="text-[10px] uppercase font-bold text-amber-300 tracking-wider mb-1">Exportar Lote Seleccionado</p>
+            <button onclick="exportarPDFLote()" class="w-full bg-amber-500 text-[#1a1205] font-black py-1.5 px-3 rounded-lg text-xs uppercase tracking-wider hover:bg-amber-400 transition cursor-pointer flex items-center justify-center gap-1.5 shadow">
+                <span>📄</span> Descargar Lote PDF
+            </button>
         </div>
     </div>
 
@@ -147,10 +156,12 @@
         <p class="text-amber-400/80 mt-0.5">Plataforma Inteligente de Credencialización • By J.F.A.M</p>
     </footer>
 
-    <!-- SCRIPT DE CONEXIÓN A FIRESTORE -->
+    <!-- SCRIPT DE GESTIÓN, FILTRADO Y EXPORTACIÓN POR LOTE -->
     <script type="module">
         import { db } from "./firebase-config.js";
         import { collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        let listaEstudiantesGlobal = [];
 
         window.mostrarAlerta = function(mensaje, callbackAceptar = null, mostrarCancelar = false) {
             document.getElementById('modalMessage').innerText = mensaje;
@@ -182,56 +193,103 @@
             const tbody = document.getElementById('tablaEstudiantes');
             const totalAlumnosBadge = document.getElementById('totalAlumnosBadge');
             const statTotal = document.getElementById('statTotal');
+            const selectFiltro = document.getElementById('filtroGrupo');
 
             try {
                 const querySnapshot = await getDocs(collection(db, "estudiantes_credenciales"));
-                tbody.innerHTML = "";
+                listaEstudiantesGlobal = [];
                 
-                let contador = 0;
-                if (querySnapshot.empty) {
+                querySnapshot.forEach((docSnap) => {
+                    listaEstudiantesGlobal.push({ id: docSnap.id, ...docSnap.data() });
+                });
+
+                if (listaEstudiantesGlobal.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400 italic">No hay estudiantes registrados todavía.</td></tr>`;
                     totalAlumnosBadge.innerText = "0 Registros";
                     statTotal.innerText = "0";
                     return;
                 }
 
-                querySnapshot.forEach((docSnap) => {
-                    contador++;
-                    const data = docSnap.data();
-                    const id = docSnap.id;
-
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-slate-50 transition";
-                    tr.innerHTML = `
-                        <td class="p-3">
-                            <div class="w-8 h-10 bg-slate-200 rounded border border-slate-300 overflow-hidden shadow-sm">
-                                <img src="${data.fotoBase64 || ''}" alt="Foto" class="w-full h-full object-cover">
-                            </div>
-                        </td>
-                        <td class="p-3 font-bold uppercase text-slate-900">${data.nombreCompleto || 'Sin Nombre'}</td>
-                        <td class="p-3 font-mono text-slate-600">${data.matricula || '-'}</td>
-                        <td class="p-3 uppercase font-medium text-slate-700">${data.especialidad || '-'}</td>
-                        <td class="p-3 font-mono font-bold">${data.semestre || '1'}° "${data.grupo || 'A'}"</td>
-                        <td class="p-3 text-center">
-                            <div class="flex items-center justify-center gap-1.5 flex-wrap">
-                                <a href="credencial.html?id=${id}" class="bg-[#4a0e1e] text-white px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-rose-900 shadow transition">🪪 Anv</a>
-                                <a href="reverso.html?id=${id}" class="bg-slate-900 text-amber-300 border border-amber-500/30 px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-slate-800 shadow transition">🔄 Rev</a>
-                                <a href="registro.html?id=${id}" class="bg-blue-600 text-white px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-blue-700 shadow transition">✏️ Mod</a>
-                                <button onclick="window.eliminar('${id}', '${data.nombreCompleto || 'Estudiante'}')" class="bg-rose-600 text-white px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-rose-700 shadow transition cursor-pointer">🗑️ Elim</button>
-                            </div>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
+                // Poblar el selector de grupos automáticamente según los registrados
+                const gruposUnicos = [...new Set(listaEstudiantesGlobal.map(e => `${e.semestre || '1'}° "${e.grupo || 'A'}" - ${e.especialidad || 'General'}`))];
+                selectFiltro.innerHTML = `<option value="TODOS">🔍 Todos los grupos (${listaEstudiantesGlobal.length} alumnos)</option>`;
+                gruposUnicos.forEach(g => {
+                    selectFiltro.innerHTML += `<option value="${g}">${g}</option>`;
                 });
 
-                totalAlumnosBadge.innerText = `${contador} Registros`;
-                statTotal.innerText = contador;
+                renderizarTabla(listaEstudiantesGlobal);
+                statTotal.innerText = listaEstudiantesGlobal.length;
+                totalAlumnosBadge.innerText = `${listaEstudiantesGlobal.length} Registros`;
 
             } catch (error) {
                 console.error("Error al cargar el padrón:", error);
-                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-rose-600 font-bold">Error de permisos en Firestore: Asegúrate de publicar las reglas.</td></tr>`;
-                totalAlumnosBadge.innerText = "Error";
+                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-rose-600 font-bold">Error al conectar con Firestore.</td></tr>`;
             }
+        }
+
+        window.filtrarTabla = function() {
+            const criterio = document.getElementById('filtroGrupo').value;
+            if (criterio === "TODOS") {
+                renderizarTabla(listaEstudiantesGlobal);
+            } else {
+                const filtrados = listaEstudiantesGlobal.filter(e => `${e.semestre || '1'}° "${e.grupo || 'A'}" - ${e.especialidad || 'General'}` === criterio);
+                renderizarTabla(filtrados);
+            }
+        }
+
+        function renderizarTabla(arrayDatos) {
+            const tbody = document.getElementById('tablaEstudiantes');
+            tbody.innerHTML = "";
+
+            if (arrayDatos.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400 italic">No hay alumnos en este grupo.</td></tr>`;
+                return;
+            }
+
+            arrayDatos.forEach((data) => {
+                const id = data.id;
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition";
+                tr.innerHTML = `
+                    <td class="p-3">
+                        <div class="w-8 h-10 bg-slate-200 rounded border border-slate-300 overflow-hidden shadow-sm">
+                            <img src="${data.fotoBase64 || ''}" alt="Foto" class="w-full h-full object-cover">
+                        </div>
+                    </td>
+                    <td class="p-3 font-bold uppercase text-slate-900">${data.nombreCompleto || 'Sin Nombre'}</td>
+                    <td class="p-3 font-mono text-slate-600">${data.matricula || '-'}</td>
+                    <td class="p-3 uppercase font-medium text-slate-700">${data.especialidad || '-'}</td>
+                    <td class="p-3 font-mono font-bold">${data.semestre || '1'}° "${data.grupo || 'A'}"</td>
+                    <td class="p-3 text-center">
+                        <div class="flex items-center justify-center gap-1.5 flex-wrap">
+                            <a href="credencial.html?id=${id}" class="bg-[#4a0e1e] text-white px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-rose-900 shadow transition">🪪 Anv</a>
+                            <a href="reverso.html?id=${id}" class="bg-slate-900 text-amber-300 border border-amber-500/30 px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-slate-800 shadow transition">🔄 Rev</a>
+                            <a href="registro.html?id=${id}" class="bg-blue-600 text-white px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-blue-700 shadow transition">✏️ Mod</a>
+                            <button onclick="window.eliminar('${id}', '${data.nombreCompleto || 'Estudiante'}')" class="bg-rose-600 text-white px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-rose-700 shadow transition cursor-pointer">🗑️ Elim</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.exportarPDFLote = function() {
+            const criterio = document.getElementById('filtroGrupo').value;
+            mostrarAlerta(`Generando reporte PDF del lote: [${criterio}]. Por favor espera...`);
+            
+            const elementoTabla = document.querySelector(".w-full.max-w-5xl.bg-white.rounded-2xl");
+            
+            const opciones = {
+                margin:       10,
+                filename:     `Lote_Credenciales_${criterio.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+
+            html2pdf().from(elementoTabla).set(opciones).save().then(() => {
+                mostrarAlerta("¡Lote de credenciales exportado a PDF con éxito!");
+            });
         }
 
         window.eliminar = function(id, nombre) {
