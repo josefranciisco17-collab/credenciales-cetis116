@@ -123,7 +123,7 @@
                 <path d="M 204 165 L 145 323 L 204 323 Z" fill="#4a0e1e" fill-opacity="0.07"/>
             </svg>
 
-            <!-- 2. CONTENIDO INTERIOR VERTICAL CON BLOQUE DE PERIODOS UNIFICADO Y ESPACIO PARA QR -->
+            <!-- 2. CONTENIDO INTERIOR VERTICAL CON BLOQUE DE PERIODOS UNIFICADO Y QR REAL -->
             <div style="position: relative; z-index: 2; width: 54mm; height: 85.6mm; display: flex; flex-direction: column; justify-content: space-between; padding: 2.2mm;">
 
                 <!-- Bloque Unificado de Periodos / Semestres SEP -->
@@ -162,7 +162,7 @@
                     </p>
                 </div>
 
-                <!-- SECCIÓN INFERIOR COMPACTA (Director + Espacio Reservado para Código QR) -->
+                <!-- SECCIÓN INFERIOR: DIRECTOR + CÓDIGO QR REAL -->
                 <div style="display: flex; gap: 1.5mm; align-items: stretch;">
                     <!-- Cuadro del Director del Plantel -->
                     <div style="flex-grow: 1; border: 0.3mm solid #4a0e1e; border-radius: 1mm; padding: 0.8mm; text-align: center; background-color: #ffffff; display: flex; flex-direction: column; justify-content: center;">
@@ -177,12 +177,11 @@
                         </div>
                     </div>
 
-                    <!-- ESPACIO RESERVADO PARA CÓDIGO QR -->
-                    <div style="width: 14mm; height: 14mm; border: 0.3mm dashed #c59b4d; border-radius: 1mm; background-color: rgba(255,255,255,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.5mm;">
-                        <span style="font-size: 3.5pt; font-weight: 900; color: #4a0e1e; text-transform: uppercase; letter-spacing: 0.2px;">QR VERIFY</span>
-                        <!-- Aquí colocaremos el canvas o imagen del QR -->
-                        <div style="width: 9.5mm; height: 9.5mm; background-color: #0f172a; border-radius: 0.5mm; display: flex; align-items: center; justify-content: center; margin-top: 0.5mm;">
-                            <span style="font-size: 6pt; color: #fcd34d;">📱</span>
+                    <!-- CONTENEDOR DEL CÓDIGO QR REAL -->
+                    <div style="width: 14mm; height: 14mm; border: 0.3mm solid #c59b4d; border-radius: 1mm; background-color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.5mm;">
+                        <span style="font-size: 3.5pt; font-weight: 900; color: #4a0e1e; text-transform: uppercase; letter-spacing: 0.2px; line-height: 1;">VERIFY</span>
+                        <div id="qrContainer" style="width: 10mm; height: 10mm; margin-top: 0.3mm; display: flex; align-items: center; justify-content: center;">
+                            <!-- Aquí se inyectará el código QR dinámico -->
                         </div>
                     </div>
                 </div>
@@ -209,13 +208,45 @@
         </button>
     </div>
 
-    <!-- Script para mantener el ID del alumno al navegar -->
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const alumnoId = params.get('id');
-        if (alumnoId) {
+    <!-- Script para generar el Código QR dinámico apuntando a verificar.html -->
+    <script type="module">
+        import { db, doc, getDoc } from "./firebase-config.js";
+
+        async function generarReversoConQR() {
+            const params = new URLSearchParams(window.location.search);
+            const alumnoId = params.get('id');
+
+            if (!alumnoId) {
+                console.error("No se especificó un estudiante.");
+                return;
+            }
+
             document.getElementById('linkAnverso').href = `credencial.html?id=${alumnoId}`;
+
+            try {
+                const docRef = doc(db, "estudiantes_credenciales", alumnoId);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    // Construir la URL absoluta o relativa de verificación del alumno
+                    const baseURL = window.location.origin + window.location.pathname.replace('reverso.html', 'verificar.html');
+                    const linkVerificacion = `${baseURL}?id=${alumnoId}`;
+
+                    // Generar el código QR usando la API pública de códigos QR (limpio y sin dependencias pesadas)
+                    const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(linkVerificacion)}`;
+                    
+                    document.getElementById('qrContainer').innerHTML = `
+                        <img src="${qrImageUrl}" alt="QR Verificación" style="width: 100%; height: 100%; object-fit: contain; display: block;">
+                    `;
+                } else {
+                    console.error("Estudiante no encontrado para el QR.");
+                }
+            } catch (error) {
+                console.error("Error al generar el QR:", error);
+            }
         }
+
+        generarReversoConQR();
     </script>
 </body>
 </html>
