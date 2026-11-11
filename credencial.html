@@ -3,325 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Administración - Credenciales CETis No. 116</title>
-    
+    <title>Anverso de Credencial - CETis No. 116</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body {
             background-color: #070b14;
-            color: #0f172a;
             font-family: Arial, Helvetica, sans-serif;
+        }
+        /* Proporción estándar CR-80 Vertical (54mm x 85.6mm -> escala web 340px x 540px) */
+        .cr80-card {
+            width: 340px;
+            height: 540px;
+            background-color: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         .btn-gold {
             background: linear-gradient(135deg, #d4b26f 0%, #c59b4d 100%);
             color: #1a1205;
         }
-        .btn-gold:hover {
-            background: linear-gradient(135deg, #e0c283 0%, #d1a95b 100%);
-        }
-        .app-card-shadow {
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
-        }
-        @keyframes modalPop {
-            0% { transform: scale(0.85); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .modal-anim {
-            animation: modalPop 0.25s ease-out;
+        @media print {
+            body {
+                background: none;
+                margin: 0;
+                padding: 0;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .cr80-card {
+                width: 54mm;
+                height: 85.6mm;
+                box-shadow: none;
+                border-radius: 0;
+                margin: 0;
+            }
         }
     </style>
-
     <script>
-        const usuarioActual = localStorage.getItem("cetis116_user_email");
-        const ADMIN_MASTER_CHECK = "josefranciisco17@gmail.com";
-
-        if (!usuarioActual) {
+        if (!localStorage.getItem("cetis116_user_email")) {
             window.location.replace("login.html");
-        } else if (usuarioActual.trim().toLowerCase() !== ADMIN_MASTER_CHECK) {
-            alert("Acceso denegado: Panel exclusivo del Administrador Propietario.");
-            window.location.replace("index.html");
         }
     </script>
 </head>
-<body class="min-h-screen flex flex-col items-center p-3 md:p-6">
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
 
-    <!-- ENCABEZADO DE ADMINISTRACIÓN -->
-    <header class="w-full max-w-5xl bg-[#4a0e1e] text-white border-b-4 border-[#c59b4d] rounded-2xl app-card-shadow p-4 mb-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
-        <div>
-            <p class="text-[9px] font-extrabold tracking-widest text-amber-300 uppercase">CETis 116 • Antonia Nava de Catalán</p>
-            <h1 class="text-base md:text-lg font-black tracking-wider uppercase text-white mt-0.5">Panel de Administración • Cuentas</h1>
-        </div>
-        <a href="index.html" class="bg-slate-900 text-amber-300 border border-amber-500/40 px-4 py-2 rounded-xl text-xs font-extrabold uppercase hover:bg-slate-800 transition shadow cursor-pointer">
-            Volver al Inicio
+    <!-- BARRA SUPERIOR DE CONTROLES (NO SE IMPRIME) -->
+    <div class="no-print w-full max-w-md bg-[#4a0e1e] text-white border-b-4 border-[#c59b4d] rounded-2xl p-3.5 mb-5 flex items-center justify-between shadow-xl">
+        <a href="index.html" class="bg-slate-900 text-amber-300 border border-amber-500/40 px-3.5 py-2 rounded-xl text-xs font-extrabold uppercase hover:bg-slate-800 transition">
+            ⬅ Padrón
         </a>
-    </header>
-
-    <!-- BOTONERA DE CONTROL -->
-    <div class="w-full max-w-5xl grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
-        <button onclick="window.cambiarVista('pendientes')" id="tabPendientes" class="bg-amber-500 text-[#1a1205] font-black py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition">
-            👥 Solicitudes
-        </button>
-        <button onclick="window.cambiarVista('activas')" id="tabActivas" class="bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800">
-            🔒 Cuentas Activas
-        </button>
-        <button onclick="window.cambiarVista('roles')" id="tabRoles" class="bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800">
-            ⚙️ Permisos y Roles
-        </button>
-        <button onclick="window.cambiarVista('estadisticas')" id="tabEstadisticas" class="bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800">
-            📊 Estadísticas
-        </button>
+        <span class="text-xs font-black uppercase tracking-wider text-amber-300">Vista Anverso</span>
+        <a id="btnIrReverso" href="reverso.html" class="btn-gold px-3.5 py-2 rounded-xl text-xs font-black uppercase transition shadow">
+            🔄 Reverso
+        </a>
     </div>
 
-    <!-- CONTENEDOR DINÁMICO DE SECCIONES -->
-    <div class="w-full max-w-5xl bg-white rounded-2xl app-card-shadow p-5 border border-slate-200 flex-grow mb-4">
+    <!-- CONTENEDOR DE LA CREDENCIAL (CR-80) -->
+    <div id="credencialAnverso" class="cr80-card border border-slate-300">
         
-        <!-- SECCIÓN 1: SOLICITUDES PENDIENTES -->
-        <div id="seccionPendientes" class="space-y-4">
-            <h2 class="text-sm font-black text-slate-900 uppercase tracking-tight">Cuentas Nuevas Pendientes de Validación</h2>
-            <p class="text-xs text-slate-500">Autoriza los registros nuevos para que puedan acceder al sistema:</p>
-            <div id="listaPendientes" class="divide-y divide-slate-100 mt-3">
-                <p class="text-xs text-slate-400 italic py-4">Buscando solicitudes pendientes...</p>
+        <!-- ENCABEZADO GUINDA INSTITUCIONAL -->
+        <div class="bg-[#4a0e1e] text-white pt-3 pb-2.5 px-3 border-b-4 border-[#c59b4d] flex items-center justify-between gap-2 relative">
+            <div class="w-11 h-11 bg-white rounded-lg p-1 flex items-center justify-center shadow flex-shrink-0">
+                <img src="logo-dgti.png" alt="DGETI" class="w-full h-full object-contain" crossorigin="anonymous">
+            </div>
+            <div class="text-center flex-grow">
+                <p class="text-[8px] font-black tracking-widest text-amber-300 uppercase leading-tight">SEP • SEMS • DGETI</p>
+                <h1 class="text-[12px] font-black tracking-wider uppercase text-white leading-tight mt-0.5">CETis No. 116</h1>
+                <p class="text-[7.5px] text-amber-100 font-bold leading-tight">"Antonia Nava de Catalán"</p>
+                <p class="text-[7px] text-amber-300/90 font-mono leading-tight">C.C.T. 12DCT0007F</p>
+            </div>
+            <div class="w-11 h-11 bg-white rounded-lg p-1 flex items-center justify-center shadow flex-shrink-0">
+                <img src="logo116.png" alt="CETis 116" class="w-full h-full object-contain" crossorigin="anonymous">
             </div>
         </div>
 
-        <!-- SECCIÓN 2: CUENTAS ACTIVAS -->
-        <div id="seccionActivas" class="space-y-4" style="display: none;">
-            <h2 class="text-sm font-black text-slate-900 uppercase tracking-tight">Cuentas con Acceso Autorizado</h2>
-            <p class="text-xs text-slate-500">Colaboradores con permiso activo en la plataforma:</p>
-            <div id="listaActivas" class="divide-y divide-slate-100 mt-3">
-                <p class="text-xs text-slate-400 italic py-4">Cargando cuentas activas...</p>
+        <!-- CUERPO CENTRAL DE LA CREDENCIAL -->
+        <div class="flex-grow flex flex-col items-center justify-center px-4 py-2 bg-gradient-to-b from-slate-50 to-white relative">
+            
+            <!-- ETIQUETA ESTUDIANTE -->
+            <div class="bg-[#4a0e1e] text-amber-300 text-[9px] font-black uppercase tracking-widest px-4 py-0.5 rounded-full border border-[#c59b4d] mb-2 shadow-sm">
+                Credencial de Estudiante
             </div>
-        </div>
 
-        <!-- SECCIÓN 3: PERMISOS Y ROLES -->
-        <div id="seccionRoles" class="space-y-4" style="display: none;">
-            <h2 class="text-sm font-black text-slate-900 uppercase tracking-tight">Gestión de Roles y Seguridad</h2>
-            <p class="text-xs text-slate-500">Configuración global del Administrador Propietario:</p>
-            <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl text-xs text-slate-700 space-y-2">
-                <p><strong>Admin Propietario Master:</strong> <span class="font-mono text-rose-800">josefranciisco17@gmail.com</span></p>
-                <p><strong>Nivel de Acceso:</strong> Control total de bases de datos, aprobación de usuarios y emisión de credenciales institucionales.</p>
+            <!-- FOTOGRAFÍA DEL ALUMNO -->
+            <div class="w-28 h-36 bg-slate-200 rounded-xl border-2 border-[#4a0e1e] shadow-md overflow-hidden mb-2.5 flex items-center justify-center">
+                <img id="fotoAlumno" src="" alt="Fotografía" class="w-full h-full object-cover">
             </div>
-        </div>
 
-        <!-- SECCIÓN 4: ESTADÍSTICAS -->
-        <div id="seccionEstadisticas" class="space-y-4" style="display: none;">
-            <h2 class="text-sm font-black text-slate-900 uppercase tracking-tight">Estadísticas del Sistema</h2>
-            <p class="text-xs text-slate-500">Resumen operativo del CETis No. 116:</p>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
-                <div class="bg-slate-900 text-amber-300 p-4 rounded-xl border border-amber-500/30">
-                    <p class="text-[10px] uppercase font-bold text-slate-400">Total Cuentas en Sistema</p>
-                    <p id="statTotalCuentas" class="text-xl font-black font-mono mt-1">0</p>
+            <!-- NOMBRE COMPLETO -->
+            <div class="w-full text-center px-1 mb-2">
+                <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Nombre del Alumno(a)</p>
+                <h2 id="nombreAlumno" class="text-[13px] font-black text-slate-900 uppercase leading-snug break-words mt-0.5">
+                    Cargando...
+                </h2>
+            </div>
+
+            <!-- FRANJA DE ESPECIALIDAD CON COLOR DINÁMICO -->
+            <div id="franjaEspecialidad" class="w-full bg-[#4a0e1e] text-white py-1.5 px-2 rounded-lg text-center shadow-sm mb-2 border border-amber-400/50">
+                <p class="text-[7px] uppercase tracking-widest text-amber-200 font-bold">Especialidad Técnica</p>
+                <p id="especialidadAlumno" class="text-[10px] font-black uppercase tracking-wider truncate">---</p>
+            </div>
+
+            <!-- DATOS ACADÉMICOS Y MÉDICOS -->
+            <div class="w-full grid grid-cols-3 gap-1.5 text-center bg-slate-100 p-2 rounded-xl border border-slate-200">
+                <div>
+                    <p class="text-[7px] font-extrabold text-slate-500 uppercase">No. Control</p>
+                    <p id="matriculaAlumno" class="text-[10px] font-black text-slate-900 font-mono mt-0.5">---</p>
                 </div>
-                <div class="bg-slate-900 text-amber-300 p-4 rounded-xl border border-amber-500/30">
-                    <p class="text-[10px] uppercase font-bold text-slate-400">Clave C.C.T.</p>
-                    <p class="text-sm font-black font-mono mt-1">12DCT0007F</p>
+                <div class="border-x border-slate-300">
+                    <p class="text-[7px] font-extrabold text-slate-500 uppercase">Sem / Grupo</p>
+                    <p id="semGrupoAlumno" class="text-[10px] font-black text-slate-900 font-mono mt-0.5">---</p>
+                </div>
+                <div>
+                    <p class="text-[7px] font-extrabold text-slate-500 uppercase">Turno / Sangre</p>
+                    <p id="turnoSangreAlumno" class="text-[9px] font-black text-rose-800 uppercase mt-0.5">---</p>
                 </div>
             </div>
         </div>
 
+        <!-- PIE DE CREDENCIAL -->
+        <div class="bg-slate-900 text-white py-2 px-3 border-t-2 border-[#c59b4d] flex items-center justify-between text-[8px]">
+            <span class="font-bold text-amber-300 uppercase tracking-wider">Acapulco, Gro.</span>
+            <span id="curpAlumno" class="font-mono text-slate-300">CURP: ---</span>
+        </div>
     </div>
 
-    <!-- MODAL PERSONALIZADO -->
-    <div id="customModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(7, 11, 20, 0.85); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
-        <div class="modal-anim bg-white border-2 border-[#c59b4d] rounded-2xl w-full max-w-[320px] shadow-2xl overflow-hidden text-center p-5">
-            <div class="w-10 h-10 bg-[#4a0e1e] text-amber-300 rounded-full mx-auto flex items-center justify-center text-lg font-bold border border-amber-400 mb-2">⚙️</div>
-            <h3 class="text-xs font-black uppercase tracking-wider text-[#4a0e1e] mb-1">CETis No. 116</h3>
-            <p id="modalMessage" class="text-xs font-bold text-slate-800 mb-4">Mensaje del sistema</p>
-            <div id="modalButtons" class="flex gap-2 justify-center">
-                <button onclick="window.cerrarModal()" class="w-full btn-gold font-black py-2.5 rounded-xl uppercase text-xs tracking-wider cursor-pointer">Aceptar</button>
-            </div>
-        </div>
+    <!-- BOTONES DE IMPRESIÓN Y DESCARGA -->
+    <div class="no-print w-full max-w-md flex gap-3 mt-5">
+        <button onclick="descargarPNG()" class="flex-1 btn-gold font-black py-3 rounded-xl uppercase text-xs tracking-wider shadow-lg cursor-pointer flex items-center justify-center gap-2">
+            <span>📥</span> Guardar Imagen
+        </button>
+        <button onclick="window.print()" class="flex-1 bg-slate-800 text-amber-300 border border-amber-500/40 font-black py-3 rounded-xl uppercase text-xs tracking-wider shadow-lg hover:bg-slate-700 cursor-pointer flex items-center justify-center gap-2">
+            <span>🖨️</span> Imprimir PVC
+        </button>
     </div>
 
-    <!-- SCRIPT DE GESTIÓN Y NAVEGACIÓN -->
     <script type="module">
         import { db } from "./firebase-config.js";
-        import { collection, getDocs, doc, updateDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const ADMIN_MASTER = "josefranciisco17@gmail.com";
+        const params = new URLSearchParams(window.location.search);
+        const alumnoId = params.get("id");
 
-        window.mostrarAlerta = function(mensaje, callbackAceptar = null, mostrarCancelar = false) {
-            document.getElementById('modalMessage').innerText = mensaje;
-            const modal = document.getElementById('customModal');
-            const btnContainer = document.getElementById('modalButtons');
+        if (alumnoId) {
+            document.getElementById("btnIrReverso").href = `reverso.html?id=${alumnoId}`;
+        }
 
-            if (mostrarCancelar) {
-                btnContainer.innerHTML = `
-                    <button onclick="window.cerrarModal()" class="flex-1 bg-slate-200 text-slate-700 font-black py-2.5 rounded-xl uppercase text-xs cursor-pointer">Cancelar</button>
-                    <button id="btnConfirmModal" class="flex-1 bg-rose-600 text-white font-black py-2.5 rounded-xl uppercase text-xs cursor-pointer">Confirmar</button>
-                `;
-                document.getElementById('btnConfirmModal').onclick = () => {
-                    window.cerrarModal();
-                    if (callbackAceptar) callbackAceptar();
-                };
-            } else {
-                btnContainer.innerHTML = `
-                    <button onclick="window.cerrarModal()" class="w-full btn-gold font-black py-2.5 rounded-xl uppercase text-xs cursor-pointer">Aceptar</button>
-                `;
+        async function cargarCredencial() {
+            if (!alumnoId) {
+                alert("No se especificó ningún estudiante.");
+                window.location.replace("index.html");
+                return;
             }
-            modal.style.display = 'flex';
-        };
-
-        window.cerrarModal = function() {
-            document.getElementById('customModal').style.display = 'none';
-        };
-
-        window.cambiarVista = function(vista) {
-            ['Pendientes', 'Activas', 'Roles', 'Estadisticas'].forEach(v => {
-                const sec = document.getElementById(`seccion${v}`);
-                const tab = document.getElementById(`tab${v}`);
-                if (sec) sec.style.display = 'none';
-                if (tab) tab.className = "bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800";
-            });
-
-            const nombreCapitalizado = vista.charAt(0).toUpperCase() + vista.slice(1);
-            const targetSec = document.getElementById(`seccion${nombreCapitalizado}`);
-            const targetTab = document.getElementById(`tab${nombreCapitalizado}`);
-            
-            if (targetSec) targetSec.style.display = 'block';
-            if (targetTab) targetTab.className = "bg-amber-500 text-[#1a1205] font-black py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition";
-
-            if (vista === 'pendientes' || vista === 'activas' || vista === 'estadisticas') {
-                cargarUsuarios();
-            }
-        };
-
-        async function cargarUsuarios() {
-            const contenedorPendientes = document.getElementById('listaPendientes');
-            const contenedorActivas = document.getElementById('listaActivas');
-            const statTotalCuentas = document.getElementById('statTotalCuentas');
-
-            if (contenedorPendientes) contenedorPendientes.innerHTML = `<p class="text-xs text-slate-400 italic py-4">Sincronizando con el servidor...</p>`;
-            if (contenedorActivas) contenedorActivas.innerHTML = `<p class="text-xs text-slate-400 italic py-4">Cargando cuentas activas...</p>`;
 
             try {
-                const querySnapshot = await getDocs(collection(db, "usuarios_sistema"));
-                
-                if (contenedorPendientes) contenedorPendientes.innerHTML = "";
-                if (contenedorActivas) contenedorActivas.innerHTML = "";
-
-                let pendientesCount = 0;
-                let totalCount = 0;
-                let adminRegistrado = false;
-
-                querySnapshot.forEach((docSnap) => {
-                    totalCount++;
-                    const data = docSnap.data() || {};
-                    const id = docSnap.id;
-                    const email = (data.email || 'Sin correo').trim();
-                    const esMaster = email.toLowerCase() === ADMIN_MASTER;
-                    if (esMaster) adminRegistrado = true;
-
-                    const aprobado = data.aprobado === true || esMaster;
-
-                    let fechaTexto = 'Reciente';
-                    if (data.fechaRegistro) {
-                        const f = new Date(data.fechaRegistro);
-                        if (!isNaN(f)) fechaTexto = f.toLocaleString();
-                    }
-
-                    if (!aprobado) {
-                        pendientesCount++;
-                        const div = document.createElement('div');
-                        div.className = "py-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-100";
-                        div.innerHTML = `
-                            <div>
-                                <p class="font-bold text-slate-900 text-xs">${email}</p>
-                                <p class="text-[10px] text-slate-500">Registrado: ${fechaTexto}</p>
-                            </div>
-                            <div class="flex gap-2 w-full sm:w-auto">
-                                <button onclick="window.aprobarCuenta('${id}')" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700 text-white font-black px-3 py-2 rounded-lg text-[10px] uppercase tracking-wider shadow transition cursor-pointer">
-                                    Aprobar Cuenta
-                                </button>
-                                <button onclick="window.rechazarCuenta('${id}')" class="flex-1 sm:flex-initial bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-2 rounded-lg text-[10px] uppercase tracking-wider shadow transition cursor-pointer">
-                                    Rechazar
-                                </button>
-                            </div>
-                        `;
-                        if (contenedorPendientes) contenedorPendientes.appendChild(div);
-                    } else {
-                        const div = document.createElement('div');
-                        div.className = "py-3.5 flex justify-between items-center border-b border-slate-100";
-                        div.innerHTML = `
-                            <div>
-                                <p class="font-bold text-slate-900 text-xs">${email} ${esMaster ? '<span class="text-amber-600 font-black">(Propietario)</span>' : ''}</p>
-                                <p class="text-[10px] text-emerald-600 font-bold">Estado: Activo y Autorizado</p>
-                            </div>
-                            ${!esMaster ? `<button onclick="window.rechazarCuenta('${id}')" class="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1.5 rounded-lg text-[10px] uppercase tracking-wider shadow transition cursor-pointer">Revocar</button>` : ''}
-                        `;
-                        if (contenedorActivas) contenedorActivas.appendChild(div);
-                    }
-                });
-
-                // Si la colección estaba vacía o no aparecía el propietario, lo mostramos como activo y lo guardamos
-                if (!adminRegistrado) {
-                    totalCount++;
-                    const divMaster = document.createElement('div');
-                    divMaster.className = "py-3.5 flex justify-between items-center border-b border-slate-100";
-                    divMaster.innerHTML = `
-                        <div>
-                            <p class="font-bold text-slate-900 text-xs">${ADMIN_MASTER} <span class="text-amber-600 font-black">(Propietario)</span></p>
-                            <p class="text-[10px] text-emerald-600 font-bold">Estado: Activo y Autorizado</p>
-                        </div>
-                    `;
-                    if (contenedorActivas) contenedorActivas.prepend(divMaster);
-
-                    try {
-                        await setDoc(doc(db, "usuarios_sistema", "admin_master"), {
-                            email: ADMIN_MASTER,
-                            rol: "propietario_admin",
-                            aprobado: true,
-                            fechaRegistro: new Date().toISOString()
-                        });
-                    } catch (errSet) {
-                        console.warn("No se pudo autoguardar admin_master:", errSet);
-                    }
+                const docSnap = await getDoc(doc(db, "estudiantes_credenciales", alumnoId));
+                if (!docSnap.exists()) {
+                    alert("El registro del estudiante no existe.");
+                    window.location.replace("index.html");
+                    return;
                 }
 
-                if (pendientesCount === 0 && contenedorPendientes) {
-                    contenedorPendientes.innerHTML = `<p class="text-xs text-slate-500 italic py-4">No hay solicitudes nuevas pendientes de validación.</p>`;
+                const d = docSnap.data();
+                document.getElementById("fotoAlumno").src = d.fotoBase64 || "logo116.png";
+                document.getElementById("nombreAlumno").innerText = d.nombreCompleto || "SIN NOMBRE";
+                document.getElementById("especialidadAlumno").innerText = d.especialidad || "GENERAL";
+                document.getElementById("matriculaAlumno").innerText = d.matricula || "-";
+                document.getElementById("semGrupoAlumno").innerText = `${d.semestre || '1'}° "${d.grupo || 'A'}"`;
+                document.getElementById("turnoSangreAlumno").innerText = `${(d.turno || 'MAT').substring(0,3)} • ${d.tipoSangre || 'O+'}`;
+                document.getElementById("curpAlumno").innerText = d.curp ? `CURP: ${d.curp}` : "VIGENCIA 2026-2027";
+
+                // Color de franja según especialidad si aplica
+                const esp = (d.especialidad || "").toUpperCase();
+                const franja = document.getElementById("franjaEspecialidad");
+                if (esp.includes("PROGRAMACIÓN") || esp.includes("PROGRAMACION")) {
+                    franja.className = "w-full bg-blue-900 text-white py-1.5 px-2 rounded-lg text-center shadow-sm mb-2 border border-blue-400";
+                } else if (esp.includes("LABORATORISTA")) {
+                    franja.className = "w-full bg-emerald-900 text-white py-1.5 px-2 rounded-lg text-center shadow-sm mb-2 border border-emerald-400";
+                } else if (esp.includes("CONTABILIDAD")) {
+                    franja.className = "w-full bg-amber-800 text-white py-1.5 px-2 rounded-lg text-center shadow-sm mb-2 border border-amber-400";
                 }
-
-                if (statTotalCuentas) statTotalCuentas.innerText = totalCount;
-
             } catch (error) {
-                console.error("Detalle del error Firestore:", error);
-                const msgError = error.code === "permission-denied" 
-                    ? "Permiso denegado por las Reglas de Firestore. Asegúrate de publicar 'allow read, write: if true;' en la consola de Firebase." 
-                    : (error.message || "Fallo de red");
-
-                if (contenedorPendientes) {
-                    contenedorPendientes.innerHTML = `<p class="text-xs text-rose-600 font-bold py-4">⚠️ ${msgError}</p>`;
-                }
-                if (contenedorActivas) {
-                    contenedorActivas.innerHTML = `<p class="text-xs text-rose-600 font-bold py-4">⚠️ ${msgError}</p>`;
-                }
+                console.error("Error al cargar credencial:", error);
             }
         }
 
-        window.aprobarCuenta = async function(id) {
-            try {
-                await updateDoc(doc(db, "usuarios_sistema", id), { aprobado: true });
-                window.mostrarAlerta("¡Cuenta aprobada con éxito! El colaborador ya puede iniciar sesión.");
-                cargarUsuarios();
-            } catch (e) {
-                window.mostrarAlerta("Error al aprobar la cuenta: " + e.message);
-            }
+        window.descargarPNG = async function() {
+            const card = document.getElementById("credencialAnverso");
+            const canvas = await html2canvas(card, { scale: 3, useCORS: true });
+            const link = document.createElement("a");
+            link.download = `Anverso_${document.getElementById("matriculaAlumno").innerText}.png`;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
         };
 
-        window.rechazarCuenta = function(id) {
-            window.mostrarAlerta("¿Estás seguro de eliminar o revocar el acceso a esta cuenta?", async () => {
-                try {
-                    await deleteDoc(doc(db, "usuarios_sistema", id));
-                    window.mostrarAlerta("Cuenta eliminada del sistema.");
-                    cargarUsuarios();
-                } catch (e) {
-                    window.mostrarAlerta("No se pudo eliminar: " + e.message);
-                }
-            }, true);
-        };
-
-        cargarUsuarios();
+        cargarCredencial();
     </script>
 </body>
 </html>
