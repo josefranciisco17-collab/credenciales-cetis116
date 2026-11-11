@@ -22,7 +22,6 @@
         .app-card-shadow {
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
         }
-        /* Ocultar contenido hasta verificar sesión para evitar pantallas fantasma */
         #appContainer {
             display: none;
         }
@@ -30,10 +29,8 @@
 </head>
 <body class="min-h-screen flex flex-col items-center p-3 md:p-6">
 
-    <!-- CONTENEDOR PRINCIPAL (OCULTO HASTA ESTAR AUTENTICADO) -->
+    <!-- CONTENEDOR PRINCIPAL -->
     <div id="appContainer" class="w-full flex flex-col items-center">
-
-        <!-- ENCABEZADO INSTITUCIONAL -->
         <div class="w-full max-w-5xl bg-[#4a0e1e] text-white border-b-4 border-[#c59b4d] rounded-2xl app-card-shadow p-4 mb-4 flex items-center justify-between gap-3">
             <div class="w-12 h-12 bg-white rounded-xl p-1 flex items-center justify-center shadow border border-amber-400 flex-shrink-0">
                 <img src="logo-dgti.png" alt="DGETI" class="w-full h-full object-contain">
@@ -53,29 +50,23 @@
             </div>
         </div>
 
-        <!-- PANEL DE ESTADÍSTICAS Y CONTROL RÁPIDO -->
         <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
             <div class="bg-slate-900 border border-amber-500/30 rounded-xl p-3 text-white flex items-center justify-between shadow-lg">
                 <div>
                     <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Padrón Activo</p>
                     <p id="statTotal" class="text-lg font-black text-amber-300 font-mono mt-0.5">Cargando...</p>
                 </div>
-                <div class="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-base">
-                    👥
-                </div>
+                <div class="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-base">👥</div>
             </div>
             <div class="bg-slate-900 border border-amber-500/30 rounded-xl p-3 text-white flex items-center justify-between shadow-lg">
                 <div>
                     <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Clave C.C.T.</p>
                     <p class="text-sm font-black text-white font-mono mt-0.5">12DCT0007F</p>
                 </div>
-                <div class="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-base">
-                    🏫
-                </div>
+                <div class="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-base">🏫</div>
             </div>
         </div>
 
-        <!-- PANEL DE ACCIONES Y NUEVO REGISTRO -->
         <div class="w-full max-w-5xl bg-white rounded-2xl app-card-shadow p-4 mb-4 border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-3">
             <div>
                 <h2 class="text-sm font-black text-slate-900 uppercase tracking-tight">Directorio de Estudiantes</h2>
@@ -88,13 +79,11 @@
             </div>
         </div>
 
-        <!-- LISTADO / TABLA DE ESTUDIANTES -->
         <div class="w-full max-w-5xl bg-white rounded-2xl app-card-shadow overflow-hidden border border-slate-200 flex-grow mb-4">
             <div class="p-3 bg-slate-900 text-amber-300 font-bold text-xs uppercase tracking-wider flex justify-between items-center">
                 <span>Listado General de Alumnos</span>
                 <span id="totalAlumnosBadge" class="bg-amber-400/20 text-amber-300 border border-amber-400/30 px-2 py-0.5 rounded text-[10px] font-mono">Sincronizando...</span>
             </div>
-            
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
@@ -108,34 +97,45 @@
                         </tr>
                     </thead>
                     <tbody id="tablaEstudiantes" class="divide-y divide-slate-200 text-xs text-slate-800">
-                        <tr>
-                            <td colspan="6" class="p-6 text-center text-slate-400 italic">Cargando registros...</td>
-                        </tr>
+                        <tr><td colspan="6" class="p-6 text-center text-slate-400 italic">Cargando registros...</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
-
     </div>
 
-    <!-- PANTALLA DE CARGA / VERIFICACIÓN LIMPIA -->
+    <!-- PANTALLA DE CARGA -->
     <div id="loaderScreen" class="fixed inset-0 bg-[#070b14] flex flex-col items-center justify-center text-center p-4 z-50">
         <div class="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mb-4"></div>
         <p class="text-amber-300 font-bold text-xs uppercase tracking-widest">Verificando Credenciales de Acceso...</p>
     </div>
 
-    <!-- SCRIPT DE CONTROL ESTABLE IDÉNTICO A LA APP DE MANTENIMIENTO -->
+    <!-- SCRIPT DE CONTROL CON TIMEOUT DE SEGURIDAD -->
     <script type="module">
         import { db, auth } from "./firebase-config.js";
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        let procesado = false;
+
+        // Si en 1.2 segundos Firebase no responde porque no hay sesión, redirige al login de inmediato
+        const safetyTimer = setTimeout(() => {
+            if (!procesado) {
+                procesado = true;
+                window.location.replace("login.html");
+            }
+        }, 1200);
+
         onAuthStateChanged(auth, async (user) => {
+            if (procesado) return;
+            
             if (!user) {
-                // Si no hay sesión, redirección limpia inmediata al login
+                procesado = true;
+                clearTimeout(safetyTimer);
                 window.location.replace("login.html");
             } else {
-                // Si hay sesión válida, mostramos la app y cargamos los datos
+                procesado = true;
+                clearTimeout(safetyTimer);
                 document.getElementById('userEmailDisplay').innerText = `Sesión: ${user.email}`;
                 document.getElementById('loaderScreen').style.display = 'none';
                 document.getElementById('appContainer').style.display = 'flex';
