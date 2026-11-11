@@ -96,7 +96,7 @@
     <div id="areaImpresion">
         <div class="cr80-card">
 
-            <!-- 1. DISEÑO DE FONDO REAL (SVG + MARCA DE AGUA QUE SÍ SE IMPRIME) -->
+            <!-- 1. DISEÑO DE FONDO REAL (SVG + MARCA DE AGUA) -->
             <svg style="position: absolute; top: 0; left: 0; width: 54mm; height: 85.6mm; z-index: 1; pointer-events: none;" viewBox="0 0 204 323" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -108,14 +108,10 @@
                         <path d="M 12 0 L 0 12 M 0 0 L 12 12" fill="none" stroke="#c59b4d" stroke-width="0.35" stroke-opacity="0.22"/>
                     </pattern>
                 </defs>
-                <!-- Fondo base tono crema/perla oficial -->
                 <rect width="204" height="323" fill="url(#bgGrad)"/>
-                <!-- Textura de seguridad cruzada -->
                 <rect width="204" height="323" fill="url(#gridGuilloche)"/>
                 
-                <!-- Olas y vectores decorativos institucionales (Guinda y Dorado) -->
                 <path d="M -10 75 Q 60 55 120 80 T 215 65 L 215 323 L -10 323 Z" fill="#c59b4d" fill-opacity="0.08"/>
-                <path d="M 204 165 L 145 323 L 204 323 Z" fill="#4a0e1e" fill-opacity="0.07"/>
                 <path d="M 0 185 L 55 323 L 0 323 Z" fill="#c59b4d" fill-opacity="0.12"/>
                 <circle cx="102" cy="259" r="42" fill="none" stroke="#c59b4d" stroke-width="0.6" stroke-dasharray="3,2" stroke-opacity="0.45"/>
             </svg>
@@ -126,8 +122,8 @@
             <!-- 2. CONTENIDO ESTRUCTURADO Y FIJO ENCIMA DEL FONDO -->
             <div style="position: relative; z-index: 2; width: 54mm; height: 85.6mm;">
 
-                <!-- ENCABEZADO GUINDA (Altura exacta: 13.5mm) -->
-                <div style="width: 54mm; height: 13.5mm; background-color: #4a0e1e; border-bottom: 0.8mm solid #c59b4d; padding: 1.2mm 1.8mm;">
+                <!-- ENCABEZADO INSTITUCIONAL (Color dinámico según semestre) -->
+                <div id="cardHeader" style="width: 54mm; height: 13.5mm; background-color: #4a0e1e; border-bottom: 0.8mm solid #c59b4d; padding: 1.2mm 1.8mm; transition: background-color 0.3s ease;">
                     <table style="width: 100%; height: 100%; border-collapse: collapse;">
                         <tr>
                             <td style="width: 9mm; vertical-align: middle; text-align: left;">
@@ -152,32 +148,27 @@
                 <!-- CUERPO DE DATOS DEL ALUMNO -->
                 <div style="padding: 1.2mm 2.2mm 0 2.2mm;">
 
-                    <!-- Etiqueta Estudiante Acreditado (Centrada arriba) -->
                     <div style="text-align: center; margin-bottom: 0.6mm;">
                         <span style="display: inline-block; background-color: #fef3c7; color: #78350f; border: 0.25mm solid #d97706; font-size: 4.8pt; font-weight: 800; padding: 0.3mm 2.5mm; border-radius: 3mm; text-transform: uppercase; letter-spacing: 0.4px;">
                             ESTUDIANTE ACREDITADO
                         </span>
                     </div>
 
-                    <!-- Nombre del Alumno (Centrado, grande y sin desbordarse) -->
                     <div id="cardNombre" style="text-align: center; font-size: 7.2pt; font-weight: 900; color: #0f172a; text-transform: uppercase; line-height: 1.15; min-height: 6.5mm; display: flex; align-items: center; justify-content: center; word-wrap: break-word; margin-bottom: 1mm;">
                         CARGANDO...
                     </div>
 
-                    <!-- Barra de Especialidad Técnica (Título arriba, carrera abajo) -->
                     <div style="background-color: #1e293b; border: 0.3mm solid #c59b4d; border-radius: 1.2mm; padding: 0.7mm 1.5mm; text-align: center; margin-bottom: 1.2mm;">
                         <div style="font-size: 4.3pt; color: #cbd5e1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; line-height: 1.1;">
                             ESPECIALIDAD TÉCNICA
                         </div>
                         <div id="cardEspecialidad" style="font-size: 6.5pt; color: #fbbf24; font-weight: 900; text-transform: uppercase; line-height: 1.2; margin-top: 0.2mm;">
-                            LABORATORISTA CLÍNICO
+                            -
                         </div>
                     </div>
 
-                    <!-- Tabla de Datos (Blindada contra desbordamientos) -->
                     <div style="background-color: rgba(255, 255, 255, 0.88); border: 0.3mm solid #94a3b8; border-radius: 1.5mm; padding: 1mm 1.5mm;">
                         <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
-                            <!-- Fila 1: No. Control y Semestre/Grupo -->
                             <tr>
                                 <td style="width: 58%; padding-bottom: 0.8mm; vertical-align: top;">
                                     <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">NO. CONTROL:</div>
@@ -188,14 +179,12 @@
                                     <div id="cardSemestreGrupo" style="font-size: 6.5pt; font-weight: 900; color: #0f172a; font-family: monospace; line-height: 1.15; margin-top: 0.2mm;">-</div>
                                 </td>
                             </tr>
-                            <!-- Fila 2: CURP de ancho completo (100%) para que jamás se salga -->
                             <tr>
                                 <td colspan="2" style="padding: 0.7mm 0; border-top: 0.2mm solid #e2e8f0; border-bottom: 0.2mm solid #e2e8f0; vertical-align: middle;">
                                     <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">CURP:</div>
                                     <div id="cardCurp" style="font-size: 6.2pt; font-weight: 900; color: #0f172a; font-family: monospace; letter-spacing: 0.2px; line-height: 1.2; margin-top: 0.2mm; word-break: break-all;">-</div>
                                 </td>
                             </tr>
-                            <!-- Fila 3: Turno y Tipo de Sangre -->
                             <tr>
                                 <td style="width: 40%; padding-top: 0.7mm; vertical-align: bottom;">
                                     <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">TURNO:</div>
@@ -211,15 +200,15 @@
 
                 </div>
 
-                <!-- FOTOGRAFÍA ANCLADA MILIMÉTRICAMENTE ARRIBA DE LA BARRA VINO Y DEBAJO DEL CUADRO BLANCO -->
+                <!-- FOTOGRAFÍA ANCLADA -->
                 <div style="position: absolute; bottom: 6.2mm; left: 0; width: 54mm; display: flex; justify-content: center; align-items: center;">
                     <div style="width: 17.5mm; height: 21mm; background-color: #e2e8f0; border: 0.6mm solid #4a0e1e; outline: 0.3mm solid #c59b4d; border-radius: 1.5mm; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
                         <img id="cardFoto" src="" alt="Foto Alumno" style="width: 100%; height: 100%; object-fit: cover; display: block;">
                     </div>
                 </div>
 
-                <!-- PIE DE CREDENCIAL FIJO AL FONDO -->
-                <div style="position: absolute; bottom: 0; left: 0; width: 54mm; height: 4.8mm; background-color: #4a0e1e; border-top: 0.5mm solid #c59b4d; padding: 0 2.2mm;">
+                <!-- PIE DE CREDENCIAL FIJO AL FONDO (Color dinámico según semestre) -->
+                <div id="cardFooter" style="position: absolute; bottom: 0; left: 0; width: 54mm; height: 4.8mm; background-color: #4a0e1e; border-top: 0.5mm solid #c59b4d; padding: 0 2.2mm; transition: background-color 0.3s ease;">
                     <table style="width: 100%; height: 100%; border-collapse: collapse;">
                         <tr>
                             <td style="text-align: left; vertical-align: middle; font-size: 5pt; color: #f1f5f9; font-weight: 700;">
@@ -239,11 +228,11 @@
     <!-- Botón de Impresión -->
     <div class="no-print" style="margin-top: 16px;">
         <button onclick="window.print()" class="btn-gold" style="font-weight: 900; padding: 10px 24px; border-radius: 12px; border: none; cursor: pointer; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 10px 20px rgba(0,0,0,0.4);">
-            🖨️ Imprimir Anverso Vertical (ZC300)
+            🖨️ Imprimir Anverso Vertical
         </button>
     </div>
 
-    <!-- Script de Conexión Firestore -->
+    <!-- Script de Conexión Firestore y Asignación de Colores por Semestre -->
     <script type="module">
         import { db, doc, getDoc } from "./firebase-config.js";
 
@@ -266,7 +255,11 @@
                     const data = docSnap.data();
                     document.getElementById('cardNombre').innerText = data.nombreCompleto || '';
                     document.getElementById('cardEspecialidad').innerText = data.especialidad || '';
-                    document.getElementById('cardSemestreGrupo').innerText = `${data.semestre || '1'}° "${data.grupo || 'A'}"`;
+                    
+                    const semestreNum = parseInt(data.semestre) || 1;
+                    const grupoStr = data.grupo || 'A';
+                    document.getElementById('cardSemestreGrupo').innerText = `${semestreNum}° "${grupoStr}"`;
+                    
                     document.getElementById('cardMatricula').innerText = data.matricula || '';
                     document.getElementById('cardCurp').innerText = data.curp || '';
                     document.getElementById('cardSangre').innerText = data.tipoSangre || 'O+';
@@ -274,6 +267,25 @@
                     if (data.fotoBase64) {
                         document.getElementById('cardFoto').src = data.fotoBase64;
                     }
+
+                    // APLICAR COLORES DINÁMICOS SEGÚN EL SEMESTRE
+                    const headerEl = document.getElementById('cardHeader');
+                    const footerEl = document.getElementById('cardFooter');
+
+                    if (semestreNum === 1 || semestreNum === 2) {
+                        // Gris Claro Institucional
+                        headerEl.style.backgroundColor = "#64748b";
+                        footerEl.style.backgroundColor = "#64748b";
+                    } else if (semestreNum === 3 || semestreNum === 4) {
+                        // Azul Institucional
+                        headerEl.style.backgroundColor = "#1e3a8a";
+                        footerEl.style.backgroundColor = "#1e3a8a";
+                    } else {
+                        // 5to y 6to Semestre: Color Vino Oficial por default
+                        headerEl.style.backgroundColor = "#4a0e1e";
+                        footerEl.style.backgroundColor = "#4a0e1e";
+                    }
+
                 } else {
                     alert("Estudiante no encontrado en Firebase.");
                 }
