@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validación Oficial - Credencial CETis No. 116</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #070b14;
+            color: #0f172a;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .app-card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- CONTENEDOR PRINCIPAL DE VERIFICACIÓN -->
+    <div class="w-full max-w-md bg-white rounded-3xl app-card-shadow overflow-hidden border border-amber-500/30">
+        
+        <!-- ENCABEZADO INSTITUCIONAL GUINDA -->
+        <div class="bg-[#4a0e1e] text-white p-5 border-b-4 border-[#c59b4d] text-center relative">
+            <div class="w-14 h-14 bg-white rounded-2xl p-1.5 mx-auto mb-2 flex items-center justify-center shadow border border-amber-400">
+                <img src="logo116.png" alt="CETis 116" class="w-full h-full object-contain">
+            </div>
+            <p class="text-[10px] font-extrabold tracking-widest text-amber-300 uppercase">SEP • SEMS • DGETI</p>
+            <h1 class="text-lg font-black tracking-wider uppercase text-white mt-0.5">CETis No. 116</h1>
+            <p class="text-[11px] text-rose-100 italic">"Antonia Nava de Catalán"</p>
+        </div>
+
+        <!-- SELLO DE ESTADO DE VERIFICACIÓN -->
+        <div class="px-6 pt-5 pb-2 text-center">
+            <div id="badgeEstado" class="inline-flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-300 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider shadow-sm">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                Credencial Vigente y Verificada
+            </div>
+        </div>
+
+        <!-- DATOS DEL ESTUDIANTE -->
+        <div class="p-6 space-y-4">
+            
+            <!-- Foto y Nombre -->
+            <div class="flex flex-col items-center text-center">
+                <div class="w-24 h-28 bg-slate-100 rounded-xl border-2 border-[#4a0e1e] shadow-md overflow-hidden mb-3">
+                    <img id="verifFoto" src="" alt="Foto Alumno" class="w-full h-full object-cover">
+                </div>
+                <h2 id="verifNombre" class="text-sm font-black text-slate-900 uppercase tracking-tight">Cargando datos...</h2>
+                <p id="verifEspecialidad" class="text-xs font-extrabold text-amber-700 uppercase mt-0.5">-</p>
+            </div>
+
+            <!-- Ficha Técnica de Control -->
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-3 text-xs">
+                <div class="flex justify-between border-b border-slate-200 pb-2">
+                    <span class="font-extrabold text-slate-500 uppercase text-[10px]">Número de Control:</span>
+                    <span id="verifMatricula" class="font-mono font-bold text-slate-900">-</span>
+                </div>
+                <div class="flex justify-between border-b border-slate-200 pb-2">
+                    <span class="font-extrabold text-slate-500 uppercase text-[10px]">Semestre y Grupo:</span>
+                    <span id="verifSemestreGrupo" class="font-mono font-bold text-slate-900">-</span>
+                </div>
+                <div class="flex justify-between border-b border-slate-200 pb-2">
+                    <span class="font-extrabold text-slate-500 uppercase text-[10px]">Clave CURP:</span>
+                    <span id="verifCurp" class="font-mono font-bold text-slate-900 text-[11px]">-</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="font-extrabold text-slate-500 uppercase text-[10px]">Vigencia Oficial:</span>
+                    <span class="font-bold text-amber-700 font-mono">2026 - 2027</span>
+                </div>
+            </div>
+
+            <!-- Información del Plantel -->
+            <div class="text-center pt-1">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Plantel Autorizado</p>
+                <p class="text-[10px] font-medium text-slate-600">C.C.T. 12DCT0007F • Acapulco, Guerrero</p>
+            </div>
+
+        </div>
+
+        <!-- PIE DE PÁGINA DEL MODAL -->
+        <div class="bg-slate-900 text-slate-400 text-center py-3 text-[10px] border-t border-slate-800">
+            <p>Sistema Oficial de Credencialización • JFAM Tecno-Energy</p>
+        </div>
+
+    </div>
+
+    <!-- SCRIPT DE CONSULTA EN FIREBASE -->
+    <script type="module">
+        import { db, doc, getDoc } from "./firebase-config.js";
+
+        async function verificarEstudiante() {
+            const params = new URLSearchParams(window.location.search);
+            const alumnoId = params.get('id');
+
+            if (!alumnoId) {
+                document.getElementById('verifNombre').innerText = "Enlace de verificación inválido";
+                document.getElementById('badgeEstado').className = "inline-flex items-center gap-2 bg-rose-50 text-rose-800 border border-rose-300 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider";
+                document.getElementById('badgeEstado').innerHTML = "<span>❌</span> Credencial No Encontrada";
+                return;
+            }
+
+            try {
+                const docRef = doc(db, "estudiantes_credenciales", alumnoId);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('verifNombre').innerText = data.nombreCompleto || 'Sin Nombre';
+                    document.getElementById('verifEspecialidad').innerText = data.especialidad || '';
+                    document.getElementById('verifMatricula').innerText = data.matricula || '-';
+                    document.getElementById('verifSemestreGrupo').innerText = `${data.semestre || '1'}° "${data.grupo || 'A'}"`;
+                    document.getElementById('verifCurp').innerText = data.curp || '-';
+                    
+                    if (data.fotoBase64) {
+                        document.getElementById('verifFoto').src = data.fotoBase64;
+                    }
+                } else {
+                    document.getElementById('verifNombre').innerText = "Registro no existente en la base de datos";
+                    document.getElementById('badgeEstado').className = "inline-flex items-center gap-2 bg-rose-50 text-rose-800 border border-rose-300 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider";
+                    document.getElementById('badgeEstado').innerHTML = "<span>❌</span> Credencial Inexistente";
+                }
+            } catch (error) {
+                console.error("Error al verificar:", error);
+                document.getElementById('verifNombre').innerText = "Error de conexión con Firestore";
+            }
+        }
+
+        verificarEstudiante();
+    </script>
+</body>
+</html>
