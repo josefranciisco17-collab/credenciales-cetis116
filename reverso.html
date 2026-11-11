@@ -88,7 +88,7 @@
 </head>
 <body>
 
-    <!-- Barra de Navegación y Título Superior corregidos sin solapamiento -->
+    <!-- Barra de Navegación y Título Superior -->
     <div class="no-print" style="width: 54mm; display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 12px;">
         <div style="width: 100%; display: flex; justify-content: flex-start;">
             <a id="linkAnverso" href="credencial.html" style="font-size: 11px; background: #0f172a; color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); padding: 6px 12px; border-radius: 8px; text-decoration: none; font-weight: bold;">
@@ -119,70 +119,82 @@
                 <rect width="204" height="323" fill="url(#bgGradV)"/>
                 <rect width="204" height="323" fill="url(#gridGuillocheV)"/>
                 
-                <!-- Vectores decorativos institucionales -->
                 <path d="M -10 75 Q 60 55 120 80 T 215 65 L 215 323 L -10 323 Z" fill="#c59b4d" fill-opacity="0.08"/>
                 <path d="M 204 165 L 145 323 L 204 323 Z" fill="#4a0e1e" fill-opacity="0.07"/>
             </svg>
 
-            <!-- 2. CONTENIDO INTERIOR VERTICAL -->
+            <!-- 2. CONTENIDO INTERIOR VERTICAL CON BLOQUE DE PERIODOS UNIFICADO Y ESPACIO PARA QR -->
             <div style="position: relative; z-index: 2; width: 54mm; height: 85.6mm; display: flex; flex-direction: column; justify-content: space-between; padding: 2.2mm;">
 
-                <!-- Cabecera institucional superior estilo anverso -->
-                <div style="background-color: #4a0e1e; border: 0.3mm solid #c59b4d; border-radius: 1mm; padding: 1mm; text-align: center;">
-                    <p style="font-size: 5pt; font-weight: 900; letter-spacing: 0.6px; color: #fcd34d; text-transform: uppercase; margin: 0;">PERIODOS / SEMESTRES SEP</p>
-                </div>
-
-                <!-- Cuadros de Periodos SEP en Bloque Vertical -->
-                <div style="display: flex; flex-direction: column; gap: 1mm;">
-                    <div style="border: 0.3mm solid #4a0e1e; border-radius: 1mm; padding: 1mm; text-align: center; background-color: rgba(255,255,255,0.9);">
-                        <span style="font-size: 4.5pt; font-weight: 800; color: #64748b; display: block; text-transform: uppercase;">PRIMER PERIODO</span>
-                        <span style="font-size: 6.5pt; font-weight: 900; color: #0f172a; font-family: monospace;">SEP 26 / ENE 27</span>
+                <!-- Bloque Unificado de Periodos / Semestres SEP -->
+                <div style="border: 0.3mm solid #4a0e1e; border-radius: 1mm; background-color: rgba(255,255,255,0.92); overflow: hidden;">
+                    <div style="background-color: #4a0e1e; border-bottom: 0.3mm solid #c59b4d; padding: 0.8mm; text-align: center;">
+                        <p style="font-size: 5pt; font-weight: 900; letter-spacing: 0.6px; color: #fcd34d; text-transform: uppercase; margin: 0;">PERIODOS / SEMESTRES SEP</p>
                     </div>
-                    <div style="border: 0.3mm solid #4a0e1e; border-radius: 1mm; padding: 1mm; text-align: center; background-color: rgba(255,255,255,0.9);">
-                        <span style="font-size: 4.5pt; font-weight: 800; color: #64748b; display: block; text-transform: uppercase;">SEGUNDO PERIODO</span>
-                        <span style="font-size: 6.5pt; font-weight: 900; color: #0f172a; font-family: monospace;">FEB 27 / AGO 27</span>
+                    <div style="display: flex; justify-content: space-around; padding: 1.2mm 0; text-align: center;">
+                        <div>
+                            <span style="font-size: 4pt; font-weight: 800; color: #64748b; display: block; text-transform: uppercase;">1ER PERIODO</span>
+                            <span style="font-size: 5.8pt; font-weight: 900; color: #0f172a; font-family: monospace;">SEP 26 / ENE 27</span>
+                        </div>
+                        <div style="border-left: 0.2mm solid #cbd5e1;"></div>
+                        <div>
+                            <span style="font-size: 4pt; font-weight: 800; color: #64748b; display: block; text-transform: uppercase;">2DO PERIODO</span>
+                            <span style="font-size: 5.8pt; font-weight: 900; color: #0f172a; font-family: monospace;">FEB 27 / AGO 27</span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Cuadro de Firma del Alumno -->
-                <div style="border: 0.3mm solid #4a0e1e; border-radius: 1mm; padding: 1.5mm; text-align: center; background-color: rgba(255,255,255,0.9);">
-                    <div style="height: 10mm; display: flex; align-items: center; justify-content: center;">
-                        <span style="font-size: 6pt; font-style: italic; color: #94a3b8; font-family: serif;">Firma de Conformidad</span>
+                <div style="border: 0.3mm solid #4a0e1e; border-radius: 1mm; padding: 1.2mm; text-align: center; background-color: rgba(255,255,255,0.9);">
+                    <div style="height: 7.5mm; display: flex; align-items: center; justify-content: center;">
+                        <span style="font-size: 5.5pt; font-style: italic; color: #94a3b8; font-family: serif;">Firma de Conformidad</span>
                     </div>
-                    <div style="border-top: 0.2mm solid #64748b; padding-top: 0.4mm;">
-                        <p style="font-size: 4.8pt; font-weight: 900; text-transform: uppercase; color: #334155; letter-spacing: 0.4px; margin: 0;">FIRMA DEL ALUMNO</p>
+                    <div style="border-top: 0.2mm solid #64748b; padding-top: 0.3mm;">
+                        <p style="font-size: 4.5pt; font-weight: 900; text-transform: uppercase; color: #334155; letter-spacing: 0.4px; margin: 0;">FIRMA DEL ALUMNO</p>
                     </div>
                 </div>
 
                 <!-- Dirección del Plantel -->
-                <div style="border: 0.3mm solid #4a0e1e; border-radius: 1mm; padding: 1mm; background-color: rgba(255,255,255,0.9); text-align: center;">
-                    <p style="font-size: 4.5pt; font-weight: 900; text-transform: uppercase; color: #4a0e1e; margin: 0 0 0.3mm 0;">DIRECCIÓN DEL PLANTEL</p>
-                    <p style="font-size: 4.5pt; font-weight: 700; color: #334155; line-height: 1.2; text-transform: uppercase; margin: 0;">
+                <div style="border: 0.3mm solid #4a0e1e; border-radius: 1mm; padding: 0.8mm 1mm; background-color: rgba(255,255,255,0.9); text-align: center;">
+                    <p style="font-size: 4.2pt; font-weight: 900; text-transform: uppercase; color: #4a0e1e; margin: 0 0 0.2mm 0;">DIRECCIÓN DEL PLANTEL</p>
+                    <p style="font-size: 4.3pt; font-weight: 700; color: #334155; line-height: 1.15; text-transform: uppercase; margin: 0;">
                         BLDV. VICENTE GUERRERO L1 CD. RENACIMIENTO CP. 39715
                     </p>
                 </div>
 
-                <!-- Cuadro del Director del Plantel -->
-                <div style="border: 0.3mm solid #4a0e1e; border-radius: 1mm; padding: 1mm; text-align: center; background-color: #ffffff;">
-                    <div style="font-size: 4.5pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1.1; margin-bottom: 0.5mm;">
-                        SEP • SEMS • DGETI
+                <!-- SECCIÓN INFERIOR COMPACTA (Director + Espacio Reservado para Código QR) -->
+                <div style="display: flex; gap: 1.5mm; align-items: stretch;">
+                    <!-- Cuadro del Director del Plantel -->
+                    <div style="flex-grow: 1; border: 0.3mm solid #4a0e1e; border-radius: 1mm; padding: 0.8mm; text-align: center; background-color: #ffffff; display: flex; flex-direction: column; justify-content: center;">
+                        <div style="font-size: 4.2pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1.1; margin-bottom: 0.3mm;">
+                            SEP • SEMS • DGETI
+                        </div>
+                        <div style="font-size: 5.2pt; font-weight: 900; color: #0f172a; text-transform: uppercase; line-height: 1.1; margin-bottom: 0.2mm;">
+                            LIC. JOSÉ MARCELO OLEA
+                        </div>
+                        <div style="font-size: 4.2pt; font-weight: 900; color: #4a0e1e; text-transform: uppercase; border-top: 0.2mm solid #cbd5e1; padding-top: 0.2mm; margin-top: 0.2mm;">
+                            DIRECTOR DEL PLANTEL
+                        </div>
                     </div>
-                    <div style="font-size: 5.5pt; font-weight: 900; color: #0f172a; text-transform: uppercase; line-height: 1.1; margin-bottom: 0.2mm;">
-                        LIC. JOSÉ MARCELO OLEA
-                    </div>
-                    <div style="font-size: 4.5pt; font-weight: 900; color: #4a0e1e; text-transform: uppercase; border-top: 0.2mm solid #cbd5e1; padding-top: 0.3mm; margin-top: 0.2mm;">
-                        DIRECTOR DEL PLANTEL
+
+                    <!-- ESPACIO RESERVADO PARA CÓDIGO QR -->
+                    <div style="width: 14mm; height: 14mm; border: 0.3mm dashed #c59b4d; border-radius: 1mm; background-color: rgba(255,255,255,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.5mm;">
+                        <span style="font-size: 3.5pt; font-weight: 900; color: #4a0e1e; text-transform: uppercase; letter-spacing: 0.2px;">QR VERIFY</span>
+                        <!-- Aquí colocaremos el canvas o imagen del QR -->
+                        <div style="width: 9.5mm; height: 9.5mm; background-color: #0f172a; border-radius: 0.5mm; display: flex; align-items: center; justify-content: center; margin-top: 0.5mm;">
+                            <span style="font-size: 6pt; color: #fcd34d;">📱</span>
+                        </div>
                     </div>
                 </div>
 
             </div>
 
             <!-- 3. PIE INFERIOR VERTICAL: SISTEMA ESCOLARIZADO -->
-            <div style="position: relative; z-index: 2; width: 54mm; height: 4.8mm; background-color: #4a0e1e; border-top: 0.5mm solid #c59b4d; padding: 0 2.2mm; display: flex; align-items: center; justify-content: space-between;">
-                <span style="font-size: 5pt; font-weight: 900; letter-spacing: 1px; color: #ffffff; text-transform: uppercase;">
+            <div style="position: relative; z-index: 2; width: 54mm; height: 4.5mm; background-color: #4a0e1e; border-top: 0.5mm solid #c59b4d; padding: 0 2.2mm; display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 4.8pt; font-weight: 900; letter-spacing: 1px; color: #ffffff; text-transform: uppercase;">
                     SISTEMA ESCOLARIZADO
                 </span>
-                <span style="font-size: 5pt; font-weight: 900; color: #fcd34d; text-transform: uppercase;">
+                <span style="font-size: 4.8pt; font-weight: 900; color: #fcd34d; text-transform: uppercase;">
                     SEP 2026
                 </span>
             </div>
