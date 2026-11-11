@@ -3,298 +3,325 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Credencial Oficial - CETis No. 116</title>
+    <title>Panel de Administración - Credenciales CETis No. 116</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        * {
-            box-sizing: border-box;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-            color-adjust: exact !important;
-        }
-
         body {
             background-color: #070b14;
             color: #0f172a;
             font-family: Arial, Helvetica, sans-serif;
-            margin: 0;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
         }
-
-        /* TARJETA CR-80 VERTICAL EXACTA (54mm x 85.6mm) */
-        .cr80-card {
-            width: 54mm;
-            height: 85.6mm;
-            background-color: #fcfaf5;
-            position: relative;
-            overflow: hidden;
-            border-radius: 2.5mm;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.6);
-            border: 0.3mm solid #c59b4d;
-        }
-
         .btn-gold {
             background: linear-gradient(135deg, #d4b26f 0%, #c59b4d 100%);
             color: #1a1205;
         }
-
-        /* IMPRESIÓN PERFECTA SIN ROMPER EL DISEÑO INTERNO */
-        @media print {
-            @page {
-                size: 54mm 85.6mm;
-                margin: 0 !important;
-            }
-            html, body {
-                width: 54mm !important;
-                height: 85.6mm !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                background: #fcfaf5 !important;
-                overflow: hidden !important;
-            }
-            .no-print {
-                display: none !important;
-            }
-            #areaImpresion {
-                position: fixed !important;
-                top: 0 !important;
-                left: 0 !important;
-                width: 54mm !important;
-                height: 85.6mm !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-            .cr80-card {
-                width: 54mm !important;
-                height: 85.6mm !important;
-                border-radius: 0 !important;
-                box-shadow: none !important;
-                border: none !important;
-                margin: 0 !important;
-            }
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #e0c283 0%, #d1a95b 100%);
+        }
+        .app-card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+        }
+        @keyframes modalPop {
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .modal-anim {
+            animation: modalPop 0.25s ease-out;
         }
     </style>
-</head>
-<body>
 
-    <!-- Barra de Navegación (Se oculta al imprimir) -->
-    <div class="no-print" style="width: 54mm; display: flex; justify-content: space-between; margin-bottom: 12px;">
-        <a href="index.html" style="font-size: 11px; background: #0f172a; color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); padding: 6px 10px; border-radius: 8px; text-decoration: none; font-weight: bold;">
-            ⬅ Padrón
+    <script>
+        const usuarioActual = localStorage.getItem("cetis116_user_email");
+        const ADMIN_MASTER_CHECK = "josefranciisco17@gmail.com";
+
+        if (!usuarioActual) {
+            window.location.replace("login.html");
+        } else if (usuarioActual.trim().toLowerCase() !== ADMIN_MASTER_CHECK) {
+            alert("Acceso denegado: Panel exclusivo del Administrador Propietario.");
+            window.location.replace("index.html");
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col items-center p-3 md:p-6">
+
+    <!-- ENCABEZADO DE ADMINISTRACIÓN -->
+    <header class="w-full max-w-5xl bg-[#4a0e1e] text-white border-b-4 border-[#c59b4d] rounded-2xl app-card-shadow p-4 mb-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+        <div>
+            <p class="text-[9px] font-extrabold tracking-widest text-amber-300 uppercase">CETis 116 • Antonia Nava de Catalán</p>
+            <h1 class="text-base md:text-lg font-black tracking-wider uppercase text-white mt-0.5">Panel de Administración • Cuentas</h1>
+        </div>
+        <a href="index.html" class="bg-slate-900 text-amber-300 border border-amber-500/40 px-4 py-2 rounded-xl text-xs font-extrabold uppercase hover:bg-slate-800 transition shadow cursor-pointer">
+            Volver al Inicio
         </a>
-        <a id="linkReverso" href="reverso.html" style="font-size: 11px; background: #0f172a; color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); padding: 6px 10px; border-radius: 8px; text-decoration: none; font-weight: bold;">
-            Ver Reverso ➡
-        </a>
+    </header>
+
+    <!-- BOTONERA DE CONTROL -->
+    <div class="w-full max-w-5xl grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+        <button onclick="window.cambiarVista('pendientes')" id="tabPendientes" class="bg-amber-500 text-[#1a1205] font-black py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition">
+            👥 Solicitudes
+        </button>
+        <button onclick="window.cambiarVista('activas')" id="tabActivas" class="bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800">
+            🔒 Cuentas Activas
+        </button>
+        <button onclick="window.cambiarVista('roles')" id="tabRoles" class="bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800">
+            ⚙️ Permisos y Roles
+        </button>
+        <button onclick="window.cambiarVista('estadisticas')" id="tabEstadisticas" class="bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800">
+            📊 Estadísticas
+        </button>
     </div>
 
-    <!-- ÁREA DE IMPRESIÓN -->
-    <div id="areaImpresion">
-        <div class="cr80-card">
+    <!-- CONTENEDOR DINÁMICO DE SECCIONES -->
+    <div class="w-full max-w-5xl bg-white rounded-2xl app-card-shadow p-5 border border-slate-200 flex-grow mb-4">
+        
+        <!-- SECCIÓN 1: SOLICITUDES PENDIENTES -->
+        <div id="seccionPendientes" class="space-y-4">
+            <h2 class="text-sm font-black text-slate-900 uppercase tracking-tight">Cuentas Nuevas Pendientes de Validación</h2>
+            <p class="text-xs text-slate-500">Autoriza los registros nuevos para que puedan acceder al sistema:</p>
+            <div id="listaPendientes" class="divide-y divide-slate-100 mt-3">
+                <p class="text-xs text-slate-400 italic py-4">Buscando solicitudes pendientes...</p>
+            </div>
+        </div>
 
-            <!-- 1. DISEÑO DE FONDO REAL (SVG + MARCA DE AGUA) -->
-            <svg style="position: absolute; top: 0; left: 0; width: 54mm; height: 85.6mm; z-index: 1; pointer-events: none;" viewBox="0 0 204 323" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#fdfbf7"/>
-                        <stop offset="50%" stop-color="#f5efe2"/>
-                        <stop offset="100%" stop-color="#ebe1cd"/>
-                    </linearGradient>
-                    <pattern id="gridGuilloche" width="12" height="12" patternUnits="userSpaceOnUse">
-                        <path d="M 12 0 L 0 12 M 0 0 L 12 12" fill="none" stroke="#c59b4d" stroke-width="0.35" stroke-opacity="0.22"/>
-                    </pattern>
-                </defs>
-                <rect width="204" height="323" fill="url(#bgGrad)"/>
-                <rect width="204" height="323" fill="url(#gridGuilloche)"/>
-                
-                <path d="M -10 75 Q 60 55 120 80 T 215 65 L 215 323 L -10 323 Z" fill="#c59b4d" fill-opacity="0.08"/>
-                <path d="M 0 185 L 55 323 L 0 323 Z" fill="#c59b4d" fill-opacity="0.12"/>
-                <circle cx="102" cy="259" r="42" fill="none" stroke="#c59b4d" stroke-width="0.6" stroke-dasharray="3,2" stroke-opacity="0.45"/>
-            </svg>
+        <!-- SECCIÓN 2: CUENTAS ACTIVAS -->
+        <div id="seccionActivas" class="space-y-4" style="display: none;">
+            <h2 class="text-sm font-black text-slate-900 uppercase tracking-tight">Cuentas con Acceso Autorizado</h2>
+            <p class="text-xs text-slate-500">Colaboradores con permiso activo en la plataforma:</p>
+            <div id="listaActivas" class="divide-y divide-slate-100 mt-3">
+                <p class="text-xs text-slate-400 italic py-4">Cargando cuentas activas...</p>
+            </div>
+        </div>
 
-            <!-- Escudo Marca de Agua Central -->
-            <img src="logo116.png" alt="" style="position: absolute; top: 31mm; left: 11mm; width: 32mm; height: 32mm; object-fit: contain; opacity: 0.08; z-index: 1; pointer-events: none;">
+        <!-- SECCIÓN 3: PERMISOS Y ROLES -->
+        <div id="seccionRoles" class="space-y-4" style="display: none;">
+            <h2 class="text-sm font-black text-slate-900 uppercase tracking-tight">Gestión de Roles y Seguridad</h2>
+            <p class="text-xs text-slate-500">Configuración global del Administrador Propietario:</p>
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl text-xs text-slate-700 space-y-2">
+                <p><strong>Admin Propietario Master:</strong> <span class="font-mono text-rose-800">josefranciisco17@gmail.com</span></p>
+                <p><strong>Nivel de Acceso:</strong> Control total de bases de datos, aprobación de usuarios y emisión de credenciales institucionales.</p>
+            </div>
+        </div>
 
-            <!-- 2. CONTENIDO ESTRUCTURADO Y FIJO ENCIMA DEL FONDO -->
-            <div style="position: relative; z-index: 2; width: 54mm; height: 85.6mm;">
-
-                <!-- ENCABEZADO INSTITUCIONAL (Color dinámico según semestre) -->
-                <div id="cardHeader" style="width: 54mm; height: 13.5mm; background-color: #4a0e1e; border-bottom: 0.8mm solid #c59b4d; padding: 1.2mm 1.8mm; transition: background-color 0.3s ease;">
-                    <table style="width: 100%; height: 100%; border-collapse: collapse;">
-                        <tr>
-                            <td style="width: 9mm; vertical-align: middle; text-align: left;">
-                                <div style="width: 8.5mm; height: 8.5mm; background-color: #ffffff; border-radius: 1.2mm; padding: 0.5mm; border: 0.3mm solid #c59b4d;">
-                                    <img src="logo-dgti.png" alt="DGETI" style="width: 100%; height: 100%; object-fit: contain; display: block;">
-                                </div>
-                            </td>
-                            <td style="vertical-align: middle; text-align: center; padding: 0 1mm;">
-                                <div style="font-size: 5pt; font-weight: 800; color: #fcd34d; letter-spacing: 0.4px; line-height: 1.1;">SEP • SEMS • DGETI</div>
-                                <div style="font-size: 8.5pt; font-weight: 900; color: #ffffff; letter-spacing: 0.3px; line-height: 1.15; margin-top: 0.3mm;">CETis No. 116</div>
-                                <div style="font-size: 5pt; color: #fecdd3; font-style: italic; line-height: 1.1;">"Antonia Nava de Catalán"</div>
-                            </td>
-                            <td style="width: 9mm; vertical-align: middle; text-align: right;">
-                                <div style="width: 8.5mm; height: 8.5mm; background-color: #ffffff; border-radius: 1.2mm; padding: 0.5mm; border: 0.3mm solid #c59b4d; margin-left: auto;">
-                                    <img src="logo116.png" alt="CETis 116" style="width: 100%; height: 100%; object-fit: contain; display: block;">
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
+        <!-- SECCIÓN 4: ESTADÍSTICAS -->
+        <div id="seccionEstadisticas" class="space-y-4" style="display: none;">
+            <h2 class="text-sm font-black text-slate-900 uppercase tracking-tight">Estadísticas del Sistema</h2>
+            <p class="text-xs text-slate-500">Resumen operativo del CETis No. 116:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+                <div class="bg-slate-900 text-amber-300 p-4 rounded-xl border border-amber-500/30">
+                    <p class="text-[10px] uppercase font-bold text-slate-400">Total Cuentas en Sistema</p>
+                    <p id="statTotalCuentas" class="text-xl font-black font-mono mt-1">0</p>
                 </div>
-
-                <!-- CUERPO DE DATOS DEL ALUMNO -->
-                <div style="padding: 1.2mm 2.2mm 0 2.2mm;">
-
-                    <div style="text-align: center; margin-bottom: 0.6mm;">
-                        <span style="display: inline-block; background-color: #fef3c7; color: #78350f; border: 0.25mm solid #d97706; font-size: 4.8pt; font-weight: 800; padding: 0.3mm 2.5mm; border-radius: 3mm; text-transform: uppercase; letter-spacing: 0.4px;">
-                            ESTUDIANTE ACREDITADO
-                        </span>
-                    </div>
-
-                    <div id="cardNombre" style="text-align: center; font-size: 7.2pt; font-weight: 900; color: #0f172a; text-transform: uppercase; line-height: 1.15; min-height: 6.5mm; display: flex; align-items: center; justify-content: center; word-wrap: break-word; margin-bottom: 1mm;">
-                        CARGANDO...
-                    </div>
-
-                    <div style="background-color: #1e293b; border: 0.3mm solid #c59b4d; border-radius: 1.2mm; padding: 0.7mm 1.5mm; text-align: center; margin-bottom: 1.2mm;">
-                        <div style="font-size: 4.3pt; color: #cbd5e1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; line-height: 1.1;">
-                            ESPECIALIDAD
-                        </div>
-                        <div id="cardEspecialidad" style="font-size: 6.5pt; color: #fbbf24; font-weight: 900; text-transform: uppercase; line-height: 1.2; margin-top: 0.2mm;">
-                            -
-                        </div>
-                    </div>
-
-                    <div style="background-color: rgba(255, 255, 255, 0.88); border: 0.3mm solid #94a3b8; border-radius: 1.5mm; padding: 1mm 1.5mm;">
-                        <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
-                            <tr>
-                                <td style="width: 58%; padding-bottom: 0.8mm; vertical-align: top;">
-                                    <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">NO. CONTROL:</div>
-                                    <div id="cardMatricula" style="font-size: 6.5pt; font-weight: 900; color: #0f172a; font-family: monospace; line-height: 1.15; margin-top: 0.2mm;">-</div>
-                                </td>
-                                <td style="width: 42%; padding-bottom: 0.8mm; vertical-align: top; text-align: right;">
-                                    <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">SEMESTRE / GRUPO:</div>
-                                    <div id="cardSemestreGrupo" style="font-size: 6.5pt; font-weight: 900; color: #0f172a; font-family: monospace; line-height: 1.15; margin-top: 0.2mm;">-</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" style="padding: 0.7mm 0; border-top: 0.2mm solid #e2e8f0; border-bottom: 0.2mm solid #e2e8f0; vertical-align: middle;">
-                                    <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">CURP:</div>
-                                    <div id="cardCurp" style="font-size: 6.2pt; font-weight: 900; color: #0f172a; font-family: monospace; letter-spacing: 0.2px; line-height: 1.2; margin-top: 0.2mm; word-break: break-all;">-</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 40%; padding-top: 0.7mm; vertical-align: bottom;">
-                                    <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">TURNO:</div>
-                                    <div style="font-size: 6pt; font-weight: 900; color: #0f172a; text-transform: uppercase; line-height: 1.15; margin-top: 0.2mm;">MATUTINO</div>
-                                </td>
-                                <td style="width: 60%; padding-top: 0.7mm; vertical-align: bottom; text-align: right;">
-                                    <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">TIPO DE SANGRE:</div>
-                                    <div id="cardSangre" style="font-size: 5.8pt; font-weight: 900; color: #be123c; text-transform: uppercase; line-height: 1.15; margin-top: 0.2mm; white-space: nowrap;">-</div>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-
+                <div class="bg-slate-900 text-amber-300 p-4 rounded-xl border border-amber-500/30">
+                    <p class="text-[10px] uppercase font-bold text-slate-400">Clave C.C.T.</p>
+                    <p class="text-sm font-black font-mono mt-1">12DCT0007F</p>
                 </div>
+            </div>
+        </div>
 
-                <!-- FOTOGRAFÍA ANCLADA -->
-                <div style="position: absolute; bottom: 6.2mm; left: 0; width: 54mm; display: flex; justify-content: center; align-items: center;">
-                    <div style="width: 17.5mm; height: 21mm; background-color: #e2e8f0; border: 0.6mm solid #4a0e1e; outline: 0.3mm solid #c59b4d; border-radius: 1.5mm; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
-                        <img id="cardFoto" src="" alt="Foto Alumno" style="width: 100%; height: 100%; object-fit: cover; display: block;">
-                    </div>
-                </div>
+    </div>
 
-                <!-- PIE DE CREDENCIAL FIJO AL FONDO (Color dinámico según semestre) -->
-                <div id="cardFooter" style="position: absolute; bottom: 0; left: 0; width: 54mm; height: 4.8mm; background-color: #4a0e1e; border-top: 0.5mm solid #c59b4d; padding: 0 2.2mm; transition: background-color 0.3s ease;">
-                    <table style="width: 100%; height: 100%; border-collapse: collapse;">
-                        <tr>
-                            <td style="text-align: left; vertical-align: middle; font-size: 5pt; color: #f1f5f9; font-weight: 700;">
-                                VIGENCIA: <span style="color: #fcd34d; font-weight: 900;">2026 - 2027</span>
-                            </td>
-                            <td style="text-align: right; vertical-align: middle; font-size: 5pt; color: #e2e8f0; font-family: monospace; font-weight: 700;">
-                                C.C.T. 12DCT0007F
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-
+    <!-- MODAL PERSONALIZADO -->
+    <div id="customModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(7, 11, 20, 0.85); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
+        <div class="modal-anim bg-white border-2 border-[#c59b4d] rounded-2xl w-full max-w-[320px] shadow-2xl overflow-hidden text-center p-5">
+            <div class="w-10 h-10 bg-[#4a0e1e] text-amber-300 rounded-full mx-auto flex items-center justify-center text-lg font-bold border border-amber-400 mb-2">⚙️</div>
+            <h3 class="text-xs font-black uppercase tracking-wider text-[#4a0e1e] mb-1">CETis No. 116</h3>
+            <p id="modalMessage" class="text-xs font-bold text-slate-800 mb-4">Mensaje del sistema</p>
+            <div id="modalButtons" class="flex gap-2 justify-center">
+                <button onclick="window.cerrarModal()" class="w-full btn-gold font-black py-2.5 rounded-xl uppercase text-xs tracking-wider cursor-pointer">Aceptar</button>
             </div>
         </div>
     </div>
 
-    <!-- Botón de Impresión -->
-    <div class="no-print" style="margin-top: 16px;">
-        <button onclick="window.print()" class="btn-gold" style="font-weight: 900; padding: 10px 24px; border-radius: 12px; border: none; cursor: pointer; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 10px 20px rgba(0,0,0,0.4);">
-            🖨️ Imprimir Anverso Vertical
-        </button>
-    </div>
-
-    <!-- Script de Conexión Firestore y Asignación de Colores por Semestre -->
+    <!-- SCRIPT DE GESTIÓN Y NAVEGACIÓN -->
     <script type="module">
-        import { db, doc, getDoc } from "./firebase-config.js";
+        import { db } from "./firebase-config.js";
+        import { collection, getDocs, doc, updateDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        async function cargarCredencialVertical() {
-            const params = new URLSearchParams(window.location.search);
-            const alumnoId = params.get('id');
+        const ADMIN_MASTER = "josefranciisco17@gmail.com";
 
-            if (!alumnoId) {
-                alert("No se especificó un estudiante.");
-                return;
+        window.mostrarAlerta = function(mensaje, callbackAceptar = null, mostrarCancelar = false) {
+            document.getElementById('modalMessage').innerText = mensaje;
+            const modal = document.getElementById('customModal');
+            const btnContainer = document.getElementById('modalButtons');
+
+            if (mostrarCancelar) {
+                btnContainer.innerHTML = `
+                    <button onclick="window.cerrarModal()" class="flex-1 bg-slate-200 text-slate-700 font-black py-2.5 rounded-xl uppercase text-xs cursor-pointer">Cancelar</button>
+                    <button id="btnConfirmModal" class="flex-1 bg-rose-600 text-white font-black py-2.5 rounded-xl uppercase text-xs cursor-pointer">Confirmar</button>
+                `;
+                document.getElementById('btnConfirmModal').onclick = () => {
+                    window.cerrarModal();
+                    if (callbackAceptar) callbackAceptar();
+                };
+            } else {
+                btnContainer.innerHTML = `
+                    <button onclick="window.cerrarModal()" class="w-full btn-gold font-black py-2.5 rounded-xl uppercase text-xs cursor-pointer">Aceptar</button>
+                `;
             }
+            modal.style.display = 'flex';
+        };
 
-            document.getElementById('linkReverso').href = `reverso.html?id=${alumnoId}`;
+        window.cerrarModal = function() {
+            document.getElementById('customModal').style.display = 'none';
+        };
+
+        window.cambiarVista = function(vista) {
+            ['Pendientes', 'Activas', 'Roles', 'Estadisticas'].forEach(v => {
+                const sec = document.getElementById(`seccion${v}`);
+                const tab = document.getElementById(`tab${v}`);
+                if (sec) sec.style.display = 'none';
+                if (tab) tab.className = "bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800";
+            });
+
+            const nombreCapitalizado = vista.charAt(0).toUpperCase() + vista.slice(1);
+            const targetSec = document.getElementById(`seccion${nombreCapitalizado}`);
+            const targetTab = document.getElementById(`tab${nombreCapitalizado}`);
+            
+            if (targetSec) targetSec.style.display = 'block';
+            if (targetTab) targetTab.className = "bg-amber-500 text-[#1a1205] font-black py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition";
+
+            if (vista === 'pendientes' || vista === 'activas' || vista === 'estadisticas') {
+                cargarUsuarios();
+            }
+        };
+
+        async function cargarUsuarios() {
+            const contenedorPendientes = document.getElementById('listaPendientes');
+            const contenedorActivas = document.getElementById('listaActivas');
+            const statTotalCuentas = document.getElementById('statTotalCuentas');
+
+            if (contenedorPendientes) contenedorPendientes.innerHTML = `<p class="text-xs text-slate-400 italic py-4">Sincronizando con el servidor...</p>`;
+            if (contenedorActivas) contenedorActivas.innerHTML = `<p class="text-xs text-slate-400 italic py-4">Cargando cuentas activas...</p>`;
 
             try {
-                const docRef = doc(db, "estudiantes_credenciales", alumnoId);
-                const docSnap = await getDoc(docRef);
+                const querySnapshot = await getDocs(collection(db, "usuarios_sistema"));
+                
+                if (contenedorPendientes) contenedorPendientes.innerHTML = "";
+                if (contenedorActivas) contenedorActivas.innerHTML = "";
 
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    document.getElementById('cardNombre').innerText = data.nombreCompleto || '';
-                    document.getElementById('cardEspecialidad').innerText = data.especialidad || '';
-                    
-                    const semestreNum = parseInt(data.semestre) || 1;
-                    const grupoStr = data.grupo || 'A';
-                    document.getElementById('cardSemestreGrupo').innerText = `${semestreNum}° "${grupoStr}"`;
-                    
-                    document.getElementById('cardMatricula').innerText = data.matricula || '';
-                    document.getElementById('cardCurp').innerText = data.curp || '';
-                    document.getElementById('cardSangre').innerText = data.tipoSangre || 'O+';
+                let pendientesCount = 0;
+                let totalCount = 0;
+                let adminRegistrado = false;
 
-                    if (data.fotoBase64) {
-                        document.getElementById('cardFoto').src = data.fotoBase64;
+                querySnapshot.forEach((docSnap) => {
+                    totalCount++;
+                    const data = docSnap.data() || {};
+                    const id = docSnap.id;
+                    const email = (data.email || 'Sin correo').trim();
+                    const esMaster = email.toLowerCase() === ADMIN_MASTER;
+                    if (esMaster) adminRegistrado = true;
+
+                    const aprobado = data.aprobado === true || esMaster;
+
+                    let fechaTexto = 'Reciente';
+                    if (data.fechaRegistro) {
+                        const f = new Date(data.fechaRegistro);
+                        if (!isNaN(f)) fechaTexto = f.toLocaleString();
                     }
 
-                    // APLICAR COLORES DINÁMICOS SEGÚN EL SEMESTRE
-                    const headerEl = document.getElementById('cardHeader');
-                    const footerEl = document.getElementById('cardFooter');
-
-                    if (semestreNum === 1 || semestreNum === 2) {
-                        // Gris Claro Institucional
-                        headerEl.style.backgroundColor = "#64748b";
-                        footerEl.style.backgroundColor = "#64748b";
-                    } else if (semestreNum === 3 || semestreNum === 4) {
-                        // Azul Institucional
-                        headerEl.style.backgroundColor = "#1e3a8a";
-                        footerEl.style.backgroundColor = "#1e3a8a";
+                    if (!aprobado) {
+                        pendientesCount++;
+                        const div = document.createElement('div');
+                        div.className = "py-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-100";
+                        div.innerHTML = `
+                            <div>
+                                <p class="font-bold text-slate-900 text-xs">${email}</p>
+                                <p class="text-[10px] text-slate-500">Registrado: ${fechaTexto}</p>
+                            </div>
+                            <div class="flex gap-2 w-full sm:w-auto">
+                                <button onclick="window.aprobarCuenta('${id}')" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700 text-white font-black px-3 py-2 rounded-lg text-[10px] uppercase tracking-wider shadow transition cursor-pointer">
+                                    Aprobar Cuenta
+                                </button>
+                                <button onclick="window.rechazarCuenta('${id}')" class="flex-1 sm:flex-initial bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-2 rounded-lg text-[10px] uppercase tracking-wider shadow transition cursor-pointer">
+                                    Rechazar
+                                </button>
+                            </div>
+                        `;
+                        if (contenedorPendientes) contenedorPendientes.appendChild(div);
                     } else {
-                        // 5to y 6to Semestre: Color Vino Oficial por default
-                        headerEl.style.backgroundColor = "#4a0e1e";
-                        footerEl.style.backgroundColor = "#4a0e1e";
+                        const div = document.createElement('div');
+                        div.className = "py-3.5 flex justify-between items-center border-b border-slate-100";
+                        div.innerHTML = `
+                            <div>
+                                <p class="font-bold text-slate-900 text-xs">${email} ${esMaster ? '<span class="text-amber-600 font-black">(Propietario)</span>' : ''}</p>
+                                <p class="text-[10px] text-emerald-600 font-bold">Estado: Activo y Autorizado</p>
+                            </div>
+                            ${!esMaster ? `<button onclick="window.rechazarCuenta('${id}')" class="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1.5 rounded-lg text-[10px] uppercase tracking-wider shadow transition cursor-pointer">Revocar</button>` : ''}
+                        `;
+                        if (contenedorActivas) contenedorActivas.appendChild(div);
                     }
+                });
 
-                } else {
-                    alert("Estudiante no encontrado en Firebase.");
+                // Si la colección estaba vacía o no aparecía el propietario, lo mostramos como activo y lo guardamos
+                if (!adminRegistrado) {
+                    totalCount++;
+                    const divMaster = document.createElement('div');
+                    divMaster.className = "py-3.5 flex justify-between items-center border-b border-slate-100";
+                    divMaster.innerHTML = `
+                        <div>
+                            <p class="font-bold text-slate-900 text-xs">${ADMIN_MASTER} <span class="text-amber-600 font-black">(Propietario)</span></p>
+                            <p class="text-[10px] text-emerald-600 font-bold">Estado: Activo y Autorizado</p>
+                        </div>
+                    `;
+                    if (contenedorActivas) contenedorActivas.prepend(divMaster);
+
+                    try {
+                        await setDoc(doc(db, "usuarios_sistema", "admin_master"), {
+                            email: ADMIN_MASTER,
+                            rol: "propietario_admin",
+                            aprobado: true,
+                            fechaRegistro: new Date().toISOString()
+                        });
+                    } catch (errSet) {
+                        console.warn("No se pudo autoguardar admin_master:", errSet);
+                    }
                 }
+
+                if (pendientesCount === 0 && contenedorPendientes) {
+                    contenedorPendientes.innerHTML = `<p class="text-xs text-slate-500 italic py-4">No hay solicitudes nuevas pendientes de validación.</p>`;
+                }
+
+                if (statTotalCuentas) statTotalCuentas.innerText = totalCount;
+
             } catch (error) {
-                console.error("Error al cargar credencial:", error);
+                console.error("Detalle del error Firestore:", error);
+                const msgError = error.code === "permission-denied" 
+                    ? "Permiso denegado por las Reglas de Firestore. Asegúrate de publicar 'allow read, write: if true;' en la consola de Firebase." 
+                    : (error.message || "Fallo de red");
+
+                if (contenedorPendientes) {
+                    contenedorPendientes.innerHTML = `<p class="text-xs text-rose-600 font-bold py-4">⚠️ ${msgError}</p>`;
+                }
+                if (contenedorActivas) {
+                    contenedorActivas.innerHTML = `<p class="text-xs text-rose-600 font-bold py-4">⚠️ ${msgError}</p>`;
+                }
             }
         }
 
-        cargarCredencialVertical();
+        window.aprobarCuenta = async function(id) {
+            try {
+                await updateDoc(doc(db, "usuarios_sistema", id), { aprobado: true });
+                window.mostrarAlerta("¡Cuenta aprobada con éxito! El colaborador ya puede iniciar sesión.");
+                cargarUsuarios();
+            } catch (e) {
+                window.mostrarAlerta("Error al aprobar la cuenta: " + e.message);
+            }
+        };
+
+        window.rechazarCuenta = function(id) {
+            window.mostrarAlerta("¿Estás seguro de eliminar o revocar el acceso a esta cuenta?", async () => {
+                try {
+                    await deleteDoc(doc(db, "usuarios_sistema", id));
+                    window.mostrarAlerta("Cuenta eliminada del sistema.");
+                    cargarUsuarios();
+                } catch (e) {
+                    window.mostrarAlerta("No se pudo eliminar: " + e.message);
+                }
+            }, true);
+        };
+
+        cargarUsuarios();
     </script>
 </body>
 </html>
