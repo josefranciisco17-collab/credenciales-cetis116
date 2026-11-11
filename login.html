@@ -21,22 +21,20 @@
         .app-card-shadow {
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
         }
-        @keyframes modalPop {
-            0% { transform: scale(0.85); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .modal-anim {
-            animation: modalPop 0.25s ease-out;
-        }
     </style>
+    <script>
+        // Si ya tiene sesión activa, salta directo al padrón
+        if (localStorage.getItem("cetis116_user_email")) {
+            window.location.replace("index.html");
+        }
+    </script>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
 
-    <!-- CONTENEDOR PRINCIPAL DEL LOGIN -->
     <div class="w-full max-w-md bg-white rounded-3xl app-card-shadow overflow-hidden border border-amber-500/30">
         
-        <!-- ENCABEZADO INSTITUCIONAL GUINDA -->
-        <div class="bg-[#4a0e1e] text-white p-6 border-b-4 border-[#c59b4d] text-center relative">
+        <!-- ENCABEZADO INSTITUCIONAL -->
+        <div class="bg-[#4a0e1e] text-white p-6 border-b-4 border-[#c59b4d] text-center">
             <div class="flex justify-center items-center gap-3 mb-3">
                 <div class="w-12 h-12 bg-white rounded-xl p-1 flex items-center justify-center shadow border border-amber-400">
                     <img src="logo-dgti.png" alt="DGETI" class="w-full h-full object-contain">
@@ -50,7 +48,7 @@
             <p class="text-[10px] text-amber-200/90 font-mono tracking-wide mt-1">Control de Acceso • Sistema de Credenciales</p>
         </div>
 
-        <!-- FORMULARIO DE ACCESO Y REGISTRO -->
+        <!-- FORMULARIO -->
         <div class="p-6">
             <div class="space-y-4 text-xs">
                 <div>
@@ -63,7 +61,6 @@
                     <input type="password" id="password" required placeholder="••••••••" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 font-medium text-slate-900 focus:outline-none focus:border-amber-500">
                 </div>
 
-                <!-- BOTONES SEPARADOS PARA EVITAR CONFUSIONES -->
                 <div class="pt-2 space-y-2.5">
                     <button type="button" id="btnIngresar" onclick="iniciarSesion()" class="w-full btn-gold font-extrabold py-3.5 rounded-xl shadow-lg uppercase tracking-wider text-xs flex items-center justify-center gap-2 cursor-pointer">
                         <span>🔐</span> Iniciar Sesión
@@ -76,16 +73,14 @@
             </div>
         </div>
 
-        <!-- PIE DE PÁGINA -->
         <div class="bg-slate-900 text-slate-400 text-center py-3 text-[10px] border-t border-slate-800">
-            <p>Admin Propietario: josefranciisco17@gmail.com</p>
+            <p>Admin Propietario: josefranciisco17@gmail.com • By J.F.A.M</p>
         </div>
-
     </div>
 
     <!-- MODAL DE ALERTA PERSONALIZADO -->
     <div id="customModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(7, 11, 20, 0.85); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
-        <div class="modal-anim bg-white border-1.5 border-[#c59b4d] rounded-2xl w-full max-w-[320px] shadow-2xl overflow-hidden text-center p-5">
+        <div class="bg-white border-2 border-[#c59b4d] rounded-2xl w-full max-w-[320px] shadow-2xl overflow-hidden text-center p-5">
             <div class="w-10 h-10 bg-[#4a0e1e] text-amber-300 rounded-full mx-auto flex items-center justify-center text-lg font-bold border border-amber-400 mb-2">
                 ✨
             </div>
@@ -97,20 +92,15 @@
         </div>
     </div>
 
-    <!-- SCRIPT DE AUTENTICACIÓN FIREBASE -->
+    <!-- SCRIPT DE AUTENTICACIÓN AUTÓNOMO -->
     <script type="module">
-        import { db, auth } from "./firebase-config.js";
-        import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { db } from "./firebase-config.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // Inicializamos auth directamente desde la app de db para no depender de exportaciones rotas
+        const auth = getAuth(db.app);
         const ADMIN_EMAIL = "josefranciisco17@gmail.com";
-
-        // Si ya hay sesión abierta, salta directo al padrón
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                window.location.replace("index.html");
-            }
-        });
 
         window.mostrarAlerta = function(mensaje, callback = null) {
             document.getElementById('modalMessage').innerText = mensaje;
@@ -124,7 +114,7 @@
         }
 
         window.iniciarSesion = async function() {
-            const email = document.getElementById('email').value.trim();
+            const email = document.getElementById('email').value.trim().toLowerCase();
             const password = document.getElementById('password').value;
 
             if (!email || !password) {
@@ -137,6 +127,10 @@
                 const user = userCredential.user;
                 const esAdmin = (user.email.toLowerCase() === ADMIN_EMAIL);
 
+                // Guardar llave de sesión igual que en la app de Mantenimiento
+                localStorage.setItem("cetis116_user_email", user.email);
+                localStorage.setItem("cetis116_user_rol", esAdmin ? "propietario_admin" : "colaborador");
+
                 mostrarAlerta(esAdmin ? "¡Bienvenido Administrador Propietario!" : "¡Acceso concedido al sistema!", () => {
                     window.location.replace("index.html");
                 });
@@ -147,7 +141,7 @@
         }
 
         window.registrarColaborador = async function() {
-            const email = document.getElementById('email').value.trim();
+            const email = document.getElementById('email').value.trim().toLowerCase();
             const password = document.getElementById('password').value;
 
             if (!email || !password) {
@@ -171,12 +165,22 @@
                     fechaRegistro: new Date().toISOString()
                 });
 
-                mostrarAlerta("¡Cuenta creada y registrada con éxito!", () => {
+                // Guardar llave de sesión inmediatamente
+                localStorage.setItem("cetis116_user_email", user.email);
+                localStorage.setItem("cetis116_user_rol", esAdmin ? "propietario_admin" : "colaborador");
+
+                mostrarAlerta(esAdmin ? "¡Cuenta de Administrador Propietario creada con éxito!" : "¡Cuenta creada y registrada con éxito!", () => {
                     window.location.replace("index.html");
                 });
             } catch (error) {
                 console.error("Error al registrar:", error);
-                mostrarAlerta("No se pudo crear la cuenta. Es posible que el correo ya esté registrado.");
+                if (error.code === "auth/email-already-in-use") {
+                    mostrarAlerta("Este correo ya está registrado. Presiona 'Iniciar Sesión'.");
+                } else if (error.code === "auth/operation-not-allowed") {
+                    mostrarAlerta("Falta habilitar Correo/Contraseña en Firebase > Authentication > Sign-in method.");
+                } else {
+                    mostrarAlerta("Error al registrar: " + error.message);
+                }
             }
         }
     </script>
