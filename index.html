@@ -53,55 +53,38 @@
 </head>
 <body class="min-h-screen flex flex-col items-center p-3 md:p-6">
 
-    <!-- ENCABEZADO INSTITUCIONAL DE ALTA CALIDAD -->
-    <header class="w-full max-w-5xl bg-gradient-to-r from-[#380914] via-[#4a0e1e] to-[#380914] text-white border-2 border-amber-500/40 rounded-3xl app-card-shadow p-5 mb-5 flex flex-col md:flex-row items-center justify-between gap-4">
-        
-        <!-- LOGOS IZQUIERDA (SEP / DGETI) -->
+    <!-- ENCABEZADO COMPACTO Y PROFESIONAL (UN SOLO LOGO) -->
+    <header class="w-full max-w-5xl bg-[#4a0e1e] text-white border-b-4 border-[#c59b4d] rounded-2xl app-card-shadow p-3.5 mb-4 flex items-center justify-between gap-3">
         <div class="flex items-center gap-3">
-            <div class="w-14 h-14 bg-white/10 backdrop-blur-md rounded-2xl p-1.5 flex items-center justify-center shadow-inner border border-amber-400/40 flex-shrink-0">
-                <img src="logo-dgti.png" alt="DGETI" class="w-full h-full object-contain filter drop-shadow">
+            <div class="w-11 h-11 bg-white rounded-xl p-1 flex items-center justify-center shadow border border-amber-400 flex-shrink-0">
+                <img src="logo116.png" alt="CETis 116" class="w-full h-full object-contain">
             </div>
-            <div class="hidden sm:block">
-                <p class="text-[9px] font-extrabold tracking-widest text-amber-300 uppercase">SEP • SEMS</p>
-                <p class="text-[11px] font-bold text-slate-200">DGETI</p>
+            <div>
+                <p class="text-[8px] font-extrabold tracking-widest text-amber-300 uppercase">CETis 116 • Antonia Nava de Catalán</p>
+                <h1 class="text-sm md:text-base font-black tracking-wider uppercase text-white">Gestión de Credenciales</h1>
+                <p id="userEmailDisplay" class="text-[9px] text-amber-200/90 font-mono">Sesión Activa</p>
             </div>
         </div>
-
-        <!-- TÍTULO CENTRAL -->
-        <div class="text-center flex-grow px-2">
-            <div class="inline-block bg-amber-400/10 border border-amber-400/30 px-3 py-0.5 rounded-full mb-1">
-                <p class="text-[9px] font-extrabold tracking-widest text-amber-300 uppercase">CETis 116 • Antonia Nava de Catalán</p>
-            </div>
-            <h1 class="text-lg md:text-xl font-black tracking-wider uppercase text-white drop-shadow">Gestión de Credenciales</h1>
-            <p id="userEmailDisplay" class="text-[11px] text-amber-200/90 font-mono tracking-wide mt-0.5">Sesión Activa</p>
-        </div>
-
-        <!-- LOGO DERECHA Y BOTÓN SALIR -->
-        <div class="flex items-center gap-3">
-            <div class="w-14 h-14 bg-white/10 backdrop-blur-md rounded-2xl p-1.5 flex items-center justify-center shadow-inner border border-amber-400/40 flex-shrink-0">
-                <img src="logo116.png" alt="CETis 116" class="w-full h-full object-contain filter drop-shadow">
-            </div>
-            <button onclick="cerrarSesionDirecto()" class="bg-rose-950/80 hover:bg-rose-900 text-amber-300 border border-amber-500/40 px-3.5 py-2.5 rounded-2xl text-[11px] font-extrabold uppercase transition shadow-lg cursor-pointer flex items-center gap-1.5" title="Cerrar Sesión">
-                <span>🚪</span> <span class="hidden sm:inline">Salir</span>
-            </button>
-        </div>
+        <button onclick="cerrarSesionDirecto()" class="bg-rose-950/80 hover:bg-rose-900 text-amber-300 border border-amber-500/40 px-3 py-2 rounded-xl text-[10px] font-extrabold uppercase transition shadow cursor-pointer flex items-center gap-1.5 flex-shrink-0">
+            <span>🚪</span> Salir
+        </button>
     </header>
 
     <!-- PANEL DE ESTADÍSTICAS -->
     <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-        <div class="bg-slate-900 border border-amber-500/30 rounded-2xl p-4 text-white flex items-center justify-between shadow-lg">
+        <div class="bg-slate-900 border border-amber-500/30 rounded-2xl p-3.5 text-white flex items-center justify-between shadow-lg">
             <div>
                 <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Padrón Activo</p>
-                <p id="statTotal" class="text-xl font-black text-amber-300 font-mono mt-0.5">0</p>
+                <p id="statTotal" class="text-lg font-black text-amber-300 font-mono mt-0.5">0</p>
             </div>
-            <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-lg">👥</div>
+            <div class="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-base">👥</div>
         </div>
-        <div class="bg-slate-900 border border-amber-500/30 rounded-2xl p-4 text-white flex items-center justify-between shadow-lg">
+        <div class="bg-slate-900 border border-amber-500/30 rounded-2xl p-3.5 text-white flex items-center justify-between shadow-lg">
             <div>
                 <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Clave C.C.T.</p>
                 <p class="text-sm font-black text-white font-mono mt-0.5">12DCT0007F</p>
             </div>
-            <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-lg">🏫</div>
+            <div class="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-base">🏫</div>
         </div>
     </div>
 
@@ -112,7 +95,7 @@
             <p class="text-[11px] text-slate-500">Administra, emite, edita o elimina credenciales del padrón.</p>
         </div>
         <div class="flex items-center gap-2 w-full md:w-auto">
-            <a href="registro.html" class="btn-gold font-extrabold px-4 py-2.5 rounded-xl shadow transition duration-200 text-xs uppercase tracking-wider flex items-center justify-center gap-2 w-full md:w-auto">
+            <a href="registro.html" class="btn-gold font-extrabold px-4 py-2 rounded-xl shadow transition duration-200 text-xs uppercase tracking-wider flex items-center justify-center gap-2 w-full md:w-auto">
                 <span>➕</span> Nuevo Registro
             </a>
         </div>
