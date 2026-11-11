@@ -26,12 +26,19 @@
         .app-card-shadow {
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
         }
+        @keyframes modalPop {
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .modal-anim {
+            animation: modalPop 0.25s ease-out;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-3 md:p-6">
 
     <!-- ENCABEZADO INSTITUCIONAL -->
-    <div class="w-full max-w-4xl bg-[#4a0e1e] text-white border-b-4 border-[#c59b4d] rounded-2xl app-card-shadow p-4 mb-4 flex items-center justify-between gap-3">
+    <div class="w-full max-w-5xl bg-[#4a0e1e] text-white border-b-4 border-[#c59b4d] rounded-2xl app-card-shadow p-4 mb-4 flex items-center justify-between gap-3">
         <div class="w-12 h-12 bg-white rounded-xl p-1 flex items-center justify-center shadow border border-amber-400 flex-shrink-0">
             <img src="logo-dgti.png" alt="DGETI" class="w-full h-full object-contain">
         </div>
@@ -46,7 +53,7 @@
     </div>
 
     <!-- PANEL DE ESTADÍSTICAS Y CONTROL RÁPIDO -->
-    <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+    <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
         <!-- Tarjeta Total Alumnos -->
         <div class="bg-slate-900 border border-amber-500/30 rounded-xl p-3 text-white flex items-center justify-between shadow-lg">
             <div>
@@ -70,10 +77,10 @@
     </div>
 
     <!-- PANEL DE ACCIONES Y NUEVO REGISTRO -->
-    <div class="w-full max-w-4xl bg-white rounded-2xl app-card-shadow p-4 mb-4 border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-3">
+    <div class="w-full max-w-5xl bg-white rounded-2xl app-card-shadow p-4 mb-4 border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-3">
         <div>
             <h2 class="text-sm font-black text-slate-900 uppercase tracking-tight">Directorio de Estudiantes</h2>
-            <p class="text-[11px] text-slate-500">Selecciona un alumno para emitir o imprimir anverso y reverso.</p>
+            <p class="text-[11px] text-slate-500">Administra, emite, edita o elimina credenciales del padrón.</p>
         </div>
         <div class="flex items-center gap-2 w-full md:w-auto">
             <a href="registro.html" class="btn-gold font-extrabold px-4 py-2 rounded-xl shadow transition duration-200 text-xs uppercase tracking-wider flex items-center justify-center gap-2 w-full md:w-auto">
@@ -83,7 +90,7 @@
     </div>
 
     <!-- LISTADO / TABLA DE ESTUDIANTES DESDE FIRESTORE -->
-    <div class="w-full max-w-4xl bg-white rounded-2xl app-card-shadow overflow-hidden border border-slate-200 flex-grow mb-4">
+    <div class="w-full max-w-5xl bg-white rounded-2xl app-card-shadow overflow-hidden border border-slate-200 flex-grow mb-4">
         <div class="p-3 bg-slate-900 text-amber-300 font-bold text-xs uppercase tracking-wider flex justify-between items-center">
             <span>Listado General de Alumnos</span>
             <span id="totalAlumnosBadge" class="bg-amber-400/20 text-amber-300 border border-amber-400/30 px-2 py-0.5 rounded text-[10px] font-mono">Sincronizando...</span>
@@ -98,7 +105,7 @@
                         <th class="p-3">Matrícula</th>
                         <th class="p-3">Especialidad</th>
                         <th class="p-3">Sem / Grupo</th>
-                        <th class="p-3 text-center">Acciones</th>
+                        <th class="p-3 text-center">Acciones de Emisión & Gestión</th>
                     </tr>
                 </thead>
                 <tbody id="tablaEstudiantes" class="divide-y divide-slate-200 text-xs text-slate-800">
@@ -110,15 +117,63 @@
         </div>
     </div>
 
+    <!-- MODAL DE ALERTA / CONFIRMACIÓN PERSONALIZADO -->
+    <div id="customModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(7, 11, 20, 0.85); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
+        <div class="modal-anim" style="background-color: #ffffff; border: 1.5px solid #c59b4d; border-radius: 16px; width: 100%; max-width: 320px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); overflow: hidden; text-align: center;">
+            <div style="background-color: #4a0e1e; padding: 14px; border-bottom: 3px solid #c59b4d;">
+                <div style="width: 36px; height: 36px; background-color: #ffffff; border-radius: 50%; margin: 0 auto 6px auto; display: flex; align-items: center; justify-content: center; font-size: 18px; border: 2px solid #c59b4d;">
+                    ⚙️
+                </div>
+                <h3 style="color: #fcd34d; font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; margin: 0;">CETis No. 116</h3>
+            </div>
+            <div style="padding: 20px 16px;">
+                <p id="modalMessage" style="color: #0f172a; font-size: 13px; font-weight: 700; line-height: 1.4; margin: 0;">
+                    Mensaje del sistema
+                </p>
+            </div>
+            <div id="modalButtons" style="padding: 0 16px 16px 16px; display: flex; gap: 8px; justify-content: center;">
+                <button onclick="cerrarModalPersonalizado()" style="width: 100%; background: linear-gradient(135deg, #d4b26f 0%, #c59b4d 100%); color: #1a1205; font-weight: 900; font-size: 12px; padding: 10px; border: none; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer;">
+                    Aceptar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- PIE DE PÁGINA INSTITUCIONAL -->
-    <footer class="w-full max-w-4xl text-center text-slate-400 text-[10px] py-3 border-t border-slate-800">
+    <footer class="w-full max-w-5xl text-center text-slate-400 text-[10px] py-3 border-t border-slate-800">
         <p>CETis No. 116 • C.C.T. 12DCT0007F • Acapulco, Guerrero</p>
         <p class="text-amber-400/80 mt-0.5">Plataforma Inteligente de Credencialización • JFAM Tecno-Energy</p>
     </footer>
 
-    <!-- SCRIPT DE CONEXIÓN A FIRESTORE Y CARGA DE PADRÓN -->
+    <!-- SCRIPT DE CONEXIÓN A FIRESTORE Y ACCIONES -->
     <script type="module">
-        import { db, collection, getDocs } from "./firebase-config.js";
+        import { db, collection, getDocs, deleteDoc, doc } from "./firebase-config.js";
+
+        window.mostrarAlerta = function(mensaje, callbackAceptar = null, mostrarCancelar = false) {
+            document.getElementById('modalMessage').innerText = mensaje;
+            const modal = document.getElementById('customModal');
+            const btnContainer = document.getElementById('modalButtons');
+            
+            if (mostrarCancelar) {
+                btnContainer.innerHTML = `
+                    <button onclick="window.cerrarModalPersonalizado()" style="flex: 1; background: #e2e8f0; color: #334155; font-weight: 900; font-size: 11px; padding: 10px; border: none; border-radius: 10px; text-transform: uppercase; cursor: pointer;">Cancelar</button>
+                    <button id="btnModalConfirm" style="flex: 1; background: #be123c; color: #ffffff; font-weight: 900; font-size: 11px; padding: 10px; border: none; border-radius: 10px; text-transform: uppercase; cursor: pointer;">Eliminar</button>
+                `;
+                document.getElementById('btnModalConfirm').onclick = () => {
+                    cerrarModalPersonalizado();
+                    if (callbackAceptar) callbackAceptar();
+                };
+            } else {
+                btnContainer.innerHTML = `
+                    <button onclick="window.cerrarModalPersonalizado()" style="width: 100%; background: linear-gradient(135deg, #d4b26f 0%, #c59b4d 100%); color: #1a1205; font-weight: 900; font-size: 12px; padding: 10px; border: none; border-radius: 10px; text-transform: uppercase; cursor: pointer;">Aceptar</button>
+                `;
+            }
+            modal.style.display = 'flex';
+        }
+
+        window.cerrarModalPersonalizado = function() {
+            document.getElementById('customModal').style.display = 'none';
+        }
 
         async function cargarPadron() {
             const tbody = document.getElementById('tablaEstudiantes');
@@ -157,13 +212,19 @@
                         <td class="p-3 uppercase font-medium text-slate-700">${data.especialidad || '-'}</td>
                         <td class="p-3 font-mono font-bold">${data.semestre || '1'}° "${data.grupo || 'A'}"</td>
                         <td class="p-3 text-center">
-                            <div class="flex items-center justify-center gap-2">
-                                <a href="credencial.html?id=${id}" class="bg-[#4a0e1e] text-white px-3 py-1.5 rounded-lg text-[10px] font-extrabold uppercase tracking-wider hover:bg-rose-900 shadow transition">
-                                    🪪 Anverso
+                            <div class="flex items-center justify-center gap-1.5 flex-wrap">
+                                <a href="credencial.html?id=${id}" class="bg-[#4a0e1e] text-white px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-rose-900 shadow transition" title="Ver Anverso">
+                                    🪪 Anv
                                 </a>
-                                <a href="reverso.html?id=${id}" class="bg-slate-900 text-amber-300 border border-amber-500/30 px-3 py-1.5 rounded-lg text-[10px] font-extrabold uppercase tracking-wider hover:bg-slate-800 shadow transition">
-                                    🔄 Reverso
+                                <a href="reverso.html?id=${id}" class="bg-slate-900 text-amber-300 border border-amber-500/30 px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-slate-800 shadow transition" title="Ver Reverso">
+                                    🔄 Rev
                                 </a>
+                                <a href="registro.html?id=${id}" class="bg-blue-600 text-white px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-blue-700 shadow transition" title="Modificar Datos">
+                                    ✏️ Mod
+                                </a>
+                                <button onclick="window.confirmarEliminar('${id}', '${data.nombreCompleto || 'Estudiante'}')" class="bg-rose-600 text-white px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-rose-700 shadow transition" title="Eliminar Credencial">
+                                    🗑️ Elim
+                                </button>
                             </div>
                         </td>
                     `;
@@ -179,6 +240,19 @@
                 totalAlumnosBadge.innerText = "Error";
                 statTotal.innerText = "Error";
             }
+        }
+
+        window.confirmarEliminar = function(id, nombre) {
+            mostrarAlerta(`¿Estás seguro de eliminar la credencial y registro de:\n"${nombre}"?`, async () => {
+                try {
+                    await deleteDoc(doc(db, "estudiantes_credenciales", id));
+                    mostrarAlerta("¡Registro eliminado correctamente del padrón!");
+                    cargarPadron();
+                } catch (e) {
+                    console.error("Error al eliminar:", e);
+                    mostrarAlerta("No se pudo eliminar el registro. Intenta de nuevo.");
+                }
+            }, true);
         }
 
         cargarPadron();
