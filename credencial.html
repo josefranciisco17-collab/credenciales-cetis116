@@ -3,208 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anverso de Credencial - CETis No. 116</title>
+    <title>Credencial Oficial - CETis No. 116</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+        }
+
         body {
             background-color: #070b14;
+            color: #0f172a;
             font-family: Arial, Helvetica, sans-serif;
-        }
-        /* Proporción estándar CR-80 Vertical (54mm x 85.6mm -> escala web 340px x 540px) */
-        .cr80-card {
-            width: 340px;
-            height: 540px;
-            background-color: #ffffff;
-            border-radius: 16px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.6);
+            margin: 0;
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
         }
+
+        /* TARJETA CR-80 VERTICAL EXACTA (54mm x 85.6mm) */
+        .cr80-card {
+            width: 54mm;
+            height: 85.6mm;
+            background-color: #fcfaf5;
+            position: relative;
+            overflow: hidden;
+            border-radius: 2.5mm;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+            border: 0.3mm solid #c59b4d;
+        }
+
         .btn-gold {
             background: linear-gradient(135deg, #d4b26f 0%, #c59b4d 100%);
             color: #1a1205;
         }
+
+        /* IMPRESIÓN PERFECTA SIN ROMPER EL DISEÑO INTERNO */
         @media print {
-            body {
-                background: none;
-                margin: 0;
-                padding: 0;
+            @page {
+                size: 54mm 85.6mm;
+                margin: 0 !important;
+            }
+            html, body {
+                width: 54mm !important;
+                height: 85.6mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #fcfaf5 !important;
+                overflow: hidden !important;
             }
             .no-print {
                 display: none !important;
             }
+            #areaImpresion {
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 54mm !important;
+                height: 85.6mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
             .cr80-card {
-                width: 54mm;
-                height: 85.6mm;
-                box-shadow: none;
-                border-radius: 0;
-                margin: 0;
+                width: 54mm !important;
+                height: 85.6mm !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+                margin: 0 !important;
             }
         }
     </style>
-    <script>
-        if (!localStorage.getItem("cetis116_user_email")) {
-            window.location.replace("login.html");
-        }
-    </script>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4">
+<body>
 
-    <!-- BARRA SUPERIOR DE CONTROLES (NO SE IMPRIME) -->
-    <div class="no-print w-full max-w-md bg-[#4a0e1e] text-white border-b-4 border-[#c59b4d] rounded-2xl p-3.5 mb-5 flex items-center justify-between shadow-xl">
-        <a href="index.html" class="bg-slate-900 text-amber-300 border border-amber-500/40 px-3.5 py-2 rounded-xl text-xs font-extrabold uppercase hover:bg-slate-800 transition">
+    <!-- Barra de Navegación (Se oculta al imprimir) -->
+    <div class="no-print" style="width: 54mm; display: flex; justify-content: space-between; margin-bottom: 12px;">
+        <a href="index.html" style="font-size: 11px; background: #0f172a; color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); padding: 6px 10px; border-radius: 8px; text-decoration: none; font-weight: bold;">
             ⬅ Padrón
         </a>
-        <span class="text-xs font-black uppercase tracking-wider text-amber-300">Vista Anverso</span>
-        <a id="btnIrReverso" href="reverso.html" class="btn-gold px-3.5 py-2 rounded-xl text-xs font-black uppercase transition shadow">
-            🔄 Reverso
+        <a id="linkReverso" href="reverso.html" style="font-size: 11px; background: #0f172a; color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); padding: 6px 10px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+            Ver Reverso ➡
         </a>
     </div>
 
-    <!-- CONTENEDOR DE LA CREDENCIAL (CR-80) -->
-    <div id="credencialAnverso" class="cr80-card border border-slate-300">
-        
-        <!-- ENCABEZADO GUINDA INSTITUCIONAL -->
-        <div class="bg-[#4a0e1e] text-white pt-3 pb-2.5 px-3 border-b-4 border-[#c59b4d] flex items-center justify-between gap-2 relative">
-            <div class="w-11 h-11 bg-white rounded-lg p-1 flex items-center justify-center shadow flex-shrink-0">
-                <img src="logo-dgti.png" alt="DGETI" class="w-full h-full object-contain" crossorigin="anonymous">
-            </div>
-            <div class="text-center flex-grow">
-                <p class="text-[8px] font-black tracking-widest text-amber-300 uppercase leading-tight">SEP • SEMS • DGETI</p>
-                <h1 class="text-[12px] font-black tracking-wider uppercase text-white leading-tight mt-0.5">CETis No. 116</h1>
-                <p class="text-[7.5px] text-amber-100 font-bold leading-tight">"Antonia Nava de Catalán"</p>
-                <p class="text-[7px] text-amber-300/90 font-mono leading-tight">C.C.T. 12DCT0007F</p>
-            </div>
-            <div class="w-11 h-11 bg-white rounded-lg p-1 flex items-center justify-center shadow flex-shrink-0">
-                <img src="logo116.png" alt="CETis 116" class="w-full h-full object-contain" crossorigin="anonymous">
-            </div>
-        </div>
+    <!-- ÁREA DE IMPRESIÓN -->
+    <div id="areaImpresion">
+        <div class="cr80-card">
 
-        <!-- CUERPO CENTRAL DE LA CREDENCIAL -->
-        <div class="flex-grow flex flex-col items-center justify-center px-4 py-2 bg-gradient-to-b from-slate-50 to-white relative">
-            
-            <!-- ETIQUETA ESTUDIANTE -->
-            <div class="bg-[#4a0e1e] text-amber-300 text-[9px] font-black uppercase tracking-widest px-4 py-0.5 rounded-full border border-[#c59b4d] mb-2 shadow-sm">
-                Credencial de Estudiante
-            </div>
+            <!-- 1. DISEÑO DE FONDO REAL (SVG + MARCA DE AGUA) -->
+            <svg style="position: absolute; top: 0; left: 0; width: 54mm; height: 85.6mm; z-index: 1; pointer-events: none;" viewBox="0 0 204 323" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#fdfbf7"/>
+                        <stop offset="50%" stop-color="#f5efe2"/>
+                        <stop offset="100%" stop-color="#ebe1cd"/>
+                    </linearGradient>
+                    <pattern id="gridGuilloche" width="12" height="12" patternUnits="userSpaceOnUse">
+                        <path d="M 12 0 L 0 12 M 0 0 L 12 12" fill="none" stroke="#c59b4d" stroke-width="0.35" stroke-opacity="0.22"/>
+                    </pattern>
+                </defs>
+                <rect width="204" height="323" fill="url(#bgGrad)"/>
+                <rect width="204" height="323" fill="url(#gridGuilloche)"/>
+                
+                <path d="M -10 75 Q 60 55 120 80 T 215 65 L 215 323 L -10 323 Z" fill="#c59b4d" fill-opacity="0.08"/>
+                <path d="M 0 185 L 55 323 L 0 323 Z" fill="#c59b4d" fill-opacity="0.12"/>
+                <circle cx="102" cy="259" r="42" fill="none" stroke="#c59b4d" stroke-width="0.6" stroke-dasharray="3,2" stroke-opacity="0.45"/>
+            </svg>
 
-            <!-- FOTOGRAFÍA DEL ALUMNO -->
-            <div class="w-28 h-36 bg-slate-200 rounded-xl border-2 border-[#4a0e1e] shadow-md overflow-hidden mb-2.5 flex items-center justify-center">
-                <img id="fotoAlumno" src="" alt="Fotografía" class="w-full h-full object-cover">
-            </div>
+            <!-- Escudo Marca de Agua Central -->
+            <img src="logo116.png" alt="" style="position: absolute; top: 31mm; left: 11mm; width: 32mm; height: 32mm; object-fit: contain; opacity: 0.08; z-index: 1; pointer-events: none;">
 
-            <!-- NOMBRE COMPLETO -->
-            <div class="w-full text-center px-1 mb-2">
-                <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Nombre del Alumno(a)</p>
-                <h2 id="nombreAlumno" class="text-[13px] font-black text-slate-900 uppercase leading-snug break-words mt-0.5">
-                    Cargando...
-                </h2>
-            </div>
+            <!-- 2. CONTENIDO ESTRUCTURADO Y FIJO ENCIMA DEL FONDO -->
+            <div style="position: relative; z-index: 2; width: 54mm; height: 85.6mm;">
 
-            <!-- FRANJA DE ESPECIALIDAD CON COLOR DINÁMICO -->
-            <div id="franjaEspecialidad" class="w-full bg-[#4a0e1e] text-white py-1.5 px-2 rounded-lg text-center shadow-sm mb-2 border border-amber-400/50">
-                <p class="text-[7px] uppercase tracking-widest text-amber-200 font-bold">Especialidad Técnica</p>
-                <p id="especialidadAlumno" class="text-[10px] font-black uppercase tracking-wider truncate">---</p>
-            </div>
-
-            <!-- DATOS ACADÉMICOS Y MÉDICOS -->
-            <div class="w-full grid grid-cols-3 gap-1.5 text-center bg-slate-100 p-2 rounded-xl border border-slate-200">
-                <div>
-                    <p class="text-[7px] font-extrabold text-slate-500 uppercase">No. Control</p>
-                    <p id="matriculaAlumno" class="text-[10px] font-black text-slate-900 font-mono mt-0.5">---</p>
+                <!-- ENCABEZADO INSTITUCIONAL (Color dinámico según semestre) -->
+                <div id="cardHeader" style="width: 54mm; height: 13.5mm; background-color: #4a0e1e; border-bottom: 0.8mm solid #c59b4d; padding: 1.2mm 1.8mm; transition: background-color 0.3s ease;">
+                    <table style="width: 100%; height: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="width: 9mm; vertical-align: middle; text-align: left;">
+                                <div style="width: 8.5mm; height: 8.5mm; background-color: #ffffff; border-radius: 1.2mm; padding: 0.5mm; border: 0.3mm solid #c59b4d;">
+                                    <img src="logo-dgti.png" alt="DGETI" style="width: 100%; height: 100%; object-fit: contain; display: block;">
+                                </div>
+                            </td>
+                            <td style="vertical-align: middle; text-align: center; padding: 0 1mm;">
+                                <div style="font-size: 5pt; font-weight: 800; color: #fcd34d; letter-spacing: 0.4px; line-height: 1.1;">SEP • SEMS • DGETI</div>
+                                <div style="font-size: 8.5pt; font-weight: 900; color: #ffffff; letter-spacing: 0.3px; line-height: 1.15; margin-top: 0.3mm;">CETis No. 116</div>
+                                <div style="font-size: 5pt; color: #fecdd3; font-style: italic; line-height: 1.1;">"Antonia Nava de Catalán"</div>
+                            </td>
+                            <td style="width: 9mm; vertical-align: middle; text-align: right;">
+                                <div style="width: 8.5mm; height: 8.5mm; background-color: #ffffff; border-radius: 1.2mm; padding: 0.5mm; border: 0.3mm solid #c59b4d; margin-left: auto;">
+                                    <img src="logo116.png" alt="CETis 116" style="width: 100%; height: 100%; object-fit: contain; display: block;">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
-                <div class="border-x border-slate-300">
-                    <p class="text-[7px] font-extrabold text-slate-500 uppercase">Sem / Grupo</p>
-                    <p id="semGrupoAlumno" class="text-[10px] font-black text-slate-900 font-mono mt-0.5">---</p>
-                </div>
-                <div>
-                    <p class="text-[7px] font-extrabold text-slate-500 uppercase">Turno / Sangre</p>
-                    <p id="turnoSangreAlumno" class="text-[9px] font-black text-rose-800 uppercase mt-0.5">---</p>
-                </div>
-            </div>
-        </div>
 
-        <!-- PIE DE CREDENCIAL -->
-        <div class="bg-slate-900 text-white py-2 px-3 border-t-2 border-[#c59b4d] flex items-center justify-between text-[8px]">
-            <span class="font-bold text-amber-300 uppercase tracking-wider">Acapulco, Gro.</span>
-            <span id="curpAlumno" class="font-mono text-slate-300">CURP: ---</span>
+                <!-- CUERPO DE DATOS DEL ALUMNO -->
+                <div style="padding: 1.2mm 2.2mm 0 2.2mm;">
+
+                    <div style="text-align: center; margin-bottom: 0.6mm;">
+                        <span style="display: inline-block; background-color: #fef3c7; color: #78350f; border: 0.25mm solid #d97706; font-size: 4.8pt; font-weight: 800; padding: 0.3mm 2.5mm; border-radius: 3mm; text-transform: uppercase; letter-spacing: 0.4px;">
+                            ESTUDIANTE ACREDITADO
+                        </span>
+                    </div>
+
+                    <div id="cardNombre" style="text-align: center; font-size: 7.2pt; font-weight: 900; color: #0f172a; text-transform: uppercase; line-height: 1.15; min-height: 6.5mm; display: flex; align-items: center; justify-content: center; word-wrap: break-word; margin-bottom: 1mm;">
+                        CARGANDO...
+                    </div>
+
+                    <div style="background-color: #1e293b; border: 0.3mm solid #c59b4d; border-radius: 1.2mm; padding: 0.7mm 1.5mm; text-align: center; margin-bottom: 1.2mm;">
+                        <div style="font-size: 4.3pt; color: #cbd5e1; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; line-height: 1.1;">
+                            ESPECIALIDAD
+                        </div>
+                        <div id="cardEspecialidad" style="font-size: 6.5pt; color: #fbbf24; font-weight: 900; text-transform: uppercase; line-height: 1.2; margin-top: 0.2mm;">
+                            -
+                        </div>
+                    </div>
+
+                    <div style="background-color: rgba(255, 255, 255, 0.88); border: 0.3mm solid #94a3b8; border-radius: 1.5mm; padding: 1mm 1.5mm;">
+                        <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                            <tr>
+                                <td style="width: 58%; padding-bottom: 0.8mm; vertical-align: top;">
+                                    <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">NO. CONTROL:</div>
+                                    <div id="cardMatricula" style="font-size: 6.5pt; font-weight: 900; color: #0f172a; font-family: monospace; line-height: 1.15; margin-top: 0.2mm;">-</div>
+                                </td>
+                                <td style="width: 42%; padding-bottom: 0.8mm; vertical-align: top; text-align: right;">
+                                    <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">SEMESTRE / GRUPO:</div>
+                                    <div id="cardSemestreGrupo" style="font-size: 6.5pt; font-weight: 900; color: #0f172a; font-family: monospace; line-height: 1.15; margin-top: 0.2mm;">-</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="padding: 0.7mm 0; border-top: 0.2mm solid #e2e8f0; border-bottom: 0.2mm solid #e2e8f0; vertical-align: middle;">
+                                    <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">CURP:</div>
+                                    <div id="cardCurp" style="font-size: 6.2pt; font-weight: 900; color: #0f172a; font-family: monospace; letter-spacing: 0.2px; line-height: 1.2; margin-top: 0.2mm; word-break: break-all;">-</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 40%; padding-top: 0.7mm; vertical-align: bottom;">
+                                    <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">TURNO:</div>
+                                    <div style="font-size: 6pt; font-weight: 900; color: #0f172a; text-transform: uppercase; line-height: 1.15; margin-top: 0.2mm;">MATUTINO</div>
+                                </td>
+                                <td style="width: 60%; padding-top: 0.7mm; vertical-align: bottom; text-align: right;">
+                                    <div style="font-size: 4.3pt; font-weight: 800; color: #64748b; text-transform: uppercase; line-height: 1;">TIPO DE SANGRE:</div>
+                                    <div id="cardSangre" style="font-size: 5.8pt; font-weight: 900; color: #be123c; text-transform: uppercase; line-height: 1.15; margin-top: 0.2mm; white-space: nowrap;">-</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+
+                <!-- FOTOGRAFÍA ANCLADA -->
+                <div style="position: absolute; bottom: 6.2mm; left: 0; width: 54mm; display: flex; justify-content: center; align-items: center;">
+                    <div style="width: 17.5mm; height: 21mm; background-color: #e2e8f0; border: 0.6mm solid #4a0e1e; outline: 0.3mm solid #c59b4d; border-radius: 1.5mm; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+                        <img id="cardFoto" src="" alt="Foto Alumno" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                    </div>
+                </div>
+
+                <!-- PIE DE CREDENCIAL FIJO AL FONDO (Color dinámico según semestre) -->
+                <div id="cardFooter" style="position: absolute; bottom: 0; left: 0; width: 54mm; height: 4.8mm; background-color: #4a0e1e; border-top: 0.5mm solid #c59b4d; padding: 0 2.2mm; transition: background-color 0.3s ease;">
+                    <table style="width: 100%; height: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="text-align: left; vertical-align: middle; font-size: 5pt; color: #f1f5f9; font-weight: 700;">
+                                VIGENCIA: <span style="color: #fcd34d; font-weight: 900;">2026 - 2027</span>
+                            </td>
+                            <td style="text-align: right; vertical-align: middle; font-size: 5pt; color: #e2e8f0; font-family: monospace; font-weight: 700;">
+                                C.C.T. 12DCT0007F
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
         </div>
     </div>
 
-    <!-- BOTONES DE IMPRESIÓN Y DESCARGA -->
-    <div class="no-print w-full max-w-md flex gap-3 mt-5">
-        <button onclick="descargarPNG()" class="flex-1 btn-gold font-black py-3 rounded-xl uppercase text-xs tracking-wider shadow-lg cursor-pointer flex items-center justify-center gap-2">
-            <span>📥</span> Guardar Imagen
-        </button>
-        <button onclick="window.print()" class="flex-1 bg-slate-800 text-amber-300 border border-amber-500/40 font-black py-3 rounded-xl uppercase text-xs tracking-wider shadow-lg hover:bg-slate-700 cursor-pointer flex items-center justify-center gap-2">
-            <span>🖨️</span> Imprimir PVC
+    <!-- Botón de Impresión -->
+    <div class="no-print" style="margin-top: 16px;">
+        <button onclick="window.print()" class="btn-gold" style="font-weight: 900; padding: 10px 24px; border-radius: 12px; border: none; cursor: pointer; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 10px 20px rgba(0,0,0,0.4);">
+            🖨️ Imprimir Anverso Vertical
         </button>
     </div>
 
+    <!-- Script de Conexión Firestore y Asignación de Colores por Semestre -->
     <script type="module">
-        import { db } from "./firebase-config.js";
-        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { db, doc, getDoc } from "./firebase-config.js";
 
-        const params = new URLSearchParams(window.location.search);
-        const alumnoId = params.get("id");
+        async function cargarCredencialVertical() {
+            const params = new URLSearchParams(window.location.search);
+            const alumnoId = params.get('id');
 
-        if (alumnoId) {
-            document.getElementById("btnIrReverso").href = `reverso.html?id=${alumnoId}`;
-        }
-
-        async function cargarCredencial() {
             if (!alumnoId) {
-                alert("No se especificó ningún estudiante.");
-                window.location.replace("index.html");
+                alert("No se especificó un estudiante.");
                 return;
             }
 
+            document.getElementById('linkReverso').href = `reverso.html?id=${alumnoId}`;
+
             try {
-                const docSnap = await getDoc(doc(db, "estudiantes_credenciales", alumnoId));
-                if (!docSnap.exists()) {
-                    alert("El registro del estudiante no existe.");
-                    window.location.replace("index.html");
-                    return;
-                }
+                const docRef = doc(db, "estudiantes_credenciales", alumnoId);
+                const docSnap = await getDoc(docRef);
 
-                const d = docSnap.data();
-                document.getElementById("fotoAlumno").src = d.fotoBase64 || "logo116.png";
-                document.getElementById("nombreAlumno").innerText = d.nombreCompleto || "SIN NOMBRE";
-                document.getElementById("especialidadAlumno").innerText = d.especialidad || "GENERAL";
-                document.getElementById("matriculaAlumno").innerText = d.matricula || "-";
-                document.getElementById("semGrupoAlumno").innerText = `${d.semestre || '1'}° "${d.grupo || 'A'}"`;
-                document.getElementById("turnoSangreAlumno").innerText = `${(d.turno || 'MAT').substring(0,3)} • ${d.tipoSangre || 'O+'}`;
-                document.getElementById("curpAlumno").innerText = d.curp ? `CURP: ${d.curp}` : "VIGENCIA 2026-2027";
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('cardNombre').innerText = data.nombreCompleto || '';
+                    document.getElementById('cardEspecialidad').innerText = data.especialidad || '';
+                    
+                    const semestreNum = parseInt(data.semestre) || 1;
+                    const grupoStr = data.grupo || 'A';
+                    document.getElementById('cardSemestreGrupo').innerText = `${semestreNum}° "${grupoStr}"`;
+                    
+                    document.getElementById('cardMatricula').innerText = data.matricula || '';
+                    document.getElementById('cardCurp').innerText = data.curp || '';
+                    document.getElementById('cardSangre').innerText = data.tipoSangre || 'O+';
 
-                // Color de franja según especialidad si aplica
-                const esp = (d.especialidad || "").toUpperCase();
-                const franja = document.getElementById("franjaEspecialidad");
-                if (esp.includes("PROGRAMACIÓN") || esp.includes("PROGRAMACION")) {
-                    franja.className = "w-full bg-blue-900 text-white py-1.5 px-2 rounded-lg text-center shadow-sm mb-2 border border-blue-400";
-                } else if (esp.includes("LABORATORISTA")) {
-                    franja.className = "w-full bg-emerald-900 text-white py-1.5 px-2 rounded-lg text-center shadow-sm mb-2 border border-emerald-400";
-                } else if (esp.includes("CONTABILIDAD")) {
-                    franja.className = "w-full bg-amber-800 text-white py-1.5 px-2 rounded-lg text-center shadow-sm mb-2 border border-amber-400";
+                    if (data.fotoBase64) {
+                        document.getElementById('cardFoto').src = data.fotoBase64;
+                    }
+
+                    // APLICAR COLORES DINÁMICOS SEGÚN EL SEMESTRE
+                    const headerEl = document.getElementById('cardHeader');
+                    const footerEl = document.getElementById('cardFooter');
+
+                    if (semestreNum === 1 || semestreNum === 2) {
+                        // Gris Claro Institucional
+                        headerEl.style.backgroundColor = "#64748b";
+                        footerEl.style.backgroundColor = "#64748b";
+                    } else if (semestreNum === 3 || semestreNum === 4) {
+                        // Azul Institucional
+                        headerEl.style.backgroundColor = "#1e3a8a";
+                        footerEl.style.backgroundColor = "#1e3a8a";
+                    } else {
+                        // 5to y 6to Semestre: Color Vino Oficial por default
+                        headerEl.style.backgroundColor = "#4a0e1e";
+                        footerEl.style.backgroundColor = "#4a0e1e";
+                    }
+
+                } else {
+                    alert("Estudiante no encontrado en Firebase.");
                 }
             } catch (error) {
                 console.error("Error al cargar credencial:", error);
             }
         }
 
-        window.descargarPNG = async function() {
-            const card = document.getElementById("credencialAnverso");
-            const canvas = await html2canvas(card, { scale: 3, useCORS: true });
-            const link = document.createElement("a");
-            link.download = `Anverso_${document.getElementById("matriculaAlumno").innerText}.png`;
-            link.href = canvas.toDataURL("image/png");
-            link.click();
-        };
-
-        cargarCredencial();
+        cargarCredencialVertical();
     </script>
 </body>
 </html>
