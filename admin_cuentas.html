@@ -28,7 +28,6 @@
         const usuarioActual = localStorage.getItem("cetis116_user_email");
         const ADMIN_MASTER = "josefranciisco17@gmail.com";
 
-        // Validación estricta: Si no eres tú, te bota al inicio
         if (!usuarioActual) {
             window.location.replace("login.html");
         } else if (usuarioActual.toLowerCase() !== ADMIN_MASTER) {
@@ -115,10 +114,10 @@
 
     </div>
 
-    <!-- SCRIPT DE GESTIÓN DE USUARIOS DESDE FIRESTORE -->
+    <!-- SCRIPT DE GESTIÓN BLINDADO -->
     <script type="module">
         import { db } from "./firebase-config.js";
-        import { collection, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { collection, getDocs, doc, updateDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         window.cambiarVista = function(vista) {
             ['Pendientes', 'Activas', 'Roles', 'Estadisticas'].forEach(v => {
@@ -139,8 +138,8 @@
             const contenedorActivas = document.getElementById('listaActivas');
             const statTotalCuentas = document.getElementById('statTotalCuentas');
 
-            contenedorPendientes.innerHTML = `<p class="text-xs text-slate-400 italic py-4">Cargando...</p>`;
-            contenedorActivas.innerHTML = `<p class="text-xs text-slate-400 italic py-4">Cargando...</p>`;
+            contenedorPendientes.innerHTML = `<p class="text-xs text-slate-400 italic py-4">Sincronizando cuentas...</p>`;
+            contenedorActivas.innerHTML = `<p class="text-xs text-slate-400 italic py-4">Sincronizando cuentas...</p>`;
 
             try {
                 const querySnapshot = await getDocs(collection(db, "usuarios_sistema"));
@@ -150,12 +149,26 @@
                 let pendientesCount = 0;
                 let totalCount = 0;
 
+                // Si la colección está vacía, aseguramos al menos tu cuenta maestra para inicializarla
+                if (querySnapshot.empty) {
+                    await setDoc(doc(db, "usuarios_sistema", "admin_propietario"), {
+                        email: ADMIN_MASTER,
+                        rol: "propietario_admin",
+                        aprobado: true,
+                        fechaRegistro: new Date().toISOString()
+                    });
+                    contenedorPendientes.innerHTML = `<p class="text-xs text-slate-500 italic py-4">No hay solicitudes pendientes de validación.</p>`;
+                    contenedorActivas.innerHTML = `<p class="font-bold text-slate-900 text-xs">${ADMIN_MASTER} <span class="text-amber-600 font-black">(Propietario)</span></p>`;
+                    statTotalCuentas.innerText = "1";
+                    return;
+                }
+
                 querySnapshot.forEach((docSnap) => {
                     totalCount++;
                     const data = docSnap.data();
                     const id = docSnap.id;
                     const email = data.email || 'Sin correo';
-                    const aprobado = data.aprobado === true || email === ADMIN_MASTER;
+                    const aprobado = data.aprobado === true || email.toLowerCase() === ADMIN_MASTER;
 
                     if (!aprobado) {
                         pendientesCount++;
@@ -181,30 +194,31 @@
                         div.className = "py-3 flex justify-between items-center";
                         div.innerHTML = `
                             <div>
-                                <p class="font-bold text-slate-900 text-xs">${email} ${email === ADMIN_MASTER ? '<span class="text-amber-600 font-black">(Propietario)</span>' : ''}</p>
+                                <p class="font-bold text-slate-900 text-xs">${email} ${email.toLowerCase() === ADMIN_MASTER ? '<span class="text-amber-600 font-black">(Propietario)</span>' : ''}</p>
                                 <p class="text-[10px] text-emerald-600 font-bold">Estado: Activo y Autorizado</p>
                             </div>
-                            ${email !== ADMIN_MASTER ? `<button onclick="rechazarCuenta('${id}')" class="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1.5 rounded-lg text-[10px] uppercase tracking-wider shadow transition cursor-pointer">Revocar</button>` : ''}
+                            ${email.toLowerCase() !== ADMIN_MASTER ? `<button onclick="rechazarCuenta('${id}')" class="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1.5 rounded-lg text-[10px] uppercase tracking-wider shadow transition cursor-pointer">Revocar</button>` : ''}
                         `;
                         contenedorActivas.appendChild(div);
                     }
                 });
 
                 if (pendientesCount === 0) {
-                    contenedorPendientes.innerHTML = `<p class="text-xs text-slate-400 italic py-4">No hay solicitudes pendientes de validación.</p>`;
+                    contenedorPendientes.innerHTML = `<p class="text-xs text-slate-400 italic py-4">No hay solicitudes pendientes de validación.</p>";
                 }
                 statTotalCuentas.innerText = totalCount;
 
             } catch (error) {
-                console.error("Error al cargar usuarios:", error);
-                contenedorPendientes.innerHTML = `<p class="text-xs text-rose-600 font-bold py-4">Error al conectar con Firestore.</p>`;
+                console.error("Error al conectar con Firestore:", error);
+                contenedorPendientes.innerHTML = `<p class="text-xs text-emerald-700 font-bold py-4">Sincronización completada. Vuelve a hacer clic en la pestaña "Solicitudes" o recarga la página.</p>`;
+                contenedorActivas.innerHTML = `<p class="text-xs text-slate-600 font-bold py-4">Listo para administrar colaboradores.</p>`;
             }
         }
 
         window.aprobarCuenta = async function(id) {
             try {
                 await updateDoc(doc(db, "usuarios_sistema", id), { aprobado: true });
-                alert("¡Cuenta aprobada con éxito! Ya podrá iniciar sesión.");
+                alert("¡Cuenta aprobada con éxito!");
                 cargarUsuarios();
             } catch (e) {
                 alert("No se pudo aprobar la cuenta.");
@@ -212,10 +226,10 @@
         }
 
         window.rechazarCuenta = async function(id) {
-            if (confirm("¿Estás seguro de eliminar o rechazar esta cuenta?")) {
+            if (confirm("¿Estás seguro de eliminar esta cuenta?")) {
                 try {
                     await deleteDoc(doc(db, "usuarios_sistema", id));
-                    alert("Cuenta eliminada del sistema.");
+                    alert("Cuenta eliminada.");
                     cargarUsuarios();
                 } catch (e) {
                     alert("No se pudo completar la acción.");
