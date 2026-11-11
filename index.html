@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Padrón y Gestión - Credenciales CETis No. 116</title>
     
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#4a0e1e">
-
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -25,14 +22,27 @@
         .app-card-shadow {
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
         }
-        @keyframes modalPop {
-            0% { transform: scale(0.85); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .modal-anim {
-            animation: modalPop 0.25s ease-out;
-        }
     </style>
+
+    <!-- VERIFICACIÓN DE SEGURIDAD BLINDADA ANTES DE RENDERIZAR NADA -->
+    <script type="module">
+        import { auth } from "./firebase-config.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // Comprobación estricta: Si en 300ms Firebase no detecta sesión activa, expulsión inmediata al login
+        const checkTimer = setTimeout(() => {
+            if (!auth.currentUser) {
+                window.location.replace("login.html");
+            }
+        }, 300);
+
+        onAuthStateChanged(auth, (user) => {
+            clearTimeout(checkTimer);
+            if (!user) {
+                window.location.replace("login.html");
+            }
+        });
+    </script>
 </head>
 <body class="min-h-screen flex flex-col items-center p-3 md:p-6">
 
@@ -44,10 +54,10 @@
         <div class="text-center flex-grow px-1">
             <p class="text-[9px] font-extrabold tracking-widest text-amber-300 uppercase">CETis 116 - Antonia Nava de Catalán</p>
             <h1 class="text-base md:text-lg font-black tracking-wider uppercase text-white mt-0.5">Gestión de Credenciales</h1>
-            <p id="userEmailDisplay" class="text-[10px] text-amber-200/90 font-mono tracking-wide">Cargando...</p>
+            <p id="userEmailDisplay" class="text-[10px] text-amber-200/90 font-mono tracking-wide">Sesión Activa</p>
         </div>
         <div class="flex items-center gap-2">
-            <button onclick="cerrarSesion()" class="bg-rose-900/80 text-amber-300 border border-amber-500/30 px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase hover:bg-rose-800 transition shadow cursor-pointer" title="Cerrar Sesión">
+            <button onclick="cerrarSesion()" class="bg-rose-900/80 text-amber-300 border border-amber-500/30 px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase hover:bg-rose-800 transition shadow cursor-pointer">
                 🚪 Salir
             </button>
             <div class="w-12 h-12 bg-white rounded-xl p-1 hidden md:flex items-center justify-center shadow border border-amber-400 flex-shrink-0">
@@ -91,7 +101,7 @@
         </div>
     </div>
 
-    <!-- LISTADO / TABLA DE ESTUDIANTES DESDE FIRESTORE -->
+    <!-- LISTADO / TABLA DE ESTUDIANTES -->
     <div class="w-full max-w-5xl bg-white rounded-2xl app-card-shadow overflow-hidden border border-slate-200 flex-grow mb-4">
         <div class="p-3 bg-slate-900 text-amber-300 font-bold text-xs uppercase tracking-wider flex justify-between items-center">
             <span>Listado General de Alumnos</span>
@@ -119,50 +129,15 @@
         </div>
     </div>
 
-    <!-- MODAL DE ALERTA -->
-    <div id="customModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(7, 11, 20, 0.85); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
-        <div class="modal-anim bg-white border-1.5 border-[#c59b4d] rounded-2xl w-full max-w-[320px] shadow-2xl overflow-hidden text-center p-5">
-            <div class="w-10 h-10 bg-[#4a0e1e] text-amber-300 rounded-full mx-auto flex items-center justify-center text-lg font-bold border border-amber-400 mb-2">
-                ⚙️
-            </div>
-            <h3 class="text-xs font-black uppercase tracking-wider text-[#4a0e1e] mb-1">CETis No. 116</h3>
-            <p id="modalMessage" class="text-xs font-bold text-slate-800 mb-4">Mensaje del sistema</p>
-            <div id="modalButtons" class="flex gap-2 justify-center">
-                <button onclick="cerrarModalPersonalizado()" class="w-full btn-gold font-black py-2.5 rounded-xl uppercase text-xs tracking-wider cursor-pointer">
-                    Aceptar
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- PIE DE PÁGINA -->
-    <footer class="w-full max-w-5xl text-center text-slate-400 text-[10px] py-3 border-t border-slate-800">
-        <p>CETis No. 116 • C.C.T. 12DCT0007F • Acapulco, Guerrero</p>
-        <p class="text-amber-400/80 mt-0.5">Plataforma Inteligente de Credencialización • JFAM Tecno-Energy</p>
-    </footer>
-
-    <!-- SCRIPT DE CONTROL DE ACCESO INMEDIATO -->
+    <!-- SCRIPT DE CARGA DE DATOS DESDE FIRESTORE -->
     <script type="module">
         import { db, auth } from "./firebase-config.js";
-        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // VERIFICACIÓN INMEDIATA DE SEGURIDAD
-        setTimeout(() => {
-            if (!auth.currentUser) {
-                // Si pasados 500ms Firebase no confirma usuario, mandamos al login por seguridad
-                window.location.replace("login.html");
-            }
-        }, 500);
-
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                window.location.replace("login.html");
-            } else {
-                document.getElementById('userEmailDisplay').innerText = `Sesión: ${user.email}`;
-                cargarPadron();
-            }
-        });
+        if (auth.currentUser) {
+            document.getElementById('userEmailDisplay').innerText = `Sesión: ${auth.currentUser.email}`;
+        }
 
         window.cerrarSesion = async function() {
             try {
@@ -174,38 +149,10 @@
             }
         }
 
-        window.mostrarAlerta = function(mensaje, callbackAceptar = null, mostrarCancelar = false) {
-            document.getElementById('modalMessage').innerText = mensaje;
-            const modal = document.getElementById('customModal');
-            const btnContainer = document.getElementById('modalButtons');
-            
-            if (mostrarCancelar) {
-                btnContainer.innerHTML = `
-                    <button onclick="cerrarModalPersonalizado()" class="flex-1 bg-slate-200 text-slate-700 font-black py-2.5 rounded-xl uppercase text-xs cursor-pointer">Cancelar</button>
-                    <button id="btnModalConfirm" class="flex-1 bg-rose-600 text-white font-black py-2.5 rounded-xl uppercase text-xs cursor-pointer">Eliminar</button>
-                `;
-                document.getElementById('btnModalConfirm').onclick = () => {
-                    cerrarModalPersonalizado();
-                    if (callbackAceptar) callbackAceptar();
-                };
-            } else {
-                btnContainer.innerHTML = `
-                    <button onclick="cerrarModalPersonalizado()" class="w-full btn-gold font-black py-2.5 rounded-xl uppercase text-xs cursor-pointer">Aceptar</button>
-                `;
-            }
-            modal.style.display = 'flex';
-        }
-
-        window.cerrarModalPersonalizado = function() {
-            document.getElementById('customModal').style.display = 'none';
-        }
-
         async function cargarPadron() {
             const tbody = document.getElementById('tablaEstudiantes');
             const totalAlumnosBadge = document.getElementById('totalAlumnosBadge');
             const statTotal = document.getElementById('statTotal');
-            
-            tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500 italic">Cargando registros...</td></tr>`;
 
             try {
                 const querySnapshot = await getDocs(collection(db, "estudiantes_credenciales"));
@@ -238,18 +185,10 @@
                         <td class="p-3 font-mono font-bold">${data.semestre || '1'}° "${data.grupo || 'A'}"</td>
                         <td class="p-3 text-center">
                             <div class="flex items-center justify-center gap-1.5 flex-wrap">
-                                <a href="credencial.html?id=${id}" class="bg-[#4a0e1e] text-white px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-rose-900 shadow transition" title="Ver Anverso">
-                                    🪪 Anv
-                                </a>
-                                <a href="reverso.html?id=${id}" class="bg-slate-900 text-amber-300 border border-amber-500/30 px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-slate-800 shadow transition" title="Ver Reverso">
-                                    🔄 Rev
-                                </a>
-                                <a href="registro.html?id=${id}" class="bg-blue-600 text-white px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-blue-700 shadow transition" title="Modificar Datos">
-                                    ✏️ Mod
-                                </a>
-                                <button onclick="window.confirmarEliminar('${id}', '${data.nombreCompleto || 'Estudiante'}')" class="bg-rose-600 text-white px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-rose-700 shadow transition cursor-pointer" title="Eliminar Credencial">
-                                    🗑️ Elim
-                                </button>
+                                <a href="credencial.html?id=${id}" class="bg-[#4a0e1e] text-white px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-rose-900 shadow transition" title="Ver Anverso">🪪 Anv</a>
+                                <a href="reverso.html?id=${id}" class="bg-slate-900 text-amber-300 border border-amber-500/30 px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-slate-800 shadow transition" title="Ver Reverso">🔄 Rev</a>
+                                <a href="registro.html?id=${id}" class="bg-blue-600 text-white px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-blue-700 shadow transition" title="Modificar Datos">✏️ Mod</a>
+                                <button onclick="window.eliminar('${id}', '${data.nombreCompleto || 'Estudiante'}')" class="bg-rose-600 text-white px-2 py-1.5 rounded-lg text-[9px] font-extrabold uppercase hover:bg-rose-700 shadow transition cursor-pointer" title="Eliminar">🗑️ Elim</button>
                             </div>
                         </td>
                     `;
@@ -261,24 +200,23 @@
 
             } catch (error) {
                 console.error("Error al cargar el padrón:", error);
-                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-rose-600 font-bold">Error al conectar con Firebase Firestore.</td></tr>`;
-                totalAlumnosBadge.innerText = "Error";
-                statTotal.innerText = "Error";
+                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-rose-600 font-bold">Error al conectar con Firestore. Verifica tu sesión o reglas.</td></tr>`;
             }
         }
 
-        window.confirmarEliminar = function(id, nombre) {
-            mostrarAlerta(`¿Estás seguro de eliminar la credencial y registro de:\n"${nombre}"?`, async () => {
+        window.eliminar = async function(id, nombre) {
+            if (confirm(`¿Deseas eliminar a ${nombre}?`)) {
                 try {
                     await deleteDoc(doc(db, "estudiantes_credenciales", id));
-                    mostrarAlerta("¡Registro eliminado correctamente del padrón!");
+                    alert("¡Registro eliminado!");
                     cargarPadron();
                 } catch (e) {
-                    console.error("Error al eliminar:", e);
-                    mostrarAlerta("No se pudo eliminar el registro. Intenta de nuevo.");
+                    alert("No se pudo eliminar.");
                 }
-            }, true);
+            }
         }
+
+        cargarPadron();
     </script>
 </body>
 </html>
