@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso al Sistema - Credenciales CETis No. 116</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #070b14;
+            color: #0f172a;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .btn-gold {
+            background: linear-gradient(135deg, #d4b26f 0%, #c59b4d 100%);
+            color: #1a1205;
+        }
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #e0c283 0%, #d1a95b 100%);
+        }
+        .app-card-shadow {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+        }
+        @keyframes modalPop {
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .modal-anim {
+            animation: modalPop 0.25s ease-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- CONTENEDOR PRINCIPAL DEL LOGIN -->
+    <div class="w-full max-w-md bg-white rounded-3xl app-card-shadow overflow-hidden border border-amber-500/30">
+        
+        <!-- ENCABEZADO INSTITUCIONAL GUINDA -->
+        <div class="bg-[#4a0e1e] text-white p-6 border-b-4 border-[#c59b4d] text-center relative">
+            <div class="flex justify-center items-center gap-3 mb-3">
+                <div class="w-12 h-12 bg-white rounded-xl p-1 flex items-center justify-center shadow border border-amber-400">
+                    <img src="logo-dgti.png" alt="DGETI" class="w-full h-full object-contain">
+                </div>
+                <div class="w-12 h-12 bg-white rounded-xl p-1 flex items-center justify-center shadow border border-amber-400">
+                    <img src="logo116.png" alt="CETis 116" class="w-full h-full object-contain">
+                </div>
+            </div>
+            <p class="text-[9px] font-extrabold tracking-widest text-amber-300 uppercase">SEP • SEMS • DGETI</p>
+            <h1 class="text-base font-black tracking-wider uppercase text-white mt-0.5">CETis No. 116</h1>
+            <p class="text-[10px] text-amber-200/90 font-mono tracking-wide mt-1">Gestión de Credenciales • Admin Master</p>
+        </div>
+
+        <!-- FORMULARIO DE ACCESO -->
+        <div class="p-6">
+            <form id="formLogin" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-extrabold text-slate-700 uppercase mb-1">Correo Electrónico:</label>
+                    <input type="email" id="email" required placeholder="correo@ejemplo.com" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 font-medium text-slate-900 focus:outline-none focus:border-amber-500">
+                </div>
+
+                <div>
+                    <label class="block font-extrabold text-slate-700 uppercase mb-1">Contraseña:</label>
+                    <input type="password" id="password" required placeholder="••••••••" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 font-medium text-slate-900 focus:outline-none focus:border-amber-500">
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" id="btnIngresar" class="w-full btn-gold font-extrabold py-3.5 rounded-xl shadow-lg uppercase tracking-wider text-xs flex items-center justify-center gap-2 cursor-pointer">
+                        <span>🔐</span> Iniciar Sesión Segura
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-5 text-center border-t border-slate-100 pt-4">
+                <p class="text-[11px] text-slate-500">¿No tienes cuenta de colaborador?</p>
+                <button onclick="registrarColaborador()" class="text-[#4a0e1e] font-black uppercase text-[11px] hover:underline mt-1">
+                    Solicitar Registro de Cuenta
+                </button>
+            </div>
+        </div>
+
+        <!-- PIE DE PÁGINA -->
+        <div class="bg-slate-900 text-slate-400 text-center py-3 text-[10px] border-t border-slate-800">
+            <p>Cuenta Propietaria: josefranciisco17@gmail.com</p>
+        </div>
+
+    </div>
+
+    <!-- MODAL DE ALERTA PERSONALIZADO -->
+    <div id="customModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(7, 11, 20, 0.85); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
+        <div class="modal-anim bg-white border-1.5 border-[#c59b4d] rounded-2xl w-full max-w-320 shadow-2xl overflow-hidden text-center p-5" style="max-width: 320px;">
+            <div class="w-10 h-10 bg-[#4a0e1e] text-amber-300 rounded-full mx-auto flex items-center justify-center text-lg font-bold border border-amber-400 mb-2">
+                ✨
+            </div>
+            <h3 class="text-xs font-black uppercase tracking-wider text-[#4a0e1e] mb-1">CETis No. 116</h3>
+            <p id="modalMessage" class="text-xs font-bold text-slate-800 mb-4">Mensaje del sistema</p>
+            <button onclick="cerrarModalPersonalizado()" class="w-full btn-gold font-black py-2.5 rounded-xl uppercase text-xs tracking-wider">
+                Aceptar
+            </button>
+        </div>
+    </div>
+
+    <!-- SCRIPT DE AUTENTICACIÓN FIREBASE -->
+    <script type="module">
+        import { db, auth } from "./firebase-config.js";
+        import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const ADMIN_EMAIL = "josefranciisco17@gmail.com";
+
+        window.mostrarAlerta = function(mensaje, callback = null) {
+            document.getElementById('modalMessage').innerText = mensaje;
+            document.getElementById('customModal').style.display = 'flex';
+            window.modalCallback = callback;
+        }
+
+        window.cerrarModalPersonalizado = function() {
+            document.getElementById('customModal').style.display = 'none';
+            if (window.modalCallback) window.modalCallback();
+        }
+
+        const formLogin = document.getElementById('formLogin');
+        const btnIngresar = document.getElementById('btnIngresar');
+
+        formLogin.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            btnIngresar.innerText = "Verificando Credenciales...";
+            btnIngresar.disabled = true;
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Verificar si es el admin propietario o registrar sus permisos
+                const userDocRef = doc(db, "usuarios_sistema", user.uid);
+                const userSnap = await getDoc(userDocRef);
+
+                const esAdmin = (user.email.toLowerCase() === ADMIN_EMAIL);
+
+                if (!userSnap.exists()) {
+                    await setDoc(userDocRef, {
+                        email: user.email,
+                        rol: esAdmin ? "propietario_admin" : "colaborador",
+                        fechaRegistro: new Date().toISOString()
+                    });
+                }
+
+                mostrarAlerta(esAdmin ? "¡Bienvenido Administrador Propietario!" : "¡Acceso concedido al sistema!", () => {
+                    window.location.href = "index.html";
+                });
+
+            } catch (error) {
+                console.error("Error de login:", error);
+                mostrarAlerta("Acceso denegado: Verifica tu correo y contraseña.");
+                btnIngresar.innerText = "Iniciar Sesión Segura";
+                btnIngresar.disabled = false;
+            }
+        });
+
+        window.registrarColaborador = async function() {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                mostrarAlerta("Ingresa un correo y contraseña para registrar nueva cuenta.");
+                return;
+            }
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                const esAdmin = (user.email.toLowerCase() === ADMIN_EMAIL);
+
+                await setDoc(doc(db, "usuarios_sistema", user.uid), {
+                    email: user.email,
+                    rol: esAdmin ? "propietario_admin" : "colaborador",
+                    fechaRegistro: new Date().toISOString()
+                });
+
+                mostrarAlerta("¡Cuenta creada y registrada con éxito!", () => {
+                    window.location.href = "index.html";
+                });
+            } catch (error) {
+                console.error("Error al registrar:", error);
+                mostrarAlerta("No se pudo crear la cuenta. La contraseña debe tener al menos 6 caracteres o el correo ya está registrado.");
+            }
+        }
+    </script>
+</body>
+</html>
