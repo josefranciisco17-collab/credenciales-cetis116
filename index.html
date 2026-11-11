@@ -53,24 +53,21 @@
 </head>
 <body class="min-h-screen flex flex-col items-center p-3 md:p-6">
 
-    <!-- ENCABEZADO COMPACTO Y PROFESIONAL (DISEÑO MÓVIL CORREGIDO) -->
-    <header class="w-full max-w-5xl bg-[#4a0e1e] text-white border-b-4 border-[#c59b4d] rounded-2xl app-card-shadow p-3.5 mb-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div class="flex items-center gap-3 w-full sm:w-auto">
-            <div class="w-11 h-11 bg-white rounded-xl p-1 flex items-center justify-center shadow border border-amber-400 flex-shrink-0">
-                <img src="logo116.png" alt="CETis 116" class="w-full h-full object-contain">
-            </div>
-            <div class="overflow-hidden">
-                <p class="text-[8px] font-extrabold tracking-widest text-amber-300 uppercase">CETis 116 • Antonia Nava de Catalán</p>
-                <h1 class="text-sm md:text-base font-black tracking-wider uppercase text-white truncate">Gestión de Credenciales</h1>
-                <p id="userEmailDisplay" class="text-[9px] text-amber-200/90 font-mono truncate">Sesión Activa</p>
-            </div>
+    <!-- ENCABEZADO INSTITUCIONAL ORIGINAL Y BOTONES ACOMODADOS -->
+    <header class="w-full max-w-5xl bg-[#4a0e1e] text-white border-b-4 border-[#c59b4d] rounded-2xl app-card-shadow p-4 mb-4 flex flex-col items-center text-center gap-3">
+        <div class="w-12 h-12 bg-white rounded-xl p-1 flex items-center justify-center shadow border border-amber-400">
+            <img src="logo116.png" alt="CETis 116" class="w-full h-full object-contain">
         </div>
-        <div class="flex items-center justify-end gap-2 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-amber-500/20">
-            <!-- Botón de acceso al Panel Admin de solicitudes -->
-            <a href="admin_cuentas.html" class="bg-amber-500 hover:bg-amber-400 text-[#1a1205] px-3 py-2 rounded-xl text-[10px] font-black uppercase transition shadow cursor-pointer flex items-center gap-1.5 flex-shrink-0">
+        <div>
+            <p class="text-[9px] font-extrabold tracking-widest text-amber-300 uppercase">CETis 116 - Antonia Nava de Catalán</p>
+            <h1 class="text-base md:text-lg font-black tracking-wider uppercase text-white mt-0.5">Gestión de Credenciales</h1>
+            <p id="userEmailDisplay" class="text-[10px] text-amber-200/90 font-mono tracking-wide mt-0.5">Sesión Activa</p>
+        </div>
+        <div class="flex items-center justify-center gap-2 pt-2 border-t border-amber-500/30 w-full">
+            <a href="admin_cuentas.html" class="bg-amber-500 hover:bg-amber-400 text-[#1a1205] px-4 py-1.5 rounded-xl text-[10px] font-black uppercase transition shadow cursor-pointer flex items-center gap-1.5">
                 <span>⚙️</span> Admin
             </a>
-            <button onclick="cerrarSesionDirecto()" class="bg-rose-950/80 hover:bg-rose-900 text-amber-300 border border-amber-500/40 px-3 py-2 rounded-xl text-[10px] font-extrabold uppercase transition shadow cursor-pointer flex items-center gap-1.5 flex-shrink-0">
+            <button onclick="cerrarSesionDirecto()" class="bg-rose-950/80 hover:bg-rose-900 text-amber-300 border border-amber-500/40 px-4 py-1.5 rounded-xl text-[10px] font-extrabold uppercase transition shadow cursor-pointer flex items-center gap-1.5">
                 <span>🚪</span> Salir
             </button>
         </div>
