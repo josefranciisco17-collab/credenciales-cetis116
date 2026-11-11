@@ -51,16 +51,16 @@
 
     <!-- BOTONERA DE CONTROL -->
     <div class="w-full max-w-5xl grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
-        <button onclick="cambiarVista('pendientes')" id="tabPendientes" class="bg-amber-500 text-[#1a1205] font-black py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition">
+        <button onclick="window.cambiarVista('pendientes')" id="tabPendientes" class="bg-amber-500 text-[#1a1205] font-black py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition">
             👥 Solicitudes
         </button>
-        <button onclick="cambiarVista('activas')" id="tabActivas" class="bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800">
+        <button onclick="window.cambiarVista('activas')" id="tabActivas" class="bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800">
             🔒 Cuentas Activas
         </button>
-        <button onclick="cambiarVista('roles')" id="tabRoles" class="bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800">
+        <button onclick="window.cambiarVista('roles')" id="tabRoles" class="bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800">
             ⚙️ Permisos y Roles
         </button>
-        <button onclick="cambiarVista('estadisticas')" id="tabEstadisticas" class="bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800">
+        <button onclick="window.cambiarVista('estadisticas')" id="tabEstadisticas" class="bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800">
             📊 Estadísticas
         </button>
     </div>
@@ -114,19 +114,24 @@
 
     </div>
 
-    <!-- SCRIPT DE GESTIÓN BLINDADO -->
+    <!-- SCRIPT DE GESTIÓN Y NAVEGACIÓN -->
     <script type="module">
         import { db } from "./firebase-config.js";
-        import { collection, getDocs, doc, updateDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { collection, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         window.cambiarVista = function(vista) {
             ['Pendientes', 'Activas', 'Roles', 'Estadisticas'].forEach(v => {
-                document.getElementById(`seccion${v}`).style.display = 'none';
-                document.getElementById(`tab${v}`).className = "bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800";
+                const sec = document.getElementById(`seccion${v}`);
+                const tab = document.getElementById(`tab${v}`);
+                if(sec) sec.style.display = 'none';
+                if(tab) tab.className = "bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800";
             });
 
-            document.getElementById(`seccion${vista.charAt(0).toUpperCase() + vista.slice(1)}`).style.display = 'block';
-            document.getElementById(`tab${vista.charAt(0).toUpperCase() + vista.slice(1)}`).className = "bg-amber-500 text-[#1a1205] font-black py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition";
+            const targetSec = document.getElementById(`seccion${vista.charAt(0).toUpperCase() + vista.slice(1)}`);
+            const targetTab = document.getElementById(`tab${vista.charAt(0).toUpperCase() + vista.slice(1)}`);
+            
+            if(targetSec) targetSec.style.display = 'block';
+            if(targetTab) targetTab.className = "bg-amber-500 text-[#1a1205] font-black py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition";
 
             if (vista === 'pendientes' || vista === 'activas' || vista === 'estadisticas') {
                 cargarUsuarios();
@@ -138,28 +143,21 @@
             const contenedorActivas = document.getElementById('listaActivas');
             const statTotalCuentas = document.getElementById('statTotalCuentas');
 
-            contenedorPendientes.innerHTML = `<p class="text-xs text-slate-400 italic py-4">Sincronizando cuentas...</p>`;
-            contenedorActivas.innerHTML = `<p class="text-xs text-slate-400 italic py-4">Sincronizando cuentas...</p>`;
+            if(contenedorPendientes) contenedorPendientes.innerHTML = `<p class="text-xs text-slate-400 italic py-4">Buscando solicitudes...</p>`;
+            if(contenedorActivas) contenedorActivas.innerHTML = `<p class="text-xs text-slate-400 italic py-4">Cargando cuentas activas...</p>`;
 
             try {
                 const querySnapshot = await getDocs(collection(db, "usuarios_sistema"));
-                contenedorPendientes.innerHTML = "";
-                contenedorActivas.innerHTML = "";
+                if(contenedorPendientes) contenedorPendientes.innerHTML = "";
+                if(contenedorActivas) contenedorActivas.innerHTML = "";
 
                 let pendientesCount = 0;
                 let totalCount = 0;
 
-                // Si la colección está vacía, aseguramos al menos tu cuenta maestra para inicializarla
                 if (querySnapshot.empty) {
-                    await setDoc(doc(db, "usuarios_sistema", "admin_propietario"), {
-                        email: ADMIN_MASTER,
-                        rol: "propietario_admin",
-                        aprobado: true,
-                        fechaRegistro: new Date().toISOString()
-                    });
-                    contenedorPendientes.innerHTML = `<p class="text-xs text-slate-500 italic py-4">No hay solicitudes pendientes de validación.</p>`;
-                    contenedorActivas.innerHTML = `<p class="font-bold text-slate-900 text-xs">${ADMIN_MASTER} <span class="text-amber-600 font-black">(Propietario)</span></p>`;
-                    statTotalCuentas.innerText = "1";
+                    if(contenedorPendientes) contenedorPendientes.innerHTML = `<p class="text-xs text-slate-400 italic py-4">No hay solicitudes pendientes de validación.</p>`;
+                    if(contenedorActivas) contenedorActivas.innerHTML = `<p class="text-xs text-slate-400 italic py-4">Tu cuenta (${ADMIN_MASTER}) es la única activa.</p>`;
+                    if(statTotalCuentas) statTotalCuentas.innerText = "1";
                     return;
                 }
 
@@ -173,45 +171,45 @@
                     if (!aprobado) {
                         pendientesCount++;
                         const div = document.createElement('div');
-                        div.className = "py-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3";
+                        div.className = "py-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-100";
                         div.innerHTML = `
                             <div>
                                 <p class="font-bold text-slate-900 text-xs">${email}</p>
                                 <p class="text-[10px] text-slate-500">Registrado: ${data.fechaRegistro ? new Date(data.fechaRegistro).toLocaleString() : 'Reciente'}</p>
                             </div>
                             <div class="flex gap-2">
-                                <button onclick="aprobarCuenta('${id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-3 py-1.5 rounded-lg text-[10px] uppercase tracking-wider shadow transition cursor-pointer">
+                                <button onclick="window.aprobarCuenta('${id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-3 py-1.5 rounded-lg text-[10px] uppercase tracking-wider shadow transition cursor-pointer">
                                     Aprobar Cuenta
                                 </button>
-                                <button onclick="rechazarCuenta('${id}')" class="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1.5 rounded-lg text-[10px] uppercase tracking-wider shadow transition cursor-pointer">
+                                <button onclick="window.rechazarCuenta('${id}')" class="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1.5 rounded-lg text-[10px] uppercase tracking-wider shadow transition cursor-pointer">
                                     Rechazar
                                 </button>
                             </div>
                         `;
-                        contenedorPendientes.appendChild(div);
+                        if(contenedorPendientes) contenedorPendientes.appendChild(div);
                     } else {
                         const div = document.createElement('div');
-                        div.className = "py-3 flex justify-between items-center";
+                        div.className = "py-3 flex justify-between items-center border-b border-slate-100";
                         div.innerHTML = `
                             <div>
                                 <p class="font-bold text-slate-900 text-xs">${email} ${email.toLowerCase() === ADMIN_MASTER ? '<span class="text-amber-600 font-black">(Propietario)</span>' : ''}</p>
                                 <p class="text-[10px] text-emerald-600 font-bold">Estado: Activo y Autorizado</p>
                             </div>
-                            ${email.toLowerCase() !== ADMIN_MASTER ? `<button onclick="rechazarCuenta('${id}')" class="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1.5 rounded-lg text-[10px] uppercase tracking-wider shadow transition cursor-pointer">Revocar</button>` : ''}
+                            ${email.toLowerCase() !== ADMIN_MASTER ? `<button onclick="window.rechazarCuenta('${id}')" class="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1.5 rounded-lg text-[10px] uppercase tracking-wider shadow transition cursor-pointer">Revocar</button>` : ''}
                         `;
-                        contenedorActivas.appendChild(div);
+                        if(contenedorActivas) contenedorActivas.appendChild(div);
                     }
                 });
 
-                if (pendientesCount === 0) {
-                    contenedorPendientes.innerHTML = `<p class="text-xs text-slate-400 italic py-4">No hay solicitudes pendientes de validación.</p>";
+                if (pendientesCount === 0 && contenedorPendientes) {
+                    contenedorPendientes.innerHTML = `<p class="text-xs text-slate-400 italic py-4">No hay solicitudes pendientes de validación.</p>`;
                 }
-                statTotalCuentas.innerText = totalCount;
+                if (statTotalCuentas) statTotalCuentas.innerText = totalCount;
 
             } catch (error) {
                 console.error("Error al conectar con Firestore:", error);
-                contenedorPendientes.innerHTML = `<p class="text-xs text-emerald-700 font-bold py-4">Sincronización completada. Vuelve a hacer clic en la pestaña "Solicitudes" o recarga la página.</p>`;
-                contenedorActivas.innerHTML = `<p class="text-xs text-slate-600 font-bold py-4">Listo para administrar colaboradores.</p>`;
+                if(contenedorPendientes) contenedorPendientes.innerHTML = `<p class="text-xs text-rose-600 font-bold py-4">Error al conectar con Firestore. Revisa tu conexión o reglas.</p>`;
+                if(contenedorActivas) contenedorActivas.innerHTML = `<p class="text-xs text-rose-600 font-bold py-4">Error de conexión.</p>`;
             }
         }
 
@@ -237,6 +235,7 @@
             }
         }
 
+        // Cargar solicitudes al abrir el panel
         cargarUsuarios();
     </script>
 </body>
