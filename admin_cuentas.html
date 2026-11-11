@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Credenciales CETis No. 116</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #070b14;
+            color: #0f172a;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .btn-gold {
+            background: linear-gradient(135deg, #d4b26f 0%, #c59b4d 100%);
+            color: #1a1205;
+        }
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #e0c283 0%, #d1a95b 100%);
+        }
+        .app-card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+
+    <script>
+        const usuarioActual = localStorage.getItem("cetis116_user_email");
+        const ADMIN_MASTER = "josefranciisco17@gmail.com";
+
+        // Validación estricta: Si no eres tú, te bota al inicio
+        if (!usuarioActual) {
+            window.location.replace("login.html");
+        } else if (usuarioActual.toLowerCase() !== ADMIN_MASTER) {
+            alert("Acceso denegado: Panel exclusivo del Administrador Propietario.");
+            window.location.replace("index.html");
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col items-center p-3 md:p-6">
+
+    <!-- ENCABEZADO DE ADMINISTRACIÓN -->
+    <header class="w-full max-w-5xl bg-[#4a0e1e] text-white border-b-4 border-[#c59b4d] rounded-2xl app-card-shadow p-4 mb-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div>
+            <p class="text-[9px] font-extrabold tracking-widest text-amber-300 uppercase">CETis 116 • Antonia Nava de Catalán</p>
+            <h1 class="text-base md:text-lg font-black tracking-wider uppercase text-white">Panel de Administración • Cuentas</h1>
+        </div>
+        <a href="index.html" class="bg-slate-900 text-amber-300 border border-amber-500/40 px-4 py-2 rounded-xl text-xs font-extrabold uppercase hover:bg-slate-800 transition shadow cursor-pointer">
+            Volver al Inicio
+        </a>
+    </header>
+
+    <!-- BOTONERA DE CONTROL -->
+    <div class="w-full max-w-5xl grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+        <button onclick="cambiarVista('pendientes')" id="tabPendientes" class="bg-amber-500 text-[#1a1205] font-black py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition">
+            👥 Solicitudes
+        </button>
+        <button onclick="cambiarVista('activas')" id="tabActivas" class="bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800">
+            🔒 Cuentas Activas
+        </button>
+        <button onclick="cambiarVista('roles')" id="tabRoles" class="bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800">
+            ⚙️ Permisos y Roles
+        </button>
+        <button onclick="cambiarVista('estadisticas')" id="tabEstadisticas" class="bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800">
+            📊 Estadísticas
+        </button>
+    </div>
+
+    <!-- CONTENEDOR DINÁMICO DE SECCIONES -->
+    <div class="w-full max-w-5xl bg-white rounded-2xl app-card-shadow p-5 border border-slate-200 flex-grow mb-4">
+        
+        <!-- SECCIÓN 1: SOLICITUDES PENDIENTES -->
+        <div id="seccionPendientes" class="space-y-4">
+            <h2 class="text-sm font-black text-slate-900 uppercase tracking-tight">Cuentas Nuevas Pendientes de Validación</h2>
+            <p class="text-xs text-slate-500">Autoriza los registros nuevos para que puedan acceder al sistema:</p>
+            <div id="listaPendientes" class="divide-y divide-slate-100 mt-3">
+                <p class="text-xs text-slate-400 italic py-4">Buscando solicitudes pendientes...</p>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 2: CUENTAS ACTIVAS -->
+        <div id="seccionActivas" class="space-y-4" style="display: none;">
+            <h2 class="text-sm font-black text-slate-900 uppercase tracking-tight">Cuentas con Acceso Autorizado</h2>
+            <p class="text-xs text-slate-500">Colaboradores con permiso activo en la plataforma:</p>
+            <div id="listaActivas" class="divide-y divide-slate-100 mt-3">
+                <p class="text-xs text-slate-400 italic py-4">Cargando cuentas activas...</p>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 3: PERMISOS Y ROLES -->
+        <div id="seccionRoles" class="space-y-4" style="display: none;">
+            <h2 class="text-sm font-black text-slate-900 uppercase tracking-tight">Gestión de Roles y Seguridad</h2>
+            <p class="text-xs text-slate-500">Configuración global del Administrador Propietario:</p>
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl text-xs text-slate-700 space-y-2">
+                <p><strong>Admin Propietario Master:</strong> <span class="font-mono text-rose-800">josefranciisco17@gmail.com</span></p>
+                <p><strong>Nivel de Acceso:</strong> Control total de bases de datos, aprobación de usuarios y emisión de credenciales institucionales.</p>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 4: ESTADÍSTICAS -->
+        <div id="seccionEstadisticas" class="space-y-4" style="display: none;">
+            <h2 class="text-sm font-black text-slate-900 uppercase tracking-tight">Estadísticas del Sistema</h2>
+            <p class="text-xs text-slate-500">Resumen operativo del CETis No. 116:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+                <div class="bg-slate-900 text-amber-300 p-4 rounded-xl border border-amber-500/30">
+                    <p class="text-[10px] uppercase font-bold text-slate-400">Total Cuentas en Sistema</p>
+                    <p id="statTotalCuentas" class="text-xl font-black font-mono mt-1">0</p>
+                </div>
+                <div class="bg-slate-900 text-amber-300 p-4 rounded-xl border border-amber-500/30">
+                    <p class="text-[10px] uppercase font-bold text-slate-400">Clave C.C.T.</p>
+                    <p class="text-sm font-black font-mono mt-1">12DCT0007F</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SCRIPT DE GESTIÓN DE USUARIOS DESDE FIRESTORE -->
+    <script type="module">
+        import { db } from "./firebase-config.js";
+        import { collection, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        window.cambiarVista = function(vista) {
+            ['Pendientes', 'Activas', 'Roles', 'Estadisticas'].forEach(v => {
+                document.getElementById(`seccion${v}`).style.display = 'none';
+                document.getElementById(`tab${v}`).className = "bg-slate-900 text-amber-300 border border-amber-500/30 font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition hover:bg-slate-800";
+            });
+
+            document.getElementById(`seccion${vista.charAt(0).toUpperCase() + vista.slice(1)}`).style.display = 'block';
+            document.getElementById(`tab${vista.charAt(0).toUpperCase() + vista.slice(1)}`).className = "bg-amber-500 text-[#1a1205] font-black py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition";
+
+            if (vista === 'pendientes' || vista === 'activas' || vista === 'estadisticas') {
+                cargarUsuarios();
+            }
+        }
+
+        async function cargarUsuarios() {
+            const contenedorPendientes = document.getElementById('listaPendientes');
+            const contenedorActivas = document.getElementById('listaActivas');
+            const statTotalCuentas = document.getElementById('statTotalCuentas');
+
+            contenedorPendientes.innerHTML = `<p class="text-xs text-slate-400 italic py-4">Cargando...</p>`;
+            contenedorActivas.innerHTML = `<p class="text-xs text-slate-400 italic py-4">Cargando...</p>`;
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "usuarios_sistema"));
+                contenedorPendientes.innerHTML = "";
+                contenedorActivas.innerHTML = "";
+
+                let pendientesCount = 0;
+                let totalCount = 0;
+
+                querySnapshot.forEach((docSnap) => {
+                    totalCount++;
+                    const data = docSnap.data();
+                    const id = docSnap.id;
+                    const email = data.email || 'Sin correo';
+                    const aprobado = data.aprobado === true || email === ADMIN_MASTER;
+
+                    if (!aprobado) {
+                        pendientesCount++;
+                        const div = document.createElement('div');
+                        div.className = "py-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3";
+                        div.innerHTML = `
+                            <div>
+                                <p class="font-bold text-slate-900 text-xs">${email}</p>
+                                <p class="text-[10px] text-slate-500">Registrado: ${data.fechaRegistro ? new Date(data.fechaRegistro).toLocaleString() : 'Reciente'}</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="aprobarCuenta('${id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-3 py-1.5 rounded-lg text-[10px] uppercase tracking-wider shadow transition cursor-pointer">
+                                    Aprobar Cuenta
+                                </button>
+                                <button onclick="rechazarCuenta('${id}')" class="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1.5 rounded-lg text-[10px] uppercase tracking-wider shadow transition cursor-pointer">
+                                    Rechazar
+                                </button>
+                            </div>
+                        `;
+                        contenedorPendientes.appendChild(div);
+                    } else {
+                        const div = document.createElement('div');
+                        div.className = "py-3 flex justify-between items-center";
+                        div.innerHTML = `
+                            <div>
+                                <p class="font-bold text-slate-900 text-xs">${email} ${email === ADMIN_MASTER ? '<span class="text-amber-600 font-black">(Propietario)</span>' : ''}</p>
+                                <p class="text-[10px] text-emerald-600 font-bold">Estado: Activo y Autorizado</p>
+                            </div>
+                            ${email !== ADMIN_MASTER ? `<button onclick="rechazarCuenta('${id}')" class="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1.5 rounded-lg text-[10px] uppercase tracking-wider shadow transition cursor-pointer">Revocar</button>` : ''}
+                        `;
+                        contenedorActivas.appendChild(div);
+                    }
+                });
+
+                if (pendientesCount === 0) {
+                    contenedorPendientes.innerHTML = `<p class="text-xs text-slate-400 italic py-4">No hay solicitudes pendientes de validación.</p>`;
+                }
+                statTotalCuentas.innerText = totalCount;
+
+            } catch (error) {
+                console.error("Error al cargar usuarios:", error);
+                contenedorPendientes.innerHTML = `<p class="text-xs text-rose-600 font-bold py-4">Error al conectar con Firestore.</p>`;
+            }
+        }
+
+        window.aprobarCuenta = async function(id) {
+            try {
+                await updateDoc(doc(db, "usuarios_sistema", id), { aprobado: true });
+                alert("¡Cuenta aprobada con éxito! Ya podrá iniciar sesión.");
+                cargarUsuarios();
+            } catch (e) {
+                alert("No se pudo aprobar la cuenta.");
+            }
+        }
+
+        window.rechazarCuenta = async function(id) {
+            if (confirm("¿Estás seguro de eliminar o rechazar esta cuenta?")) {
+                try {
+                    await deleteDoc(doc(db, "usuarios_sistema", id));
+                    alert("Cuenta eliminada del sistema.");
+                    cargarUsuarios();
+                } catch (e) {
+                    alert("No se pudo completar la acción.");
+                }
+            }
+        }
+
+        cargarUsuarios();
+    </script>
+</body>
+</html>
